@@ -1,0 +1,100 @@
+﻿@page "/my-folder"
+@inject  IFolderService FolderService
+
+<style>
+    .folder-item {
+        transition: all 0.3s;
+        border-radius: 8px;
+        cursor: pointer;
+        height: 70px;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .folder-item:hover {
+        transition: all 0.3s;
+        background-color: #F4F6F7;
+    }
+    .folder-item-selected {
+        background-color: #F4F6F7;
+    }
+
+    .folder-icon {
+        float: left;
+        margin-right: 8px;
+    }
+
+    .folder-info {
+        flex-grow: 1;
+        float: left;
+    }
+
+    .folder-date {
+        color: #999;
+        font-size: 12px;
+        width: 100%;
+        float: left;
+    }
+
+    .folder-options {
+        margin-left: auto;
+        float: right;
+    }
+</style>
+
+<SpliteerContent>
+    <Left>
+        <MTextField
+            Style="flex: none;"
+            PrependInnerIcon="mdi-magnify"
+            Dense
+            Label="搜索笔记"
+            @bind-Value="SearchKey"
+            Solo>
+        </MTextField>
+        <div style="flex: 1;width: 100%;">
+
+            @if (!string.IsNullOrEmpty(FolderId))
+            {
+                <div style="height: 25px;">
+                    <div class="folder-icon">
+                        <MIcon OnClick="Back" Style="cursor: pointer;">mdi-menu-left</MIcon>
+                    </div>
+                    <div class="folder-info" style="padding-top: 2px;">
+                        <div>@FolderItemDto?.Name</div>
+                    </div>
+                </div>
+            }
+            
+            @foreach (var item in Folders)
+            {
+                <div class="@GetClass(item.Id)" @onclick="() => SelectFolder(item.Id)">
+                    <div class="folder-icon">
+                        <MIcon>mdi-folder-text</MIcon>
+                    </div>
+                    <div class="folder-info">
+                        <div>@item.Name</div>
+                    </div>
+                    <div class="folder-options">
+                        <MButton Text XSmall Fab>
+                            <MIcon>mdi-dots-horizontal</MIcon>
+                        </MButton>
+                    </div>
+                    <div class="folder-date">@item.CreatedTime.ToString("yyyy-MM-dd")</div>
+                </div>
+            }
+            @if (Folders.Count == 0)
+            {
+                <div style="text-align: center;padding-top: 20px;display: flex;flex-direction: column;justify-content: center;align-items: center;height: 100%;width: 100%;">
+                    <div style="color: #999999;margin-bottom: 15px;user-select: none;">暂无笔记</div>
+                    <MButton Depressed Color="primary">
+                        新建笔记
+                    </MButton>
+                </div>
+            }
+        </div>
+    </Left>
+    <Right>
+
+    </Right>
+</SpliteerContent>

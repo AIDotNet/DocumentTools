@@ -1,0 +1,16 @@
+﻿<style>
+    .m-splitter__bar{
+        min-width: 3px !important;
+        background-color: #f0f3f5 !important;
+    }
+</style>
+
+<MSplitter Style=@Style >
+    <MSplitterPane Min="30" Max="38" Class="grey lighten-2 d-flex align-center justify-center left-splitter" Style="@LeftStyle">
+        @Left
+    </MSplitterPane>
+    <MSplitterPane Class="grey lighten-2 d-flex align-center justify-center" Style="@RightStyle">
+        @Right
+    </MSplitterPane>
+</MSplitter>
+

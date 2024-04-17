@@ -5,7 +5,7 @@ using Photino.Blazor;
 internal class Program
 {
 	[STAThread]
-	private static void Main(string[] args)
+	private static async Task Main(string[] args)
 	{
 		var builder = PhotinoBlazorAppBuilder.CreateDefault(args);
 
@@ -15,6 +15,8 @@ internal class Program
 		builder.Services.AddDocumentService();
 
 		var app = builder.Build();
+
+		await app.Services.UseDocumentService();
 
 		app.MainWindow
 			.SetTitle("AIDotNet文档助手")

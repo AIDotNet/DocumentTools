@@ -3,6 +3,7 @@
 namespace AIDotNet.Document.Services.Domain;
 
 [Table(Name = "folder")]
+[Index("folder_ParentId", "ParentId", false)]
 public class Folder
 {
     [Column(IsPrimary = true)]

@@ -1,0 +1,55 @@
+﻿@*临时方案*@
+
+@inject IMenuItemService MenuItemService
+<style>
+    div.navTree a {
+        display: block;
+    }
+</style>
+<div class="navTree mx-2">
+    @for (int i = 0; i < _menuItems.Count; i++)
+    {
+        var item = _menuItems[i];
+        if (item.IsIsDivider)
+        {
+            <MDivider />
+        }
+        else
+        {
+            <a href="@item.Href">
+                <MIcon Icon="@item.Icon" />
+                @item.Title
+            </a>
+
+            if (item.Children?.Any() is true)
+            {
+                var childs = item.Children;
+                @for (int j = 0; j < childs.Count; j++)
+                {
+                    var child = childs[j];
+                    if (child.IsIsDivider)
+                    {
+                        <MDivider />
+                    }
+                    else
+                    {
+                        <a href="@child.Href" class="pl-2">
+                            <MIcon Icon="@child.Icon" />
+                            @child.Title
+                        </a>
+                    }
+                }
+            }
+        }
+    }
+</div>
+
+@code {
+    List<MenuItem> _menuItems = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var menuItems = await MenuItemService.GetMenuItemsAsync();
+        _menuItems = menuItems.ToList();
+    }
+}

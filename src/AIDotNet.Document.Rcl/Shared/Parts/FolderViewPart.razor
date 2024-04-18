@@ -1,0 +1,183 @@
+@*
+<MList MinHeight="30" Dense=true>
+    <MListItemGroup @bind-Value="_selectedItem" Color="primary">
+        <MListItem Dense=true Style="height:30px;min-height:30px;">
+            <MListItemIcon Style="height: 12px;">
+                <MIcon Small=true>mdi-home</MIcon>
+            </MListItemIcon>
+            <MListItemContent>
+                <MListItemTitle>首页</MListItemTitle>
+            </MListItemContent>
+        </MListItem>
+
+        <MListItem Href="/ai-toolkit" Dense Style="height: 30px; min-height: 30px;">
+            <MListItemIcon Style="height: 12px;">
+                <svg t="1713274741146" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7648" width="15" height="15">
+                    <path d="M153.6 18.2784h530.2784l201.1648 219.4432v768H153.6V18.2784z" fill="#FFFFFF" p-id="7649"></path>
+                    <path d="M658.2784 263.3216V69.4784H204.8v885.0432h629.0432v-691.2h-175.5648z m226.7648-25.6v768H153.6V18.2784h530.2784l201.1648 219.4432z m-92.928-25.6l-82.6368-90.112v90.112h82.6368z" fill="#465F78" p-id="7650"></path>
+                    <path d="M230.4 768h98.1504l32.1024-105.0624h156.3648L549.12 768h98.0992L497.92 307.2H379.904L230.4 768z m263.424-181.1456H383.8976L437.248 412.5184h3.3792l53.248 174.336zM715.3664 479.3856v288h75.0592V479.3856h-75.0592zM753.0496 442.2656a39.4752 39.4752 0 0 1-28.672-11.776 39.4752 39.4752 0 0 1-11.8272-28.7232c0-11.008 3.8912-20.48 11.776-28.3136a39.168 39.168 0 0 1 28.7232-12.032c11.1616 0 20.6848 4.0448 28.5696 12.032a38.3488 38.3488 0 0 1 11.9808 28.3136 39.168 39.168 0 0 1-11.9808 28.672 38.912 38.912 0 0 1-28.5696 11.776z" fill="#FA7553" p-id="7651"></path>
+                </svg>
+            </MListItemIcon>
+            <MListItemContent>
+                <MListItemTitle>AI工具</MListItemTitle>
+            </MListItemContent>
+        </MListItem>
+    </MListItemGroup>
+
+    <MDivider Class="my-1"/>
+
+    <MListGroup Value="_myFolderExpanded" ValueChanged=OnMyFolderExpandedChanged NoAction=true SubGroup=true PrependIcon="mdi-wallet-bifold" Style="margin-top: 5px;">
+        <ActivatorContent>
+            <ContextMenuTrigger Data="@null" MenuId="@TableContextMenuId">
+                <MListItemContent>
+                    <MListItemTitle>我的文件夹</MListItemTitle>
+                </MListItemContent>
+            </ContextMenuTrigger>
+        </ActivatorContent>
+        <ChildContent>
+            <MListItemGroup>
+                @foreach (var item in Folders)
+                {
+                    if (item.IsEdit)
+                    {
+                        <MListItem Dense Style="min-height: 32px">
+                            <MTextField @bind-Value=item.Name OnEnter="_=>OnBlurAsync(item)" OnBlur="_=>OnBlurAsync(item)" Autofocus=true Solo=true Class="update-name" />
+                        </MListItem>
+                    }
+                    else
+                    {
+                        <ContextMenuTrigger Data=item MenuId="@TableContextMenuId">
+                            <MListItem Href="@("/my-folder?folderId=" + item.Id)" Dense=true Style="min-height: 32px">
+                                <MListItemTitle>@item.Name</MListItemTitle>
+                            </MListItem>
+                        </ContextMenuTrigger>
+                    }
+                }
+            </MListItemGroup>
+        </ChildContent>
+    </MListGroup>
+    <MListItem Href="/appman" Dense Style="height: 30px; min-height: 30px;">
+        <MListItemIcon Style="height: 12px;">
+            <svg t="1713276811004" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10639" width="15" height="15">
+                <path d="M512 53.333333c126.997333 0 232.469333 88.32 244.245333 202.666667H896a32 32 0 0 1 3.072 63.850667L896 320h-54.592l-34.986667 564.906667c-2.133333 35.2-31.082667 62.421333-66.218666 64.32l-3.946667 0.106666H287.744c-35.584 0-65.728-25.962667-69.802667-60.501333l-0.341333-3.861333L182.570667 320H128a32 32 0 0 1-3.072-63.850667L128 256h139.754667C279.530667 141.653333 385.002667 53.333333 512 53.333333zM777.258667 320H246.72l34.773333 561.066667c0.085333 1.706667 1.813333 3.541333 4.522667 4.096l1.706667 0.170666h448.533333c3.072 0 5.290667-1.536 6.016-3.264l0.256-1.066666L777.258667 320z m-150.976 243.349333l1.877333 2.389334 1.642667 2.602666 80.64 141.12a32 32 0 0 1-24.981334 47.765334L682.666667 757.333333h-71.338667a32 32 0 0 1-3.093333-63.850666l3.093333-0.149334h16.192l-53.269333-93.226666a32 32 0 0 1 52.053333-36.757334z m-233.92 72.704a32 32 0 0 1 13.312 40.896l-1.408 2.773334-7.808 13.610666h110.528a32 32 0 0 1 31.850666 28.928l0.149334 3.072a32 32 0 0 1-28.906667 31.850667l-3.093333 0.149333H341.333333a32 32 0 0 1-29.077333-45.397333l1.28-2.474667 35.157333-61.504a32 32 0 0 1 43.669334-11.904z m143.808-230.4l1.92 2.453334 1.706666 2.688 37.525334 65.685333a32 32 0 0 1-53.909334 34.346667l-1.664-2.602667-9.749333-17.066667-57.301333 100.266667a32 32 0 0 1-40.896 13.312l-2.773334-1.408a32 32 0 0 1-13.290666-40.896l1.408-2.773333 85.077333-148.864c11.2-19.626667 38.016-21.333333 51.946667-5.12zM512 117.333333c-92.544 0-167.914667 60.970667-179.733333 138.666667h359.466666C679.893333 178.304 604.544 117.333333 512 117.333333z" fill="#333333" p-id="10640"></path>
+            </svg>
+        </MListItemIcon>
+        <MListItemContent>
+            <MListItemTitle>回收站</MListItemTitle>
+        </MListItemContent>
+    </MListItem>
+</MList>
+
+ *@
+
+@* @inject IFolderService FolderService *@
+
+@* <MList MinHeight="30" Dense=true>
+    <MListItemGroup @bind-Value="_selectedItem" Color="primary">
+        <MTreeview Items="models"
+                   TItem="MyClass"
+                   MultipleActive=false
+                   LoadChildren="FetchUsers"
+                   OnActiveUpdate=OnActiveUpdate
+                   TKey="string"
+                   Color="warning"
+                   Activatable=true
+                   Dense=true
+                   OpenOnClick=false
+                   ItemText="r=>r.Name"
+                   
+                   ItemKey="r=>r.Id"
+                   ItemChildren="r=>r.Children">
+            <PrependContent>
+                @if (context.Item.Children == null)
+                {
+                    <MIcon>
+                        mdi-account
+                    </MIcon>
+                }
+            </PrependContent>
+            <LabelContent>
+                <span style="user-select:none">@context.Item.Name</span>
+            </LabelContent>
+            <AppendContent>
+                <MMenu Context="MenuContext" CloseOnContentClick=false OffsetX=true>
+                    <ActivatorContent>
+                        <MIcon @attributes=MenuContext.Attrs Small=true OnClick="_=>OnAdd(context.Item.Id)">mdi-plus</MIcon>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MTextField Value="curAdd?.Name" ValueChanged="AddChanged" TValue="string"
+                                    Dense=true HideDetails="true" Solo=true>
+                            <AppendContent>
+                                <MButton Icon=true Small=true OnClick="Test">
+                                    <MIcon Small=true Color="green">mdi-check</MIcon>
+                                </MButton>
+                            </AppendContent>
+                        </MTextField>
+                    </ChildContent>
+                </MMenu>
+                <MIcon Small=true OnClick="_=>OnDelete(context.Item.Id)">mdi-delete</MIcon>
+                <MMenu Context="MenuContext" CloseOnContentClick=false>
+                    <ActivatorContent>
+                        <MIcon @attributes=MenuContext.Attrs Small=true OnClick="_=>OnRename(context.Item)">mdi-rename</MIcon>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MTextField Value="context.Item.Name" ValueChanged="EditChanged" TValue="string"
+                                    Dense=true HideDetails="true" Solo=true>
+                            <AppendContent>
+                                <MButton Icon=true Small=true OnClick="Test2">
+                                    <MIcon Small=true Color="green">mdi-check</MIcon>
+                                </MButton>
+                            </AppendContent>
+                        </MTextField>
+                    </ChildContent>
+                </MMenu>
+            </AppendContent>
+        </MTreeview>
+
+    </MListItemGroup>
+</MList> *@
+
+@* 
+@code {
+    List<MyClass> models =
+            [
+                new ()
+                {
+                    Id = "null",
+                    Name="根目录",
+                }
+            ];
+    public class MyClass
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public List<MyClass>? Children { get; set; } = new();
+    }
+
+    async Task FetchUsers(MyClass model)
+    {
+        var id = model.Id is "null" ? null : model.Id;
+
+        var models = await FolderService.GetFolderByParentIdAsync(id);
+
+        if (models.Count is 0)
+        {
+            model.Children = null;
+        }
+        else
+        {
+            model.Children = models.Select(x => new MyClass()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).ToList();
+        }
+    }
+    void OnActiveUpdate(List<MyClass> models)
+    {
+        if (models.FirstOrDefault() is MyClass model)
+        {
+            NavigationManager.NavigateTo($"/my-folder/{model.Id}");
+        }
+    }
+} *@

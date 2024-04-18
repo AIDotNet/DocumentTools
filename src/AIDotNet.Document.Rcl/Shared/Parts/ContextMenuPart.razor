@@ -1,0 +1,33 @@
+﻿
+
+@*有问题*@
+
+
+@* <ContextMenu Id="@TableContextMenuId">
+    @if (context.Data is FolderViewPart.MyClass item)
+    {
+        <Item>
+            新建
+            <SubMenu>
+                <Item OnClick="() => NewFolderClick(item.Id)">新建文件夹</Item>
+            </SubMenu>
+        </Item>
+        <Seperator />
+        <Item OnClick="() => RemoveClick(item.Id)">
+            删除
+        </Item>
+        <Seperator />
+        <Item OnClick="() => UpdateNameClick(item.Id)">
+            重命名
+        </Item>
+    }
+    else
+    {
+        <Item>
+            新建
+            <SubMenu>
+                <Item OnClick="() => NewFolderClick(null)">新建文件夹</Item>
+            </SubMenu>
+        </Item>
+    }
+</ContextMenu> *@

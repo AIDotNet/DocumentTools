@@ -45,24 +45,26 @@ public partial class MainLayout
         {
             var folder = new FolderItemDto
             {
-                Id = Guid.NewGuid().ToString("N"),
                 Name = "新建文件夹",
                 IsEdit = true,
                 ParentId = parentId
             };
 
+            var id = await FolderService.CreateAsync(folder);
+            folder.Id = id;
             folderItems.Add(folder);
-            await FolderService.CreateAsync(folder);
         }
         else
         {
-            await FolderService.CreateAsync(new FolderItemDto()
+            var item = new FolderItemDto()
             {
-                Id = Guid.NewGuid().ToString("N"),
                 Name = "新建文件夹",
                 IsEdit = true,
                 ParentId = parentId
-            });
+            };
+            var id = await FolderService.CreateAsync(item);
+
+            item.Id = id;
         }
     }
 
@@ -93,11 +95,11 @@ public partial class MainLayout
 
         InvokeAsync(StateHasChanged);
     }
-    
+
     private void SelectItem(FolderItemDto item)
     {
         _selectedItem = item.Id;
-        
-        NavigationManager.NavigateTo($"/my-folder?folderId={item.Id}");
+
+        NavigationManager.NavigateTo($"/my-folder/{item.Id}");
     }
 }

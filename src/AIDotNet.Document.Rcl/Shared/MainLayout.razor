@@ -152,7 +152,7 @@
                                 else
                                 {
                                     <ContextMenuTrigger Data=item MenuId="@tableContextMenu">
-                                        <MListItem Href="@("/my-folder?folderId=" + item.Id)" Dense Style="min-height: 32px">
+                                        <MListItem Href="@("/my-folder/" + item.Id)" Dense Style="min-height: 32px">
                                             <MListItemTitle>@item.Name</MListItemTitle>
                                         </MListItem>
                                     </ContextMenuTrigger>

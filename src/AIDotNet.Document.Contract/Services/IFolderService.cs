@@ -5,6 +5,13 @@ namespace AIDotNet.Document.Contract.Services;
 public interface IFolderService
 {
     /// <summary>
+    /// 获取文件夹
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<FolderItemDto> GetFolderByIdAsync(string id);
+    
+    /// <summary>
     /// 获取文件夹树
     /// </summary>
     /// <returns></returns>
@@ -15,7 +22,7 @@ public interface IFolderService
     /// </summary>
     /// <param name="folder"></param>
     /// <returns></returns>
-    Task CreateAsync(FolderItemDto folder);
+    Task<string> CreateAsync(FolderItemDto folder);
 
     /// <summary>
     /// 删除文件夹

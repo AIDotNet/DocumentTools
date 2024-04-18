@@ -20,7 +20,7 @@ internal class Program
 
 		app.MainWindow
 			.SetTitle("AIDotNet文档助手")
-			.SetResizable(true);
+			;
 
 		AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
 		{

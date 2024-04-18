@@ -1,16 +1,13 @@
-﻿@inject IFolderService FolderService
+﻿<MNavigationDrawer App=true Permanent="true" Color="grey lighten-5" Width="@Width">
 
-
-<MNavigationDrawer App=true Permanent="true" Color="grey lighten-4" Width="@Width">
-
-    <MRow Dense=true Class="pa-1">
-        <MCol Cols="12" Class="text-end pb-2">
+    <MRow Dense=true Class="pa-1 mb-3">
+        <MCol Cols="12" Class="text-end pb-3">
             <MButton Icon=true Small=true OnClick="RefreshClick" Loading=refreshing>
                 <MIcon Small=true>mdi-refresh</MIcon>
             </MButton>
         </MCol>
         <MCol Cols="12" Class="text-center">
-            <MAvatar Size="56">
+            <MAvatar Size="84">
                 <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
             </MAvatar>
         </MCol>
@@ -26,13 +23,16 @@
         *@
 
         <MCol Cols="12" Class="text-center">
-            <MButton Depressed=true Color="blue accent-2" Dark=true Width="@("70%")">
+            <MButton Depressed=true Color="primary" Dark=true Width="@("80%")" Class="my-2">
                 <MIcon>mdi-plus</MIcon>
                 新建
             </MButton>
         </MCol>
     </MRow>
 
-    <NavTree />
+    <NavTreePart />
 
+    <div style="bottom:0;position: absolute;width:100%" class="text-center">
+        预留脚部
+    </div>
 </MNavigationDrawer>

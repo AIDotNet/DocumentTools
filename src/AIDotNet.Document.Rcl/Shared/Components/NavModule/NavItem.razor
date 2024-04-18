@@ -1,0 +1,27 @@
+﻿@if (Menu.IsDivider)
+{
+    <MDivider Class=@($"my-{Menu.DivNumber}") />
+}
+else
+{
+    <MListItem Dense=Dense Link=true Href="@Menu.Href" Class="pl-4" Style="min-height:32px">
+        <ItemContent>
+            <MListItemIcon Class="my-auto">
+                <MIcon>@Menu.Icon</MIcon>
+            </MListItemIcon>
+            <MListItemContent>
+                <MListItemTitle>@Menu.Title</MListItemTitle>
+            </MListItemContent>
+        </ItemContent>
+    </MListItem>
+}
+
+
+@code {
+
+    [Parameter, EditorRequired]
+    public MenuItem Menu { get; set; } = null!;
+
+    [Parameter]
+    public bool Dense { get; set; }
+}

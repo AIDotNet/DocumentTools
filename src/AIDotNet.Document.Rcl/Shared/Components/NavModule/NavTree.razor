@@ -1,0 +1,11 @@
+﻿<MList Outlined="Outlined" Shaped="Shaped" Dense="Dense"
+       Flat="Flat" Disabled="Disabled" Nav="Nav" Routable="Routable"
+       Height="Height" MinHeight="MinHeight" MinWidth="MinWidth"
+       MaxHeight="MaxHeight" MaxWidth="MaxWidth" Width="Width">
+    <MListItemGroup Color="@Color" ActiveClass="@ActiveClass">
+        @foreach (var item in Items)
+        {
+            <NavItem Menu="item" Dense=Dense/>
+        }
+    </MListItemGroup>
+</MList>

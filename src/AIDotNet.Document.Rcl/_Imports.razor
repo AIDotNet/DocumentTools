@@ -3,7 +3,6 @@
 @using System.Net.Http
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
-@using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.JSInterop
 @using BlazorComponent
@@ -16,3 +15,12 @@
 @using BlazorContextMenu
 @using AIDotNet.Document.Rcl.Components
 @using AIDotNet.Document.Contract
+
+
+@*DI*@
+
+@inject IFolderService FolderService
+@inject IMenuItemService MenuItemService
+@inject NavigationManager NavigationManager
+
+@*DI*@

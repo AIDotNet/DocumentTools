@@ -1,0 +1,15 @@
+﻿@using AIDotNet.Document.Contract.Models
+@using AIDotNet.Document.Rcl.Shared.Parts
+
+@inherits LayoutComponentBase
+
+<MApp>
+
+    <SideBarPart Width="240" />
+
+    <MMain>
+        <MErrorHandler>
+            @Body
+        </MErrorHandler>
+    </MMain>
+</MApp>

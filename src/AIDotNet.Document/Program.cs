@@ -1,32 +1,34 @@
 ﻿using AIDotNet.Document;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using Photino.Blazor;
 
 internal class Program
 {
-	[STAThread]
-	private static void Main(string[] args)
-	{
-		var builder = PhotinoBlazorAppBuilder.CreateDefault(args);
+    [STAThread]
+    private static void Main(string[] args)
+    {
+        var builder = PhotinoBlazorAppBuilder.CreateDefault(args);
 
-		builder.RootComponents.Add<App>("#app");
+        builder.RootComponents.Add<App>("#app");
 
-		builder.Services.AddDocumentRcl();
-		builder.Services.AddDocumentService();
+        builder.Services.AddDocumentRcl();
+        builder.Services.AddDocumentService();
 
-		var app = builder.Build();
+        var app = builder.Build();
 
-		 app.Services.UseDocumentService();
+        app.Services.UseDocumentService();
 
-		app.MainWindow
-			.SetTitle("AIDotNet文档助手")
-			;
+        app.MainWindow
+            .SetTitle("AIDotNet文档助手")
+            .SetSize(1920, 1080);
 
-		AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
-		{
-			
-		};
+        AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
+        {
 
-		app.Run();
-	}
+        };
+
+        app.Run();
+    }
 }

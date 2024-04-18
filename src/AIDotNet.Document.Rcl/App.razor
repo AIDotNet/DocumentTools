@@ -1,4 +1,5 @@
 ﻿@namespace AIDotNet.Document
+@using AIDotNet.Document.Rcl.Shared.Layouts
 
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
@@ -6,8 +7,21 @@
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
     <NotFound>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+        <LayoutView Layout="@typeof(EmptyLayout)">
+            <MCard Class="mx-auto" Color="teal darken-2" Dark=true MaxWidth="400" Style="top:30vh">
+                <MCardTitle>
+                    <MIcon Left=true Color="warning">mdi-alert-circle</MIcon>
+                    <span class="text-h6">404</span>
+                </MCardTitle>
+                <MCardText>
+                    Sorry, there's nothing at this address.
+                </MCardText>
+                <MCardActions>
+                    <MSpacer/>
+                    <button class="m-btn m-btn--text m-size--small" onclick="window.history.back()">返回上一页</button>
+                    <MButton Outlined=true OnClick="@(_=>NavigationManager.NavigateTo("/"))">返回首页</MButton>
+                </MCardActions>
+            </MCard>
         </LayoutView>
     </NotFound>
 </Router>

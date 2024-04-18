@@ -1,0 +1,38 @@
+﻿<MNavigationDrawer App=true Permanent="true" Color="grey lighten-5" Width="@Width">
+
+    <MRow Dense=true Class="pa-1 mb-3">
+        <MCol Cols="12" Class="text-end pb-3">
+            <MButton Icon=true Small=true OnClick="RefreshClick" Loading=refreshing>
+                <MIcon Small=true>mdi-refresh</MIcon>
+            </MButton>
+        </MCol>
+        <MCol Cols="12" Class="text-center">
+            <MAvatar Size="84">
+                <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
+            </MAvatar>
+        </MCol>
+
+        @* vip
+        <MCol Cols="12">
+        <MRow NoGutters=true Align="AlignTypes.Center" Justify="JustifyTypes.Center">
+        <img src="assets/img/vip/common.png" height="13" width="35" />
+        <MDivider Vertical=true Class="ma-2" />
+        <a><small>开通会员</small></a>
+        </MRow>
+        </MCol>
+        *@
+
+        <MCol Cols="12" Class="text-center">
+            <MButton Depressed=true Color="primary" Dark=true Width="@("80%")" Class="my-2">
+                <MIcon>mdi-plus</MIcon>
+                新建
+            </MButton>
+        </MCol>
+    </MRow>
+
+    <NavTreePart />
+
+    <div style="bottom:0;position: absolute;width:100%" class="text-center">
+        预留脚部
+    </div>
+</MNavigationDrawer>

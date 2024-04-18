@@ -25,4 +25,15 @@
     <UpToDateCheckInput Remove="Pages\My\MyResources.razor" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Shared\Components\NavModule\NavItem.razor" />
+    <None Include="Shared\Components\NavModule\NavTree.razor" />
+    <None Include="Shared\Layouts\MainLayout.razor" />
+    <None Include="Shared\Parts\SideBarPart.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Shared\Components\NavModule\Models\" />
+  </ItemGroup>
+
 </Project>

@@ -2,7 +2,7 @@
 
 public interface ISettingService
 {
-    ValueTask Update();
+    void Update();
     
     string GetSetting(string key);
 

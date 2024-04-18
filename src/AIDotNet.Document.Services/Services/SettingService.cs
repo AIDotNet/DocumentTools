@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
-using System.Text.Json;
 using AIDotNet.Document.Services.Domain;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace AIDotNet.Document.Services.Services;
 
@@ -9,9 +9,9 @@ public class SettingService(IFreeSql freeSql) : ISettingService
     private static ImmutableList<Settings> Settings { get; set; } = ImmutableList<Settings>.Empty;
 
 
-    public async ValueTask Update()
+    public  void Update()
     {
-        var settings = await freeSql.Select<Settings>().ToListAsync();
+        var settings =  freeSql.Select<Settings>().ToList();
         Settings = settings.ToImmutableList();
     }
 

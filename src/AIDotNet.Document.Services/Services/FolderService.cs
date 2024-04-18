@@ -5,6 +5,21 @@ namespace AIDotNet.Document.Services.Services;
 
 public sealed class FolderService(IFreeSql freeSql) : IFolderService
 {
+    public async Task<FolderItemDto> GetFolderByIdAsync(string id)
+    {
+        var result = await freeSql.Select<Folder>().Where(f => f.Id == id).FirstAsync();
+
+        return new FolderItemDto()
+        {
+            Id = result.Id,
+            Name = result.Name,
+            ParentId = result.ParentId,
+            Size = result.Size,
+            IsFolder = result.IsFolder,
+            CreatedTime = result.CreatedTime,
+        };
+    }
+
     public async Task<List<FolderItemDto>> GetTreeFolderAsync()
     {
         var rootFolders = await freeSql.Select<Folder>().Where(f => f.ParentId == null && f.IsFolder).ToListAsync();
@@ -17,17 +32,23 @@ public sealed class FolderService(IFreeSql freeSql) : IFolderService
         }).ToList();
     }
 
-    public async Task CreateAsync(FolderItemDto folder)
+    public async Task<string> CreateAsync(FolderItemDto folder)
     {
         if (folder.IsFolder)
         {
-            await freeSql.Insert(new Folder(folder.Name, folder.ParentId))
+            var folderItem = new Folder(folder.Name, folder.ParentId);
+            await freeSql.Insert(folderItem)
                 .ExecuteAffrowsAsync();
+
+            return folderItem.Id;
         }
         else
         {
-            await freeSql.Insert(new Folder(folder.Name, folder.ParentId, folder.Size))
+            var folderItem = new Folder(folder.Name, folder.ParentId, folder.Size);
+            await freeSql.Insert(folderItem)
                 .ExecuteAffrowsAsync();
+
+            return folderItem.Id;
         }
     }
 

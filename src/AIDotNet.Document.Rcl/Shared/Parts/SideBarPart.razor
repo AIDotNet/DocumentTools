@@ -1,0 +1,38 @@
+﻿@inject IFolderService FolderService
+
+
+<MNavigationDrawer App=true Permanent="true" Color="grey lighten-4" Width="@Width">
+
+    <MRow Dense=true Class="pa-1">
+        <MCol Cols="12" Class="text-end pb-2">
+            <MButton Icon=true Small=true OnClick="RefreshClick" Loading=refreshing>
+                <MIcon Small=true>mdi-refresh</MIcon>
+            </MButton>
+        </MCol>
+        <MCol Cols="12" Class="text-center">
+            <MAvatar Size="56">
+                <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
+            </MAvatar>
+        </MCol>
+
+        @* vip
+        <MCol Cols="12">
+        <MRow NoGutters=true Align="AlignTypes.Center" Justify="JustifyTypes.Center">
+        <img src="assets/img/vip/common.png" height="13" width="35" />
+        <MDivider Vertical=true Class="ma-2" />
+        <a><small>开通会员</small></a>
+        </MRow>
+        </MCol>
+        *@
+
+        <MCol Cols="12" Class="text-center">
+            <MButton Depressed=true Color="blue accent-2" Dark=true Width="@("70%")">
+                <MIcon>mdi-plus</MIcon>
+                新建
+            </MButton>
+        </MCol>
+    </MRow>
+
+    <NavTree />
+
+</MNavigationDrawer>

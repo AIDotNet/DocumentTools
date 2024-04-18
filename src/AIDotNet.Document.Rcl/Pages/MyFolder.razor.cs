@@ -11,7 +11,6 @@ public partial class MyFolder
     /// 文件夹id
     /// </summary>
     [Parameter]
-    [SupplyParameterFromQuery(Name = "folderId")]
     public string? FolderId { get; set; }
 
     public FolderItemDto FolderItemDto { get; set; } = new();
@@ -29,7 +28,7 @@ public partial class MyFolder
 
         if (FolderId != null)
         {
-            FolderItemDto = Folders.First(x => x.Id == FolderId);
+            FolderItemDto = await FolderService.GetFolderByIdAsync(FolderId);
 
             StateHasChanged();
         }

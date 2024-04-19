@@ -6,9 +6,11 @@
         xmlns:blazor="clr-namespace:Microsoft.AspNetCore.Components.WebView.Wpf;assembly=Microsoft.AspNetCore.Components.WebView.Wpf"
         xmlns:local="clr-namespace:AIDotNet.Document.Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" ResizeMode="CanResizeWithGrip"
+        Title="MainWindow" Height="700" Width="1000" Icon="logo.ico">
     <Grid>
-        <blazor:BlazorWebView HostPage="wwwroot\index.html" Name="BlazroWeb" Services="{DynamicResource services}">
+        <blazor:BlazorWebView HostPage="wwwroot\index.html" Name="BlazorWeb" Services="{DynamicResource services}">
         </blazor:BlazorWebView>
     </Grid>
 </Window>

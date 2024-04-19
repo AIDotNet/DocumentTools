@@ -11,10 +11,11 @@
         margin-bottom: 5px;
     }
 
-    .folder-item:hover {
-        transition: all 0.3s;
-        background-color: #F4F6F7;
-    }
+        .folder-item:hover {
+            transition: all 0.3s;
+            background-color: #F4F6F7;
+        }
+
     .folder-item-selected {
         background-color: #F4F6F7;
     }
@@ -40,30 +41,42 @@
         margin-left: auto;
         float: right;
     }
-    
-    .edit-input{
+
+    .edit-input {
         outline: none;
         background-color: transparent;
         /*好看的输入框边框*/
         border: 1px solid #ccc;
         border-radius: 8px;
         padding: 5px;
-        
         color: #333;
         font-size: 10px;
         width: 100%;
+    }
+
+    .d-list-item {
+        max-height: 35px;
+        height: 35px;
+        width: 220px;
+        display: flex;
+        align-items: center;
+        min-height: auto;
+        padding-left: 20px;
+    }
+
+    .d-m-list {
+        padding: 0;
     }
 </style>
 
 <SpliteerContent>
     <Left>
-        <MTextField
-            Style="flex: none;"
-            PrependInnerIcon="mdi-magnify"
-            Dense
-            Label="搜索笔记"
-            @bind-Value="SearchKey"
-            Solo>
+        <MTextField Style="flex: none;"
+                    PrependInnerIcon="mdi-magnify"
+                    Dense
+                    Label="搜索笔记"
+                    @bind-Value="SearchKey"
+                    Solo>
         </MTextField>
         <div style="flex: 1;width: 100%;">
 
@@ -99,12 +112,12 @@
                         }
                         else
                         {
-                            <div>@item.Name</div>
+                            <div @ondblclick="() => Rename(item)">@item.Name</div>
                         }
                     </div>
                     <div class="folder-options">
 
-                        <MMenu Left
+                        <MMenu Right
                                Bottom>
                             <ActivatorContent>
                                 <MButton Text XSmall Fab @attributes="@context.Attrs">
@@ -112,13 +125,17 @@
                                 </MButton>
                             </ActivatorContent>
                             <ChildContent>
-                                <MList>
-                                    <MListItem OnClick="() => Remove(item)">
-                                        <MListItemTitle>删除</MListItemTitle>
+                                <MList Class="d-m-list">
+                                    <MListItem Class="d-list-item" OnClick="() => Remove(item)">
+                                        <MListItemTitle Style="font-size: 13px;">删除</MListItemTitle>
                                     </MListItem>
-
-                                    <MListItem OnClick="() => Rename(item)">
-                                        <MListItemTitle>重命名</MListItemTitle>
+                                    <MDivider></MDivider>
+                                    <MListItem Class="d-list-item" OnClick="() => Rename(item)">
+                                        <MListItemTitle Style="font-size: 13px;">重命名</MListItemTitle>
+                                    </MListItem>
+                                    <MDivider></MDivider>
+                                    <MListItem Class="d-list-item" OnClick="NewNote">
+                                        <MListItemTitle Style="font-size: 13px;">新增</MListItemTitle>
                                     </MListItem>
                                 </MList>
                             </ChildContent>
@@ -141,7 +158,7 @@
     <Right>
         @if (FolderItemDto is { IsFolder: false })
         {
-            <EditNote Item="FolderItemDto"/>
+            <EditNote OnBlur="RenameOnBlur" Item="FolderItemDto"/>
         }
     </Right>
 </SpliteerContent>

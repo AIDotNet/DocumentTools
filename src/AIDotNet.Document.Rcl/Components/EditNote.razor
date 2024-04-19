@@ -21,15 +21,29 @@
         overflow: auto;
     }
     
+    .name-input{
+        font-size: 25px;
+        width: 100%;
+        background-color: transparent;
+        outline: none;
+        border: none;
+    }
 </style>
 
 <div style="height: 100%;width: 100%;">
-    <div style="width: 100%;height: 110px;">
-        <div class="node-title">
-            @Item.Name
+    <div style="width: 100%;height: 110px;-webkit-app-region:drag;">
+        <div class="node-title" @ondblclick="() => IsEditName = true">
+            @if (!IsEditName)
+            {
+                @Item.Name
+            }
+            else
+            {
+                <input type="text" autofocus class="name-input" @bind="Item.Name" @onblur="Blur"/>
+            }
         </div>
     </div>
-    <MEditor Style="height: 100%;width: 100%;" @bind-Value="Content" Markdown ContentStyle="height:100%;">
+    <DEditor @ref="Ref" BeforeAllUploadAsync="BeforeAllUploadAsync" Style="height: 100%;width: 100%;" @bind-Value="Content" Markdown ContentStyle="height:100%;">
         <ToolbarContent>
             <select class="ql-header">
                 <option selected=""></option>
@@ -60,5 +74,5 @@
                 <button class="ql-image"></button>
             </span>
         </ToolbarContent>
-    </MEditor>
+    </DEditor>
 </div>

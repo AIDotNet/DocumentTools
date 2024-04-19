@@ -1,8 +1,41 @@
 ﻿@inherits LayoutComponentBase
+@inject IWindowService WindowService
+
+<style>
+    .window-buttons {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        width: 95px;
+    }
+
+    .window-buttons button {
+        width: 20px;
+        height: 20px;
+        border: none;
+        border-radius: 2px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .minimize {
+        background-color: #ffb700;
+    }
+
+    .maximize {
+        background-color: #00ca00;
+    }
+
+    .close {
+        background-color: #ff5f5f;
+    }
+</style>
 
 <MApp>
 
-    <SideBarPart Width="240" />
+    <SideBarPart Width="240"/>
 
     <MMain>
         <MErrorHandler>
@@ -10,3 +43,22 @@
         </MErrorHandler>
     </MMain>
 </MApp>
+
+<div class="window-buttons">
+    <MButton Small Icon OnClick="WindowService.Minimize">
+        <MIcon Small>mdi-minus</MIcon>
+    </MButton>
+    <MButton Small Icon OnClick="WindowService.Maximize">
+        @if (WindowService.IsMaximized)
+        {
+            <MIcon Small>mdi-window-restore</MIcon>
+        }
+        else
+        {
+            <MIcon Small>mdi-checkbox-blank-outline</MIcon>
+        }
+    </MButton>
+    <MButton Small Icon OnClick="WindowService.Close">
+        <MIcon Small>mdi-close</MIcon>
+    </MButton>
+</div>

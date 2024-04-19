@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using LiteDB;
 
 namespace AIDotNet.Document.Services.Services;
 
@@ -35,6 +34,44 @@ public sealed class FileStorageService(ILiteDatabase database) : IFileStorageSer
 
         database.FileStorage.Upload(fileId, fileId, new MemoryStream(bytes));
         return ValueTask.CompletedTask;
+    }
+
+    public async Task<string> CreateOrUpdateImageAsync(string name, string base64)
+    {
+        return await Task.Run(() =>
+        {
+            name = "https://image/" + name;
+            var file = database.FileStorage.FindById(name);
+
+            if (file != null)
+            {
+                database.FileStorage.Delete(name);
+            }
+            
+            // 去掉base64头部
+            base64 = base64.Substring(base64.IndexOf(',') + 1);
+
+            var bytes = Convert.FromBase64String(base64);
+
+            database.FileStorage.Upload(name, name, new MemoryStream(bytes));
+            return name;
+        });
+    }
+
+    public string CreateOrUpdateImage(string name, string base64)
+    {
+        name = "https://image/" + name;
+        var file = database.FileStorage.FindById(name);
+
+        if (file != null)
+        {
+            database.FileStorage.Delete(name);
+        }
+
+        var bytes = Convert.FromBase64String(base64);
+
+        database.FileStorage.Upload(name, name, new MemoryStream(bytes));
+        return name;
     }
 
     public ValueTask<string> GetFileContentAsync(string fileId)

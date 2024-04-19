@@ -5,8 +5,6 @@ VisualStudioVersion = 17.10.34804.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{978BB40D-5B01-44C0-BCD5-8A8769BA25C9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AIDotNet.Document", "src\AIDotNet.Document\AIDotNet.Document.csproj", "{C786EDCF-7AF1-41DB-8D81-4DB1EBC7CE88}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AIDotNet.Document.Rcl", "src\AIDotNet.Document.Rcl\AIDotNet.Document.Rcl.csproj", "{28A5AB5F-3180-45BC-A08F-4A5C9AB98440}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AIDotNet.Document.Contract", "src\AIDotNet.Document.Contract\AIDotNet.Document.Contract.csproj", "{9CCBA03C-9174-430B-8F81-BCA541C7409B}"
@@ -23,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C786EDCF-7AF1-41DB-8D81-4DB1EBC7CE88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C786EDCF-7AF1-41DB-8D81-4DB1EBC7CE88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C786EDCF-7AF1-41DB-8D81-4DB1EBC7CE88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C786EDCF-7AF1-41DB-8D81-4DB1EBC7CE88}.Release|Any CPU.Build.0 = Release|Any CPU
 		{28A5AB5F-3180-45BC-A08F-4A5C9AB98440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{28A5AB5F-3180-45BC-A08F-4A5C9AB98440}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A5AB5F-3180-45BC-A08F-4A5C9AB98440}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -52,7 +46,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{C786EDCF-7AF1-41DB-8D81-4DB1EBC7CE88} = {978BB40D-5B01-44C0-BCD5-8A8769BA25C9}
 		{28A5AB5F-3180-45BC-A08F-4A5C9AB98440} = {978BB40D-5B01-44C0-BCD5-8A8769BA25C9}
 		{9CCBA03C-9174-430B-8F81-BCA541C7409B} = {978BB40D-5B01-44C0-BCD5-8A8769BA25C9}
 		{7777071D-185B-47C2-A78A-46B9E7C97E0A} = {978BB40D-5B01-44C0-BCD5-8A8769BA25C9}

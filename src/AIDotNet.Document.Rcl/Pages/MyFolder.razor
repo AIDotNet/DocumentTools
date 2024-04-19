@@ -50,8 +50,13 @@
         padding: 5px;
         
         color: #333;
-        font-size: 14px;
+        font-size: 10px;
         width: 100%;
+    }
+    
+    .m-list-item{
+        height: 24px !important;
+        min-height: 25px !important;
     }
 </style>
 
@@ -99,7 +104,7 @@
                         }
                         else
                         {
-                            <div>@item.Name</div>
+                            <div @ondblclick="()=>Rename(item)">@item.Name</div>
                         }
                     </div>
                     <div class="folder-options">
@@ -112,13 +117,16 @@
                                 </MButton>
                             </ActivatorContent>
                             <ChildContent>
-                                <MList>
+                                <MList Dense>
                                     <MListItem OnClick="() => Remove(item)">
                                         <MListItemTitle>删除</MListItemTitle>
                                     </MListItem>
 
                                     <MListItem OnClick="() => Rename(item)">
                                         <MListItemTitle>重命名</MListItemTitle>
+                                    </MListItem>
+                                    <MListItem OnClick="() => NewNote()">
+                                        <MListItemTitle>新建笔记</MListItemTitle>
                                     </MListItem>
                                 </MList>
                             </ChildContent>
@@ -141,7 +149,7 @@
     <Right>
         @if (FolderItemDto is { IsFolder: false })
         {
-            <EditNote Item="FolderItemDto"/>
+            <EditNote OnBlur="RenameOnBlur" Item="FolderItemDto"/>
         }
     </Right>
 </SpliteerContent>

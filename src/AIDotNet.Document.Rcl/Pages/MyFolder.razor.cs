@@ -63,7 +63,7 @@ public partial class MyFolder
     {
         FolderItemDto = Folders.First(x => x.Id == folderId);
         FolderId = folderId;
-        
+
         StateHasChanged();
     }
 
@@ -72,17 +72,18 @@ public partial class MyFolder
     /// </summary>
     private async Task NewNote()
     {
+        var id = FolderItemDto.IsFolder == true ? FolderItemDto.Id : FolderItemDto.ParentId;
+
         var item = new FolderItemDto()
         {
             Name = "无标题笔记",
-            ParentId = FolderId,
+            ParentId = id,
             IsFolder = false,
             Size = 0,
         };
         await FolderService.CreateAsync(item);
-        
-        Folders = await FolderService.GetFolderByParentIdAsync(FolderId);
-        
+
+        Folders = await FolderService.GetFolderByParentIdAsync(id);
     }
 
     /// <summary>

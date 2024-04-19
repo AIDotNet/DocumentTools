@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AIDotNet.Document.Services"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIDotNet.Document.Client", "src\AIDotNet.Document.Client\AIDotNet.Document.Client.csproj", "{15986E6C-22C6-488F-AF6D-D1FB043B5E13}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIDotNet.Infrastructure", "src\AIDotNet.Infrastructure\AIDotNet.Infrastructure.csproj", "{107A5F68-1380-4E98-A1CE-505DF4A20502}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{15986E6C-22C6-488F-AF6D-D1FB043B5E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15986E6C-22C6-488F-AF6D-D1FB043B5E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15986E6C-22C6-488F-AF6D-D1FB043B5E13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{107A5F68-1380-4E98-A1CE-505DF4A20502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{107A5F68-1380-4E98-A1CE-505DF4A20502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{107A5F68-1380-4E98-A1CE-505DF4A20502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{107A5F68-1380-4E98-A1CE-505DF4A20502}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{9CCBA03C-9174-430B-8F81-BCA541C7409B} = {978BB40D-5B01-44C0-BCD5-8A8769BA25C9}
 		{7777071D-185B-47C2-A78A-46B9E7C97E0A} = {978BB40D-5B01-44C0-BCD5-8A8769BA25C9}
 		{15986E6C-22C6-488F-AF6D-D1FB043B5E13} = {978BB40D-5B01-44C0-BCD5-8A8769BA25C9}
+		{107A5F68-1380-4E98-A1CE-505DF4A20502} = {978BB40D-5B01-44C0-BCD5-8A8769BA25C9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE4F5F77-3875-47A2-A75C-D1167F63586C}

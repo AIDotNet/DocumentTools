@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AIDotNet.Document.Contract\AIDotNet.Document.Contract.csproj" />
+    <ProjectReference Include="..\AIDotNet.Infrastructure\AIDotNet.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

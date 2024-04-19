@@ -17,30 +17,16 @@
     }
 
     .ql-editor {
-        height: calc(100vh - 153px);;
+        height: calc(100vh - 153px);
         overflow: auto;
     }
     
-    .change-name{
-        font-size: 25px;
-        background-color: transparent;
-        border: none;
-        outline: none;
-        width: 100%;        
-    }
 </style>
 
 <div style="height: 100%;width: 100%;">
     <div style="width: 100%;height: 110px;">
-        <div class="node-title" @ondblclick="()=>IsEditName=true">
-            @if (IsEditName)
-            {
-                <input class="change-name" autofocus @onblur="async () => await OnBlur.InvokeAsync(Item)" type="text" @bind="Item.Name"/>
-            }
-            else
-            {
-                @Item.Name
-            }
+        <div class="node-title">
+            @Item.Name
         </div>
     </div>
     <MEditor Style="height: 100%;width: 100%;" @bind-Value="Content" Markdown ContentStyle="height:100%;">

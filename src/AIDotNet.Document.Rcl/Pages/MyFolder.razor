@@ -8,6 +8,7 @@
         height: 70px;
         width: 100%;
         padding: 10px;
+        margin-bottom: 5px;
     }
 
     .folder-item:hover {
@@ -39,6 +40,19 @@
         margin-left: auto;
         float: right;
     }
+    
+    .edit-input{
+        outline: none;
+        background-color: transparent;
+        /*好看的输入框边框*/
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 5px;
+        
+        color: #333;
+        font-size: 14px;
+        width: 100%;
+    }
 </style>
 
 <SpliteerContent>
@@ -53,7 +67,7 @@
         </MTextField>
         <div style="flex: 1;width: 100%;">
 
-            @if (!string.IsNullOrEmpty(FolderId))
+            @if (!string.IsNullOrEmpty(FolderId) && FolderItemDto?.IsFolder == true)
             {
                 <div style="height: 25px;">
                     <div class="folder-icon">
@@ -64,20 +78,51 @@
                     </div>
                 </div>
             }
-            
+
             @foreach (var item in Folders)
             {
                 <div class="@GetClass(item.Id)" @onclick="() => SelectFolder(item.Id)">
                     <div class="folder-icon">
-                        <MIcon>mdi-folder-text</MIcon>
+                        @if (item.IsFolder == true)
+                        {
+                            <MIcon>mdi-folder-text</MIcon>
+                        }
+                        else
+                        {
+                            <MIcon>mdi-file-document-outline</MIcon>
+                        }
                     </div>
                     <div class="folder-info">
-                        <div>@item.Name</div>
+                        @if (item.IsEdit)
+                        {
+                            <input autofocus @onblur="() => RenameOnBlur(item)" @bind="@item.Name" class="edit-input"/>
+                        }
+                        else
+                        {
+                            <div>@item.Name</div>
+                        }
                     </div>
                     <div class="folder-options">
-                        <MButton Text XSmall Fab>
-                            <MIcon>mdi-dots-horizontal</MIcon>
-                        </MButton>
+
+                        <MMenu Left
+                               Bottom>
+                            <ActivatorContent>
+                                <MButton Text XSmall Fab @attributes="@context.Attrs">
+                                    <MIcon>mdi-dots-horizontal</MIcon>
+                                </MButton>
+                            </ActivatorContent>
+                            <ChildContent>
+                                <MList>
+                                    <MListItem OnClick="() => Remove(item)">
+                                        <MListItemTitle>删除</MListItemTitle>
+                                    </MListItem>
+
+                                    <MListItem OnClick="() => Rename(item)">
+                                        <MListItemTitle>重命名</MListItemTitle>
+                                    </MListItem>
+                                </MList>
+                            </ChildContent>
+                        </MMenu>
                     </div>
                     <div class="folder-date">@item.CreatedTime.ToString("yyyy-MM-dd")</div>
                 </div>
@@ -86,7 +131,7 @@
             {
                 <div style="text-align: center;padding-top: 20px;display: flex;flex-direction: column;justify-content: center;align-items: center;height: 100%;width: 100%;">
                     <div style="color: #999999;margin-bottom: 15px;user-select: none;">暂无笔记</div>
-                    <MButton Depressed Color="primary">
+                    <MButton OnClick="NewNote" Depressed Color="primary">
                         新建笔记
                     </MButton>
                 </div>
@@ -94,6 +139,9 @@
         </div>
     </Left>
     <Right>
-
+        @if (FolderItemDto is { IsFolder: false })
+        {
+            <EditNote Item="FolderItemDto"/>
+        }
     </Right>
 </SpliteerContent>

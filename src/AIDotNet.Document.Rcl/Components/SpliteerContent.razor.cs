@@ -11,5 +11,5 @@ public partial class SpliteerContent
 
     private string LeftStyle => "height: 100%;padding:5px;flex-direction: column;background-color:#FFFFFF!important;";
 
-    private string RightStyle => "height: 100%;padding:5px;background-color:#FFFFFF!important;";
+    private string RightStyle => "height: 100%;background-color:#FFFFFF!important;";
 }

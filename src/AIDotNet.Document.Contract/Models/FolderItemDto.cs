@@ -18,7 +18,7 @@ public sealed class FolderItemDto
     /// <summary>
     /// 是否目录
     /// </summary>
-    public bool IsFolder { get; set; }
+    public bool? IsFolder { get; set; }
 
     /// <summary>
     /// 如果是文件，文件大小

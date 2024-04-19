@@ -1,0 +1,64 @@
+﻿@inject IFileStorageService fileStorageService
+
+<style>
+    .node-title {
+        font-size: 25px;
+        padding-top: 50px;
+        margin-left: 20px;
+    }
+
+    .ql-container.ql-snow {
+        border: none;
+    }
+
+    .ql-toolbar.ql-snow {
+        border-bottom: 1px solid #F0F3F5;
+        border-top: 1px solid #F0F3F5;
+    }
+
+    .ql-editor {
+        height: calc(100vh - 153px);;
+        overflow: auto;
+    }
+    
+</style>
+
+<div style="height: 100%;width: 100%;">
+    <div style="width: 100%;height: 110px;">
+        <div class="node-title">
+            @Item.Name
+        </div>
+    </div>
+    <MEditor Style="height: 100%;width: 100%;" @bind-Value="Content" Markdown ContentStyle="height:100%;">
+        <ToolbarContent>
+            <select class="ql-header">
+                <option selected=""></option>
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+                <option value="4"></option>
+                <option value="5"></option>
+            </select>
+            <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+                <button class="ql-strike"></button>
+            </span>
+            <span class="ql-formats">
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-link"></button>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-image"></button>
+            </span>
+        </ToolbarContent>
+    </MEditor>
+</div>

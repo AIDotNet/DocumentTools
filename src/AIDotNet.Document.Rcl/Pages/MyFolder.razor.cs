@@ -19,7 +19,7 @@ public partial class MyFolder
 
     protected override async Task OnInitializedAsync()
     {
-        Folders = await FolderService.GetTreeFolderAsync();
+        Folders = await FolderService.GetFolderByParentIdAsync(null);
     }
 
     public override async Task SetParametersAsync(ParameterView parameters)
@@ -63,14 +63,50 @@ public partial class MyFolder
     {
         FolderItemDto = Folders.First(x => x.Id == folderId);
         FolderId = folderId;
+        
+        StateHasChanged();
     }
-    
-    /// <summary>
+
+    /// <summary> 
     /// 新建笔记
     /// </summary>
-    private void NewNote()
+    private async Task NewNote()
     {
+        var item = new FolderItemDto()
+        {
+            Name = "无标题笔记",
+            ParentId = FolderId,
+            IsFolder = false,
+            Size = 0,
+        };
+        await FolderService.CreateAsync(item);
         
+        Folders = await FolderService.GetFolderByParentIdAsync(FolderId);
+        
+    }
+
+    /// <summary>
+    /// 删除文件夹
+    /// </summary>
+    /// <param name="item"></param>
+    private async Task Remove(FolderItemDto item)
+    {
+        await FolderService.RemoveAsync(item.Id);
+
+        Folders.Remove(item);
+    }
+
+    private async Task Rename(FolderItemDto item)
+    {
+        item.IsEdit = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task RenameOnBlur(FolderItemDto item)
+    {
+        item.IsEdit = false;
+        await FolderService.UpdateAsync(item);
+        await InvokeAsync(StateHasChanged);
     }
 
     /// <summary>

@@ -15,7 +15,7 @@
 
             services.AddScoped<IFolderService, FolderService>();
             services.AddSingleton<ISettingService, SettingService>();
-            
+
             services.AddTransient((provider) =>
             {
                 var settingService = provider.GetRequiredService<ISettingService>();

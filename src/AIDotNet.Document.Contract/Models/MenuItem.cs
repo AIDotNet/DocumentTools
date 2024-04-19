@@ -1,38 +1,45 @@
 ﻿namespace AIDotNet.Document.Contract.Models
 {
-	public sealed class MenuItem
-	{
-		public string Id { get; set; }
-		public string Title { get; private set; }
+    public sealed class MenuItem
+    {
+        public string Id { get; set; }
 
-		public string Icon { get; private set; }
+        public string Title { get; private set; }
 
-		public string Href { get; private set; }
+        public string Icon { get; private set; }
 
-		public List<MenuItem>? Children { get; set; }
+        public string Href { get; private set; }
 
-		public bool IsIsDivider { get; set; }
+        public bool IsDivider { get; set; }
 
-		public MenuItem(string title, string icon, string href, List<MenuItem>? children = null)
-		{
-			Title = title;
-			Icon = icon;
-			Href = href;
-			Children = children;
-			Id = Guid.NewGuid().ToString("N");
-		}
+        public int DivNumber { get; init; }
 
-		public MenuItem(bool isDivider)
-		{
-			Title = string.Empty;
-			Icon = string.Empty;
-			Href = string.Empty;
-			Children = null;
-			IsIsDivider = isDivider;
-		}
-		protected MenuItem()
-		{
+        public MenuItem(string title, string icon, string href)
+        {
+            Id = Guid.NewGuid().ToString("N");
 
-		}
-	}
+            Title = title;
+            Icon = icon;
+            Href = href;
+
+            DivNumber = 0;
+            IsDivider = false;
+        }
+
+        public MenuItem(int divNumber)
+        {
+            Id = Guid.NewGuid().ToString("N");
+
+            Title = string.Empty;
+            Icon = string.Empty;
+            Href = string.Empty;
+
+            DivNumber = divNumber;
+            IsDivider = true;
+        }
+        protected MenuItem()
+        {
+
+        }
+    }
 }

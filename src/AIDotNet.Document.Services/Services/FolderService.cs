@@ -34,7 +34,7 @@ public sealed class FolderService(IFreeSql freeSql) : IFolderService
 
     public async Task<string> CreateAsync(FolderItemDto folder)
     {
-        if (folder.IsFolder)
+        if (folder.IsFolder == true)
         {
             var folderItem = new Folder(folder.Name, folder.ParentId);
             await freeSql.Insert(folderItem)
@@ -75,7 +75,9 @@ public sealed class FolderService(IFreeSql freeSql) : IFolderService
         {
             Id = x.Id,
             Name = x.Name,
-            ParentId = x.ParentId
+            ParentId = x.ParentId,
+            CreatedTime = x.CreatedTime,
+            IsFolder = x.IsFolder,
         }).ToList();
     }
 }

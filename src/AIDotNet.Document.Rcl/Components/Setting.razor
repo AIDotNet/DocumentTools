@@ -1,0 +1,49 @@
+﻿@inject  ISettingService settingService
+@inject  IPopupService  popupService
+
+<MApp>
+    <MTabs Vertical>
+        <MTab>
+            OpenAI设置
+        </MTab>
+
+        <MTabItem>
+            <MCard Flat Style="margin:5px;">
+                <MTextField
+                    Dense
+                    Label="OpenAI代理地址"
+                    @bind-Value=_options.Endpoint
+                    Outlined>
+                </MTextField>
+                <MTextField
+                    Label="ApiKey"
+                    Dense
+                    @bind-Value=_options.ApiKey
+                    Outlined>
+                </MTextField>
+
+                <MSelect Items="_models"
+                         @bind-Value="@_options.ChatModel"
+                         ItemText="u => u.Name"
+                         ItemValue="u => u.Value"
+                         Label="请选择您的聊天模型"
+                         Dense
+                         Outlined>
+                </MSelect>
+
+                <MSelect Items="_embeddings"
+                         @bind-Value="@_options.EmbeddingModel"
+                         ItemText="u => u.Name"
+                         ItemValue="u => u.Value"
+                         Label="请选择您的嵌入模型"
+                         Dense
+                         Outlined>
+                </MSelect>
+
+                <MButton  OnClick="Save" Block>
+                    保存
+                </MButton>
+            </MCard>
+        </MTabItem>
+    </MTabs>
+</MApp>

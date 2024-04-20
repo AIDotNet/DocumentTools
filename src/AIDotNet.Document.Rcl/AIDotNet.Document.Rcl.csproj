@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Shared\Components\NavModule\Models\" />
+    <Folder Include="JsInterop\" />
   </ItemGroup>
 
 </Project>

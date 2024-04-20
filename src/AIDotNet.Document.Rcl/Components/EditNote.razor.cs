@@ -1,4 +1,4 @@
-﻿using AIDotNet.Infrastructure.Helpers;
+﻿using AIDotNet.Document.Contract.Services;
 using Masa.Blazor.Components.Editor;
 
 namespace AIDotNet.Document.Rcl.Components;
@@ -22,20 +22,36 @@ public partial class EditNote : IAsyncDisposable
         get => _item;
         set
         {
+            if (_item?.Id == value.Id)
+            {
+                return;
+            }
+
             if (_item != null)
             {
-                // 将异步转换为同步
-                AsyncHelper.RunSync(async () => await SaveAsync());
+                Save();
             }
 
             _item = value;
-            _ = LoadContentAsync();
+            LoadContent();
         }
     }
 
-    public bool IsEditName { get; set; }
+    private bool IsEditName { get; set; }
 
-    private string? Content { get; set; }
+    private bool _isEditContent;
+
+    private string _content;
+
+    private string? Content
+    {
+        get => _content;
+        set
+        {
+            _isEditContent = true;
+            _content = value;
+        }
+    }
 
     [Parameter] public EventCallback<FolderItemDto> OnBlur { get; set; }
 
@@ -43,25 +59,46 @@ public partial class EditNote : IAsyncDisposable
     {
         await OnBlur.InvokeAsync(Item);
     }
-    
-    protected override async Task OnInitializedAsync()
+
+    protected override void OnInitialized()
     {
-        await LoadContentAsync();
+        LoadContent();
     }
 
-    public async ValueTask LoadContentAsync()
+    public void LoadContent()
     {
-        Content = await fileStorageService.GetFileContentAsync(Item.Id);
-        await InvokeAsync(StateHasChanged);
+        Content = fileStorageService.GetFileContent(Item.Id);
+        _ = InvokeAsync(StateHasChanged);
     }
 
-    public async ValueTask SaveAsync()
+    public void Save()
     {
-        await fileStorageService.CreateOrUpdateFileAsync(Item.Id, Content ?? string.Empty);
+        if (_isEditContent == true)
+        {
+            fileStorageService.CreateOrUpdateFileAsync(Item.Id, Content ?? string.Empty);
+        }
+    }
+
+    /// <summary>
+    /// 向量
+    /// </summary>
+    private async Task Vector()
+    {
+        if (_item.Status == VectorStatus.Processing)
+        {
+            return;
+        }
+
+        // 防止重复点击
+        await folderService.QuantifyAsync(_item.Id);
+
+        _item.Status = VectorStatus.Processing;
     }
 
     public async ValueTask DisposeAsync()
     {
-        await SaveAsync();
+        Save();
+
+        await ValueTask.CompletedTask;
     }
 }

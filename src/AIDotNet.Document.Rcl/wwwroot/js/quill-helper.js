@@ -7,21 +7,19 @@
     accept: 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon',
     pathKey: 'path'
 }
-const defaultToolbarContainer = [
-    ['bold', 'italic', 'underline', 'strike'],
-    ['blockquote', 'code-block'],
-    [{'header': 1}, {'header': 2}],
-    [{'list': 'ordered'}, {'list': 'bullet'}],
-    [{'script': 'sub'}, {'script': 'super'}],
-    [{'indent': '-1'}, {'indent': '+1'}],
-    [{'direction': 'rtl'}],
-    [{'header': [1, 2, 3, 4, 5, 6, false]}],
-    [{'color': []}, {'background': []}],
-    [{'font': []}],
-    [{'align': []}],
-    ['clean'],
-    ['emoji'],
-    ['link', 'image', 'video']
+const defaultToolbarContainer = [ [{header: [1, 2, 3, 4, 5, 6, false]}], // 标题 —— 下拉选择
+    [{size: ["small", false, "large", "huge"]}], // 字体大小
+    [{list: "ordered"}, {list: "bullet"}], // 有序、无序列表
+    ['code-block'], // 引用  代码块
+    // 链接按钮需选中文字后点击
+    ["link", "image", "video"], // 链接、图片、视频
+    [{align: []}], // 对齐方式// text direction
+    [{indent: "-1"}, {indent: "+1"}], // 缩进
+    ["bold", "italic", "underline", "strike"], // 加粗 斜体 下划线 删除线
+    [{color: []}, {background: []}], // 字体颜色、字体背景颜色
+    [{'script': 'sub'}, {'script': 'super'}],      // 下标/上标
+    [{'font': []}],//字体
+    ["clean"]
 ]
 
 export function init(quillElement, obj, toolBarContainer, additionalModules, readOnly,
@@ -47,6 +45,11 @@ export function init(quillElement, obj, toolBarContainer, additionalModules, rea
             "emoji-shortname": true,
             imageResize: {
                 displaySize: true
+            },
+            syntax: {
+                highlight: text => {
+                    return hljs.highlightAuto(text).value; // 这里就是代码高亮需要配置的地方
+                }
             }
         },
         placeholder: placeholder,
@@ -60,11 +63,15 @@ export function init(quillElement, obj, toolBarContainer, additionalModules, rea
         })
     }
 
+    let fontList = ['SimSun', 'SimHei', 'Microsoft-YaHei', 'KaiTi', 'FangSong']
+    Quill.import('formats/font').whitelist = fontList;
+
     const editor = new Quill(quillElement, options);
     if (isMarkdown) {
         const markdownOptions = {};
         const quillMarkdown = new QuillMarkdown(editor, markdownOptions);
     }
+
     obj.invokeMethodAsync("HandleRenderedAsync");
     editor.on('selection-change', range => {
         if (!range) {

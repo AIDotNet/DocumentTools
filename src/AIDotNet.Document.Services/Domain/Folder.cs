@@ -34,6 +34,11 @@ public class Folder
     public bool IsDeleted { get; set; }
     
     /// <summary>
+    /// 向量状态 | 文件夹不需要
+    /// </summary>
+    public VectorStatus Status { get; set; }
+    
+    /// <summary>
     /// 创建文件夹
     /// </summary>
     /// <param name="name"></param>
@@ -64,6 +69,7 @@ public class Folder
         IsFolder = false;
         Size = size;
         IsDeleted = false;
+        Status = VectorStatus.Unhandled;
     }
     
 

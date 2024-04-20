@@ -11,6 +11,9 @@
 
 	<ItemGroup>
 	  <Content Include="logo.ico" />
+	  <Content Update="wwwroot\ai.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>

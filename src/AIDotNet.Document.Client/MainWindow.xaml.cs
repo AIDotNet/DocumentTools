@@ -33,6 +33,8 @@ namespace AIDotNet.Document.Client
             });
 
             var app = services.BuildServiceProvider();
+            
+            app.UseDocumentService();
 
             Resources.Add("services", app);
 

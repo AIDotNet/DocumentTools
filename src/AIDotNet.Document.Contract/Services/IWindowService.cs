@@ -9,4 +9,9 @@ public interface IWindowService
     void Close();
     
     bool IsMaximized { get; }
+    
+    /// <summary>
+    /// 打开设置
+    /// </summary>
+    void OpenSetting();
 }

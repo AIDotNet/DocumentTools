@@ -1,13 +1,80 @@
-﻿using AIDotNet.Document.Contract.Models;
+﻿using System.Threading.Channels;
 using AIDotNet.Document.Services.Domain;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AIDotNet.Document.Services.Services;
 
-public sealed class FolderService(IFreeSql freeSql) : IFolderService
+public sealed class FolderService : IFolderService
 {
+    private readonly IFreeSql _freeSql;
+    private Channel<Folder> FolderChannel { get; } = Channel.CreateUnbounded<Folder>();
+
+    public FolderService(IFreeSql freeSql, IServiceProvider serviceProvider)
+    {
+        _freeSql = freeSql;
+        Task.Run(async () =>
+        {
+            var values = await freeSql.Select<Folder>().Where(x => x.Status == VectorStatus.Processing || x.Status == VectorStatus.Failed).ToListAsync();
+
+            foreach (var value in values)
+            {
+                await FolderChannel.Writer.WriteAsync(value);
+            }
+
+            using var scope = serviceProvider.CreateScope();
+            var kernelMemory = scope.ServiceProvider.GetRequiredService<IKernelMemory>();
+            var fileStorageService = scope.ServiceProvider.GetRequiredService<IFileStorageService>();
+            var sql = scope.ServiceProvider.GetRequiredService<IFreeSql>();
+            while (await FolderChannel.Reader.WaitToReadAsync())
+            {
+                var folder = await FolderChannel.Reader.ReadAsync();
+
+                await HandlerVectorAsync(folder, kernelMemory, fileStorageService, sql);
+            }
+        });
+    }
+
+    private async Task HandlerVectorAsync(Folder folder, IKernelMemory kernelMemory,
+        IFileStorageService fileStorageService, IFreeSql freeSql)
+    {
+        if (folder.IsFolder == false)
+        {
+            try
+            {
+                var content = fileStorageService.GetFileContent(folder.Id);
+
+                var tag = new TagCollection()
+                {
+                    {
+                        "fileId", folder.Id
+                    }
+                };
+
+                Console.WriteLine($"开始导入文件：{folder.Id}");
+
+                await kernelMemory.ImportTextAsync(content, folder.Id, tag);
+
+                Console.WriteLine($"导入文件：{folder.Id} 完成");
+
+                await freeSql.Update<Folder>()
+                    .Set(f => f.Status, VectorStatus.Processed)
+                    .Where(f => f.Id == folder.Id)
+                    .ExecuteAffrowsAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"导入文件：{folder.Id} 失败 {e.Message}");
+                await freeSql.Update<Folder>()
+                    .Set(f => f.Status, VectorStatus.Failed)
+                    .Where(f => f.Id == folder.Id)
+                    .ExecuteAffrowsAsync();
+            }
+        }
+    }
+
     public async Task<FolderItemDto> GetFolderByIdAsync(string id)
     {
-        var result = await freeSql.Select<Folder>().Where(f => f.Id == id).FirstAsync();
+        var result = await _freeSql.Select<Folder>().Where(f => f.Id == id).FirstAsync();
 
         return new FolderItemDto()
         {
@@ -22,7 +89,7 @@ public sealed class FolderService(IFreeSql freeSql) : IFolderService
 
     public async Task<List<FolderItemDto>> GetTreeFolderAsync()
     {
-        var rootFolders = await freeSql.Select<Folder>().Where(f => f.ParentId == null && f.IsFolder).ToListAsync();
+        var rootFolders = await _freeSql.Select<Folder>().Where(f => f.ParentId == null && f.IsFolder).ToListAsync();
 
         return rootFolders.Select(x => new FolderItemDto
         {
@@ -37,7 +104,7 @@ public sealed class FolderService(IFreeSql freeSql) : IFolderService
         if (folder.IsFolder == true)
         {
             var folderItem = new Folder(folder.Name, folder.ParentId);
-            await freeSql.Insert(folderItem)
+            await _freeSql.Insert(folderItem)
                 .ExecuteAffrowsAsync();
 
             return folderItem.Id;
@@ -45,7 +112,7 @@ public sealed class FolderService(IFreeSql freeSql) : IFolderService
         else
         {
             var folderItem = new Folder(folder.Name, folder.ParentId, folder.Size);
-            await freeSql.Insert(folderItem)
+            await _freeSql.Insert(folderItem)
                 .ExecuteAffrowsAsync();
 
             return folderItem.Id;
@@ -54,12 +121,12 @@ public sealed class FolderService(IFreeSql freeSql) : IFolderService
 
     public async Task RemoveAsync(string id)
     {
-        await freeSql.Delete<Folder>().Where(f => f.Id == id).ExecuteAffrowsAsync();
+        await _freeSql.Delete<Folder>().Where(f => f.Id == id).ExecuteAffrowsAsync();
     }
 
     public async Task UpdateAsync(FolderItemDto folder)
     {
-        await freeSql.Update<Folder>()
+        await _freeSql.Update<Folder>()
             .Where(f => f.Id == folder.Id)
             .Set(f => f.Name, folder.Name)
             .Set(x => x.ParentId, folder.ParentId)
@@ -69,7 +136,7 @@ public sealed class FolderService(IFreeSql freeSql) : IFolderService
 
     public async Task<List<FolderItemDto>> GetFolderByParentIdAsync(string? parentId)
     {
-        var folders = await freeSql.Select<Folder>().Where(f => f.ParentId == parentId).ToListAsync();
+        var folders = await _freeSql.Select<Folder>().Where(f => f.ParentId == parentId).ToListAsync();
 
         return folders.Select(x => new FolderItemDto
         {
@@ -79,5 +146,24 @@ public sealed class FolderService(IFreeSql freeSql) : IFolderService
             CreatedTime = x.CreatedTime,
             IsFolder = x.IsFolder,
         }).ToList();
+    }
+
+    public async Task QuantifyAsync(string id)
+    {
+        // 如果是文件夹，且状态不是处理中，才可以量化
+        if (await _freeSql.Select<Folder>()
+                .AnyAsync(x => x.Id == id && x.IsFolder == false && x.Status == VectorStatus.Processing))
+        {
+            return;
+        }
+
+        await _freeSql.Update<Folder>()
+            .Set(f => f.Status, VectorStatus.Processing)
+            .Where(f => f.Id == id)
+            .ExecuteAffrowsAsync();
+
+        var folder = await _freeSql.Select<Folder>().Where(f => f.Id == id).FirstAsync();
+
+        await FolderChannel.Writer.WriteAsync(folder);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Extensions.DependencyInjection
+﻿using AIDotNet.Document.Contract;
+
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
@@ -13,19 +15,20 @@
             services.AddSingleton<IFileStorageService, FileStorageService>();
             services.AddSingleton<ILiteDatabase>(_ => new LiteDatabase("file-document.db"));
 
-            services.AddScoped<IFolderService, FolderService>();
+            services.AddSingleton<IFolderService, FolderService>();
             services.AddSingleton<ISettingService, SettingService>();
 
-            services.AddTransient((provider) =>
+            services.AddSingleton<IKernelMemory>((provider) =>
             {
                 var settingService = provider.GetRequiredService<ISettingService>();
             
-                var options = settingService.GetSetting<OpenAIOptions>(SettingExtensions.OpenAI.Default);
+                var options = settingService.GetSetting<OpenAIOptions>(Constant.Settings.OpenAIOptions);
             
                 return new KernelMemoryBuilder()
                     .WithOpenAI(new OpenAIConfig()
                     {
                         TextModel = options.ChatModel,
+                        APIKey = options.ApiKey,
                         Endpoint = options.Endpoint,
                         EmbeddingModel = options.EmbeddingModel,
                     }, httpClient: new HttpClient(new OpenAIHttpClientHanlder(options.Endpoint)))
@@ -41,6 +44,7 @@
                     })
                     .Build();
             });
+            
 
             return services;
         }

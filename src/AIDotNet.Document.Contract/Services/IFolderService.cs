@@ -44,4 +44,11 @@ public interface IFolderService
     /// <param name="parentId"></param>
     /// <returns></returns>
     Task<List<FolderItemDto>> GetFolderByParentIdAsync(string? parentId);
+    
+    /// <summary>
+    /// 量化指定文件
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task QuantifyAsync(string id);
 }

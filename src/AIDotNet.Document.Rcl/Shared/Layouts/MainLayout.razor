@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject IWindowService WindowService
+@inject IJSRuntime JSRuntime
 
 <style>
     .window-buttons {
@@ -31,8 +32,37 @@
     .close {
         background-color: #ff5f5f;
     }
+
+    #floating-ball {
+        z-index: 1000;
+        width: 60px;
+        height: 60px;
+        position: fixed;
+        bottom: 10px;
+        transition: all 0.5s;
+        cursor: pointer;
+        box-sizing: border-box;
+        
+        /*往右边移动*/
+        animation: moveRight 2s infinite;
+        right: -30px;
+    }
+
+    #floating-ball:hover {
+        right: 10px;
+        width: 60px;
+        border-radius: 50%;
+    }
+
+    #ai-img {
+        width: 100%;
+        height: 100%;
+    }
 </style>
 
+<div id="floating-ball" class="floating-ball">
+    <img id="ai-img" src="ai.png" />
+</div>
 <MApp>
 
     <SideBarPart Width="240"/>

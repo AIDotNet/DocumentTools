@@ -1,4 +1,5 @@
 ﻿@inject IFileStorageService fileStorageService
+@inject IFolderService folderService
 
 <style>
     .node-title {
@@ -32,47 +33,25 @@
 
 <div style="height: 100%;width: 100%;">
     <div style="width: 100%;height: 110px;-webkit-app-region:drag;">
-        <div class="node-title" @ondblclick="() => IsEditName = true">
-            @if (!IsEditName)
-            {
-                @Item.Name
-            }
-            else
-            {
-                <input type="text" autofocus class="name-input" @bind="Item.Name" @onblur="Blur"/>
-            }
+        <div class="node-title" style="display: flex; justify-content: space-between;" @ondblclick="() => IsEditName = true">
+            <div>
+                @if (!IsEditName)
+                {
+                    @Item.Name
+                }
+                else
+                {
+                    <input type="text" autofocus class="name-input" @bind="Item.Name" @onblur="Blur"/>
+                }
+            </div>
+
+            <div>
+                <MButton Small OnClick="Vector" Text Disabled="_item.Status == VectorStatus.Processing">
+                    向量
+                </MButton>
+            </div>
         </div>
     </div>
     <DEditor @ref="Ref" BeforeAllUploadAsync="BeforeAllUploadAsync" Style="height: 100%;width: 100%;" @bind-Value="Content" Markdown ContentStyle="height:100%;">
-        <ToolbarContent>
-            <select class="ql-header">
-                <option selected=""></option>
-                <option value="1"></option>
-                <option value="2"></option>
-                <option value="3"></option>
-                <option value="4"></option>
-                <option value="5"></option>
-            </select>
-            <span class="ql-formats">
-                <button class="ql-bold"></button>
-                <button class="ql-italic"></button>
-                <button class="ql-underline"></button>
-                <button class="ql-strike"></button>
-            </span>
-            <span class="ql-formats">
-                <select class="ql-color"></select>
-                <select class="ql-background"></select>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-list" value="ordered"></button>
-                <button class="ql-list" value="bullet"></button>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-link"></button>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-image"></button>
-            </span>
-        </ToolbarContent>
     </DEditor>
 </div>

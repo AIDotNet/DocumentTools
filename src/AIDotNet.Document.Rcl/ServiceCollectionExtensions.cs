@@ -5,7 +5,6 @@
         public static IServiceCollection AddDocumentRcl(this IServiceCollection services)
         {
             services.AddMasaBlazor();
-            services.AddScoped<CustomJsInterop>();
 
             services.AddBlazorContextMenu();
 

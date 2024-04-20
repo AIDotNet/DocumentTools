@@ -17,13 +17,13 @@ public sealed class FileStorageService(ILiteDatabase database) : IFileStorageSer
         return ValueTask.CompletedTask;
     }
 
-    public async ValueTask CreateOrUpdateFileAsync(string fileId, string content)
+    public void CreateOrUpdateFileAsync(string fileId, string content)
     {
         var bytes = Encoding.UTF8.GetBytes(content);
-        await CreateOrUpdateFileAsync(fileId, bytes);
+         CreateOrUpdateFileAsync(fileId, bytes);
     }
 
-    public ValueTask CreateOrUpdateFileAsync(string fileId, byte[] bytes)
+    public void CreateOrUpdateFileAsync(string fileId, byte[] bytes)
     {
         // 先判断是否存在
         var file = database.FileStorage.FindById(fileId);
@@ -33,7 +33,6 @@ public sealed class FileStorageService(ILiteDatabase database) : IFileStorageSer
         }
 
         database.FileStorage.Upload(fileId, fileId, new MemoryStream(bytes));
-        return ValueTask.CompletedTask;
     }
 
     public async Task<string> CreateOrUpdateImageAsync(string name, string base64)
@@ -74,17 +73,17 @@ public sealed class FileStorageService(ILiteDatabase database) : IFileStorageSer
         return name;
     }
 
-    public ValueTask<string> GetFileContentAsync(string fileId)
+    public string GetFileContent(string fileId)
     {
         var file = database.FileStorage.FindById(fileId);
         if (file == null)
         {
-            return new ValueTask<string>(string.Empty);
+            return string.Empty;
         }
 
         using var stream = new MemoryStream();
         file.CopyTo(stream);
-        return new ValueTask<string>(Encoding.UTF8.GetString(stream.ToArray()));
+        return Encoding.UTF8.GetString(stream.ToArray());
     }
 
     public ValueTask<byte[]> GetFileBytesAsync(string fileId)

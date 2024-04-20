@@ -1,4 +1,7 @@
-﻿<style>
+﻿
+@inject IWindowService WindowService
+
+<style>
     .m-navigation-drawer__content{
         -webkit-app-region: drag;
         webkit-app-region: drag;
@@ -14,9 +17,41 @@
             </MButton>
         </MCol>
         <MCol Cols="12" Class="text-center">
-            <MAvatar Size="84">
-                <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
-            </MAvatar>
+
+            <MMenu OffsetX="true" Top>
+                <ActivatorContent>
+                    <MAvatar  @attributes="@context.Attrs" Size="50">
+                        <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png"/>
+                    </MAvatar>
+                </ActivatorContent>
+
+                <ChildContent>
+                    <div style="width: 220px;">
+                        <MListItemGroup >
+                            <MListItem OnClick="WindowService.OpenSetting" Dense Link=true Class="pl-4" Style="min-height:32px">
+                                <ItemContent>
+                                    <MListItemIcon Class="my-auto">
+                                        <MIcon>mdi-wrench</MIcon>
+                                    </MListItemIcon>
+                                    <MListItemContent>
+                                        <MListItemTitle>设置</MListItemTitle>
+                                    </MListItemContent>
+                                </ItemContent>
+                            </MListItem>
+                            <MListItem Dense Link=true Class="pl-4" Style="min-height:32px">
+                                <ItemContent>
+                                    <MListItemIcon Class="my-auto">
+                                        <MIcon>mdi-information-variant</MIcon>
+                                    </MListItemIcon>
+                                    <MListItemContent>
+                                        <MListItemTitle>关于我们</MListItemTitle>
+                                    </MListItemContent>
+                                </ItemContent>
+                            </MListItem>
+                        </MListItemGroup>
+                    </div>
+                </ChildContent>
+            </MMenu>
         </MCol>
 
         @* vip

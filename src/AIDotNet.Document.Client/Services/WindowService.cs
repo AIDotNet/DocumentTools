@@ -21,4 +21,29 @@ public class WindowService(Window window) : IWindowService
     }
 
     public bool IsMaximized => window.WindowState == WindowState.Maximized;
+
+    private Setting? _setting;
+    
+    public void OpenSetting()
+    {
+        _setting = new Setting();
+        _setting.Show();
+        
+        _setting.Closed += (sender, args) =>
+        {
+            _setting = null;
+        };
+        
+        _setting.Closing += (sender, args) =>
+        {
+            args.Cancel = true;
+            _setting.Hide();
+        };
+        
+        _setting.Activated += (sender, args) =>
+        {
+            _setting.Topmost = true;
+            _setting.Topmost = false;
+        };
+    }
 }

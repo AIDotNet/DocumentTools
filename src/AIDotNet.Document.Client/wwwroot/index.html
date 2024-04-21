@@ -280,6 +280,13 @@
     });
 
     window.util = {
+        copyToClipboard: (text) => {
+            navigator.clipboard.writeText(text).then(() => {
+                console.log('Text copied to clipboard');
+            }, (err) => {
+                console.error('Failed to copy text to clipboard', err);
+            });
+        },
         uploadFilePic: (quillElement, element, index) => {
             debugger;
             let _that = this;
@@ -319,22 +326,78 @@
             //     this.style.width = '20px';
             //     aiImg.src = 'ai-1.png';
             // });
+        },
+        scrollToBottom: (id) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollTop = element.scrollHeight;
+            }
+        },
+        dragElement: (id) => {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            var elmnt = document.getElementById(id);
+            if (!elmnt) return;
+            elmnt.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+            
+            function elementDrag(e) {
+                e = e || window.event;
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                var newTop = elmnt.offsetTop - pos2;
+                var newLeft = elmnt.offsetLeft - pos1;
+
+                // 获取窗口的宽度和高度
+                var winWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+                var winHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+                // 检查元素的位置是否超出了窗口的边界
+                if (newLeft < 0) {
+                    newLeft = 0;
+                } else if (newLeft + elmnt.offsetWidth > winWidth) {
+                    newLeft = winWidth - elmnt.offsetWidth;
+                }
+
+                if (newTop < 0) {
+                    newTop = 0;
+                } else if (newTop + elmnt.offsetHeight > winHeight) {
+                    newTop = winHeight - elmnt.offsetHeight;
+                }
+
+                // 设置元素的新位置
+                elmnt.style.top = newTop + "px";
+                elmnt.style.left = newLeft + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
         }
     };
 
     window.util = window.util || {};
 
-    window.util.showFloatingPanel = function() {
+    window.util.showFloatingPanel = function () {
         var panel = document.getElementById("floating-ball");
         panel.style.height = "450px";
         panel.style.width = "250px";
     };
 
-    window.util.hideFloatingPanel = function() {
+    window.util.hideFloatingPanel = function () {
         var panel = document.getElementById("floating-ball");
         panel.style.height = "60px";
         panel.style.width = "60px";
-        
+
     };
 </script>
 </body>

@@ -7,13 +7,25 @@ public partial class FloatingBall
     /// </summary>
     private bool IsShowFloatingBall { get; set; }
 
-    private string Message = string.Empty;
+    private string _id = Guid.NewGuid().ToString("N");
+
+    private string _message = string.Empty;
+
+    private bool _isLoading;
 
     private List<ChatMessage> ChatMessages { get; set; } = new();
 
     private async Task FloatingBallAsync()
     {
         IsShowFloatingBall = !IsShowFloatingBall;
+
+        if (IsShowFloatingBall)
+        {
+            await Task.Delay(100).ContinueWith(async _ =>
+            {
+                await jsRuntime.InvokeVoidAsync("util.dragElement", "floating-panel");
+            });
+        }
 
         await InvokeAsync(StateHasChanged);
     }
@@ -22,22 +34,24 @@ public partial class FloatingBall
     {
         ChatMessages.Add(new ChatMessage()
         {
-            Content = Message,
+            Content = _message,
+            Role = ChatMessageRole.User,
             CreateAt = DateTime.Now,
             Extra = new Dictionary<string, string>(),
             Id = Guid.NewGuid().ToString(),
             Meta = new Dictionary<string, string>(),
         });
 
-        Message = string.Empty;
+        _message = string.Empty;
 
-        await InvokeAsync(StateHasChanged);
+        _ = InvokeAsync(StateHasChanged);
 
         var chat = new ChatMessage()
         {
             CreateAt = DateTime.Now,
             Extra = new Dictionary<string, string>(),
             Id = Guid.NewGuid().ToString(),
+            Role = ChatMessageRole.Assistant,
             Meta = new Dictionary<string, string>(),
         };
 
@@ -46,19 +60,54 @@ public partial class FloatingBall
 
         ChatMessages.Add(chat);
 
-        await foreach (var item in KernelService.CompletionAsync(new CompletionInput()
-                       {
-                           History = history,
-                           Relevancy = 0.5f
-                       }))
+        try
         {
-            chat.Content = item;
-            ChatMessages.Add(chat);
-            _ = InvokeAsync(StateHasChanged);
+            _isLoading = true;
+            await foreach (var item in KernelService.CompletionAsync(new CompletionInput()
+                           {
+                               History = history,
+                               Relevancy = 0.5f
+                           }))
+            {
+                chat.Content += item;
+                _ = InvokeAsync(StateHasChanged);
+
+                await jsRuntime.InvokeVoidAsync("util.scrollToBottom", _id);
+            }
         }
+        catch (Exception e)
+        {
+            chat.Content = e.Message;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+
+        await InvokeAsync(StateHasChanged);
     }
 
-    protected override void OnInitialized()
+    private void RemoveMessage(ChatMessage message)
     {
+        ChatMessages.Remove(message);
+    }
+
+    private async Task CopyMessage(ChatMessage message)
+    {
+        await jsRuntime.InvokeVoidAsync("util.copyToClipboard", message.Content);
+
+        await PopupService.EnqueueSnackbarAsync("复制成功", AlertTypes.Success);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // 等待1s
+            await Task.Delay(400).ContinueWith(async _ =>
+            {
+                await jsRuntime.InvokeVoidAsync("util.AILevitatedSphereInit");
+            });
+        }
     }
 }

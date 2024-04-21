@@ -1,4 +1,6 @@
 ﻿@inject IKernelService KernelService
+@inject IJSRuntime jsRuntime
+@inject IPopupService PopupService
 
 <style>
 
@@ -30,18 +32,19 @@
         position: fixed;
         bottom: 10px;
         right: 10px;
-        width: 250px;
+        width: 300px;
         height: 0;
         border: 1px solid #ccc;
-        border-radius: 4px;
+        border-radius: 12px;
         box-sizing: border-box;
         overflow: hidden;
         transition: height 0.5s ease-in-out;
+        box-shadow: 2px 2px 5px 0 grey;
     }
 
     .floating-panel.show {
         display: block;
-        height: 450px;
+        height: 500px;
     }
 
     .panel-header {
@@ -76,6 +79,16 @@
         outline: none;
     }
     
+    .md-render{
+        width: 100%;
+        overflow: auto;
+    }
+
+    .button-group {
+        float: left;
+        display: contents;
+    }
+
 </style>
 
 <div id="floating-ball" class="floating-ball">
@@ -89,34 +102,53 @@
                         <MIcon>mdi-close</MIcon>
                     </MButton>
                 </div>
-                <div style="flex: 1;padding: 5px;">
+                <div style="flex: 1;padding: 5px;overflow: auto;font-size: 14px;" id="@_id">
                     @foreach (var item in ChatMessages)
                     {
                         if (item.Role == ChatMessageRole.User)
                         {
                             <div style="text-align:right; margin-bottom:10px;width: 85%;">
-                                <p>@item.CreateAt.ToString("yyyy-MM-dd hh:mm")</p>
+                                <div>
+                                    <div class="button-group">
+                                        <MButton Text XSmall Icon>
+                                            <MIcon>mdi-content-copy</MIcon>
+                                        </MButton>
+                                        <MButton Text XSmall Icon>
+                                            <MIcon>mdi-delete</MIcon>
+                                        </MButton>
+                                    </div>
+                                    我
+                                </div>
                                 <div style="display:inline-block; background-color:#dcdcdc; padding:10px; border-radius:10px;">
                                     <MMarkdownIt Source="@item.Content"
                                                  Html="true"
                                                  Breaks="true"
                                                  Linkify="true"
                                                  Typographer="true"
-                                                 Class="mt-4 pa-1"/>
+                                                 Class="mt-4 pa-1 md-render"/>
                                 </div>
                             </div>
                         }
                         else if (item.Role == ChatMessageRole.Assistant)
                         {
                             <div style="text-align:left; margin-bottom:10px;width: 85%;">
-                                <p>@item.CreateAt.ToString("yyyy-MM-dd hh:mm")</p>
+                                <div>
+                                    智能助手
+                                    <MButton Text XSmall Icon>
+                                        <MIcon>mdi-content-copy</MIcon>
+                                    </MButton>
+                                    <MButton Text XSmall Icon>
+                                        <MIcon>mdi-delete</MIcon>
+                                    </MButton>
+                                </div>
                                 <div style="display:inline-block; background-color:#f0f0f0; padding:10px; border-radius:10px;">
                                     <MMarkdownIt Source="@item.Content"
                                                  Html="true"
                                                  Breaks="true"
+                                                 Style="margin: 10px;"
                                                  Linkify="true"
                                                  Typographer="true"
-                                                 Class="mt-4 pa-1"/>
+                                                 Class="mt-4 pa-1 md-render"/>
                                 </div>
                             </div>
                         }
@@ -124,22 +156,22 @@
                     @if (ChatMessages.Count == 0)
                     {
                         <div style="text-align:left; margin-bottom:10px;">
-                            <p>@DateTime.Now.ToString("yyyy-MM-dd hh:mm")</p>
+                            <span>智能助手</span>
                             <div style="display:inline-block; background-color:#f0f0f0; padding:10px; border-radius:10px;">
                                 <MMarkdownIt Source="您好，我是您的智能文档助手，您可以提问您本地已经向量过的文件内容，我会快速为你解答！"
                                              Html="true"
                                              Breaks="true"
                                              Linkify="true"
                                              Typographer="true"
-                                             Class="mt-4 pa-1"/>
+                                             Class="mt-4 pa-1 md-render"/>
                             </div>
                         </div>
                     }
                 </div>
                 <MDivider ></MDivider>
                 <div class="panel-body">
-                    <input @bind=Message class="panel-input" type="text" placeholder="请输入内容"/>
-                    <MButton Small Text>
+                    <input @bind=_message class="panel-input" type="text" placeholder="请输入内容"/>
+                    <MButton Disabled="_isLoading" Small Text OnClick="SendMessageAsync">
                         发送
                     </MButton>
                 </div>

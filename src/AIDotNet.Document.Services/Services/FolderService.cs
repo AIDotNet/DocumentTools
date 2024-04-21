@@ -34,6 +34,13 @@ public sealed class FolderService : IFolderService
         });
     }
 
+    /// <summary>
+    /// 处理向量内容
+    /// </summary>
+    /// <param name="folder"></param>
+    /// <param name="kernelMemory"></param>
+    /// <param name="fileStorageService"></param>
+    /// <param name="freeSql"></param>
     private async Task HandlerVectorAsync(Folder folder, IKernelMemory kernelMemory,
         IFileStorageService fileStorageService, IFreeSql freeSql)
     {

@@ -1,0 +1,153 @@
+﻿@inject IKernelService KernelService
+
+<style>
+
+    #floating-ball {
+        z-index: 1000;
+        width: 60px;
+        height: 60px;
+        position: fixed;
+        bottom: 10px;
+        transition: all 0.5s;
+        cursor: pointer;
+        box-sizing: border-box;
+        animation: moveRight 2s infinite;
+        right: -30px;
+    }
+
+    #floating-ball:hover {
+        right: 10px;
+        width: 60px;
+        border-radius: 50%;
+    }
+
+    #ai-img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .floating-panel {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        width: 250px;
+        height: 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        overflow: hidden;
+        transition: height 0.5s ease-in-out;
+    }
+
+    .floating-panel.show {
+        display: block;
+        height: 450px;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .header-title {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .close-button {
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .panel-body {
+        padding: 10px;
+        display: flex;
+    }
+
+    .panel-input {
+        width: 100%;
+        padding: 5px;
+        outline: none;
+    }
+    
+</style>
+
+<div id="floating-ball" class="floating-ball">
+    @if (IsShowFloatingBall)
+    {
+        <div id="floating-panel" class="floating-panel @(IsShowFloatingBall ? "show" : "")">
+            <div style="display: flex;height: 100%;flex-direction: column;background-color: #ffffff;">
+                <div class="panel-header">
+                    <span class="header-title">您的智能助手</span>
+                    <MButton XSmall Text Icon OnClick="FloatingBallAsync">
+                        <MIcon>mdi-close</MIcon>
+                    </MButton>
+                </div>
+                <div style="flex: 1;padding: 5px;">
+                    @foreach (var item in ChatMessages)
+                    {
+                        if (item.Role == ChatMessageRole.User)
+                        {
+                            <div style="text-align:right; margin-bottom:10px;width: 85%;">
+                                <p>@item.CreateAt.ToString("yyyy-MM-dd hh:mm")</p>
+                                <div style="display:inline-block; background-color:#dcdcdc; padding:10px; border-radius:10px;">
+                                    <MMarkdownIt Source="@item.Content"
+                                                 Html="true"
+                                                 Breaks="true"
+                                                 Linkify="true"
+                                                 Typographer="true"
+                                                 Class="mt-4 pa-1"/>
+                                </div>
+                            </div>
+                        }
+                        else if (item.Role == ChatMessageRole.Assistant)
+                        {
+                            <div style="text-align:left; margin-bottom:10px;width: 85%;">
+                                <p>@item.CreateAt.ToString("yyyy-MM-dd hh:mm")</p>
+                                <div style="display:inline-block; background-color:#f0f0f0; padding:10px; border-radius:10px;">
+                                    <MMarkdownIt Source="@item.Content"
+                                                 Html="true"
+                                                 Breaks="true"
+                                                 Linkify="true"
+                                                 Typographer="true"
+                                                 Class="mt-4 pa-1"/>
+                                </div>
+                            </div>
+                        }
+                    }
+                    @if (ChatMessages.Count == 0)
+                    {
+                        <div style="text-align:left; margin-bottom:10px;">
+                            <p>@DateTime.Now.ToString("yyyy-MM-dd hh:mm")</p>
+                            <div style="display:inline-block; background-color:#f0f0f0; padding:10px; border-radius:10px;">
+                                <MMarkdownIt Source="您好，我是您的智能文档助手，您可以提问您本地已经向量过的文件内容，我会快速为你解答！"
+                                             Html="true"
+                                             Breaks="true"
+                                             Linkify="true"
+                                             Typographer="true"
+                                             Class="mt-4 pa-1"/>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <MDivider ></MDivider>
+                <div class="panel-body">
+                    <input @bind=Message class="panel-input" type="text" placeholder="请输入内容"/>
+                    <MButton Small Text>
+                        发送
+                    </MButton>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <img @onclick="FloatingBallAsync" id="ai-img" src="ai.png" alt=""/>
+    }
+</div>

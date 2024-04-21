@@ -1,4 +1,6 @@
 ﻿using AIDotNet.Document.Contract;
+using Azure.AI.OpenAI;
+using Microsoft.SemanticKernel;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -11,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .UseConnectionString(DataType.Sqlite, "Data Source=document.db")
                 .UseAutoSyncStructure(true) //自动同步实体结构到数据库
                 .Build());
-            
+
             services.AddSingleton<IFileStorageService, FileStorageService>();
             services.AddSingleton<ILiteDatabase>(_ => new LiteDatabase("file-document.db"));
 
@@ -21,9 +23,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IKernelMemory>((provider) =>
             {
                 var settingService = provider.GetRequiredService<ISettingService>();
-            
+
                 var options = settingService.GetSetting<OpenAIOptions>(Constant.Settings.OpenAIOptions);
-            
+
                 return new KernelMemoryBuilder()
                     .WithOpenAI(new OpenAIConfig()
                     {
@@ -44,15 +46,31 @@ namespace Microsoft.Extensions.DependencyInjection
                     })
                     .Build();
             });
-            
+
+            services.AddSingleton<Kernel>(provider =>
+            {
+                var settingService = provider.GetRequiredService<ISettingService>();
+
+                var options = settingService.GetSetting<OpenAIOptions>(Constant.Settings.OpenAIOptions);
+
+                var kernel = Kernel.CreateBuilder()
+                    .AddOpenAIChatCompletion(
+                        modelId: options.ChatModel,
+                        apiKey: options.ApiKey,
+                        httpClient: new HttpClient(new OpenAIHttpClientHanlder(options.Endpoint)))
+                    .Build();
+                return kernel;
+            });
+
+            services.AddSingleton<IKernelService, KernelService>();
 
             return services;
         }
-        
+
         public static IServiceProvider UseDocumentService(this IServiceProvider provider)
         {
             var settingService = provider.GetRequiredService<ISettingService>();
-            
+
             settingService.Update();
             return provider;
         }

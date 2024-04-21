@@ -321,6 +321,21 @@
             // });
         }
     };
+
+    window.util = window.util || {};
+
+    window.util.showFloatingPanel = function() {
+        var panel = document.getElementById("floating-ball");
+        panel.style.height = "450px";
+        panel.style.width = "250px";
+    };
+
+    window.util.hideFloatingPanel = function() {
+        var panel = document.getElementById("floating-ball");
+        panel.style.height = "60px";
+        panel.style.width = "60px";
+        
+    };
 </script>
 </body>
 

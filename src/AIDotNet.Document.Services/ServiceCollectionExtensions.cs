@@ -20,11 +20,13 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IFolderService, FolderService>();
             services.AddSingleton<ISettingService, SettingService>();
 
-            services.AddSingleton<IKernelMemory>((provider) =>
+            services.AddTransient<IKernelMemory>((provider) =>
             {
                 var settingService = provider.GetRequiredService<ISettingService>();
 
                 var options = settingService.GetSetting<OpenAIOptions>(Constant.Settings.OpenAIOptions);
+                
+                options ??= new ();
 
                 return new KernelMemoryBuilder()
                     .WithOpenAI(new OpenAIConfig()
@@ -47,12 +49,14 @@ namespace Microsoft.Extensions.DependencyInjection
                     .Build();
             });
 
-            services.AddSingleton<Kernel>(provider =>
+            services.AddTransient<Kernel>(provider =>
             {
                 var settingService = provider.GetRequiredService<ISettingService>();
 
                 var options = settingService.GetSetting<OpenAIOptions>(Constant.Settings.OpenAIOptions);
 
+                options ??= new ();
+                
                 var kernel = Kernel.CreateBuilder()
                     .AddOpenAIChatCompletion(
                         modelId: options.ChatModel,

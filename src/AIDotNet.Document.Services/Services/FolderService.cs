@@ -14,7 +14,8 @@ public sealed class FolderService : IFolderService
         _freeSql = freeSql;
         Task.Run(async () =>
         {
-            var values = await freeSql.Select<Folder>().Where(x => x.Status == VectorStatus.Processing || x.Status == VectorStatus.Failed).ToListAsync();
+            var values = await freeSql.Select<Folder>()
+                .Where(x => x.Status == VectorStatus.Processing || x.Status == VectorStatus.Failed).ToListAsync();
 
             foreach (var value in values)
             {
@@ -59,7 +60,7 @@ public sealed class FolderService : IFolderService
 
                 Console.WriteLine($"开始导入文件：{folder.Id}");
 
-                await kernelMemory.ImportTextAsync(content, folder.Id, tag);
+                await kernelMemory.ImportTextAsync(content, folder.Id, tag, index: "document");
 
                 Console.WriteLine($"导入文件：{folder.Id} 完成");
 

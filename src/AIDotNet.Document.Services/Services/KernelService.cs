@@ -29,7 +29,7 @@ public class KernelService(IKernelMemory kernelMemory, Kernel kernel) : IKernelS
 
         var content = input.History.Last();
 
-        var result = await kernelMemory.SearchAsync(content.Content, "wiki", limit: 3,
+        var result = await kernelMemory.SearchAsync(content.Content, "document", limit: 3,
             minRelevance: input.Relevancy);
 
         var prompt = string.Empty;

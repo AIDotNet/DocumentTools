@@ -1,9 +1,10 @@
-﻿using Microsoft.SemanticKernel;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace AIDotNet.Document.Services.Services;
 
-public class KernelService(IKernelMemory kernelMemory, Kernel kernel) : IKernelService
+public class KernelService(IKernelMemory kernelMemory,IServiceProvider serviceProvider) : IKernelService
 {
     private string PromptTemplate =
         """"
@@ -55,6 +56,8 @@ public class KernelService(IKernelMemory kernelMemory, Kernel kernel) : IKernelS
             Role = ChatMessageRole.System
         });
 
+        var kernel = serviceProvider.GetRequiredService<Kernel>();
+        
         var chat = kernel.GetRequiredService<IChatCompletionService>();
 
         var chatHistory = new ChatHistory();

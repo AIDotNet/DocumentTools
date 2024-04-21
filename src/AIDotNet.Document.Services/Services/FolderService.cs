@@ -23,13 +23,12 @@ public sealed class FolderService : IFolderService
             }
 
             using var scope = serviceProvider.CreateScope();
-            var kernelMemory = scope.ServiceProvider.GetRequiredService<IKernelMemory>();
             var fileStorageService = scope.ServiceProvider.GetRequiredService<IFileStorageService>();
             var sql = scope.ServiceProvider.GetRequiredService<IFreeSql>();
             while (await FolderChannel.Reader.WaitToReadAsync())
             {
                 var folder = await FolderChannel.Reader.ReadAsync();
-
+                var kernelMemory = scope.ServiceProvider.GetRequiredService<IKernelMemory>();
                 await HandlerVectorAsync(folder, kernelMemory, fileStorageService, sql);
             }
         });

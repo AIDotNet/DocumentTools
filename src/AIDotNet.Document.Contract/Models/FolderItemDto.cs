@@ -22,6 +22,15 @@ public sealed class FolderItemDto
     /// </summary>
     public VectorStatus Status { get; set; }
     
+    public string StatusText => Status switch
+    {
+        VectorStatus.Unhandled => "未量化",
+        VectorStatus.Processing => "量化中",
+        VectorStatus.Failed => "量化失败",
+        VectorStatus.Processed => "量化完成",
+        _ => "未知"
+    };
+    
     /// <summary>
     /// 是否目录
     /// </summary>

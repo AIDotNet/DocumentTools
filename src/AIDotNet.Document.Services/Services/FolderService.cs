@@ -90,6 +90,7 @@ public sealed class FolderService : IFolderService
             ParentId = result.ParentId,
             Size = result.Size,
             IsFolder = result.IsFolder,
+            Status = result.Status,
             CreatedTime = result.CreatedTime,
         };
     }
@@ -102,6 +103,7 @@ public sealed class FolderService : IFolderService
         {
             Id = x.Id,
             Name = x.Name,
+            Status = x.Status,
             ParentId = x.ParentId
         }).ToList();
     }
@@ -150,6 +152,7 @@ public sealed class FolderService : IFolderService
             Id = x.Id,
             Name = x.Name,
             ParentId = x.ParentId,
+            Status = x.Status,
             CreatedTime = x.CreatedTime,
             IsFolder = x.IsFolder,
         }).ToList();

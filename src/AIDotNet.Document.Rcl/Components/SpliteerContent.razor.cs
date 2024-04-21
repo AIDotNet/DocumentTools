@@ -9,7 +9,7 @@ public partial class SpliteerContent
     [Parameter] public string Style { get; set; } = "height: 100%;";
 
     private string LeftStyle =>
-        "height: 100%;padding:5px;flex-direction: column;background-color:#FFFFFF!important;min-width:220px;";
+        "height: 100%;padding:5px;flex-direction: column;background-color:#FFFFFF!important;min-width:220px;justify-content: flex-start !important;";
 
     private string RightStyle => "height: 100%;background-color:#FFFFFF!important;";
 }

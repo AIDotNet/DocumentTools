@@ -101,7 +101,7 @@
         </div>
         
         <div style="width: 100%;height: calc(100vh - 50px);overflow-y: auto;">
-            @if (FolderItemDto.Id != null)
+            @if (FolderItemDto?.Id != null)
             {
                 <div style="height: 25px;margin-bottom: 8px;">
                     <div class="folder-icon">
@@ -175,7 +175,10 @@
                             </ChildContent>
                         </MMenu>
                     </div>
-                    <div class="folder-date">@item.CreatedTime.ToString("yyyy-MM-dd")</div>
+                    <div class="folder-date">
+                        <span>@item.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss")</span>
+                        <span style="float: right;">@item.StatusText</span>
+                    </div>
                 </div>
             }
             @if (Folders.Count == 0)

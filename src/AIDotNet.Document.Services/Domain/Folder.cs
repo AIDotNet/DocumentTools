@@ -6,8 +6,7 @@ namespace AIDotNet.Document.Services.Domain;
 [Index("folder_ParentId", "ParentId", false)]
 public class Folder
 {
-    [Column(IsPrimary = true)]
-    public string Id { get; set; }
+    [Column(IsPrimary = true)] public string Id { get; set; }
 
     public string Name { get; set; }
 
@@ -17,7 +16,7 @@ public class Folder
     /// 创建时间
     /// </summary>
     public DateTime CreatedTime { get; set; }
-    
+
     /// <summary>
     /// 是否目录
     /// </summary>
@@ -27,17 +26,22 @@ public class Folder
     /// 如果是文件，文件大小
     /// </summary>
     public long Size { get; set; }
-    
+
     /// <summary>
     /// 是否删除
     /// </summary>
     public bool IsDeleted { get; set; }
-    
+
     /// <summary>
     /// 向量状态 | 文件夹不需要
     /// </summary>
     public VectorStatus Status { get; set; }
-    
+
+    /// <summary>
+    /// 文档类型 | 文件夹不需要
+    /// </summary>
+    public FolderType? Type { get; set; }
+
     /// <summary>
     /// 创建文件夹
     /// </summary>
@@ -53,14 +57,14 @@ public class Folder
         Size = 0;
         IsDeleted = false;
     }
-    
+
     /// <summary>
     /// 创建文件
     /// </summary>
     /// <param name="name"></param>
     /// <param name="parentId"></param>
     /// <param name="size"></param>
-    public Folder(string name, string? parentId,long size = 0)
+    public Folder(string name, string? parentId, long size = 0)
     {
         Id = Guid.NewGuid().ToString();
         Name = name;
@@ -70,8 +74,14 @@ public class Folder
         Size = size;
         IsDeleted = false;
         Status = VectorStatus.Unhandled;
+        Type = FolderType.Note;
     }
-    
+
+    public void SetType(FolderType type)
+    {
+        Type = type;
+    }
+
 
     protected Folder()
     {

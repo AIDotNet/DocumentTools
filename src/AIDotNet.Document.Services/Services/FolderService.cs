@@ -48,7 +48,7 @@ public sealed class FolderService : IFolderService
         {
             try
             {
-                var content = fileStorageService.GetFileContent(folder.Id);
+                var content = await fileStorageService.GetFileContent(folder.Id);
 
                 var tag = new TagCollection()
                 {

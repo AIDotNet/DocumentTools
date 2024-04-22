@@ -3,7 +3,7 @@ using AIDotNet.Document.Contract.Services;
 
 namespace AIDotNet.Document.Client.Services;
 
-public class WindowService(Window window) : IWindowService
+public class MainWindowService(Window window) : IMainWindowService
 {
     public void Minimize()
     {
@@ -45,5 +45,22 @@ public class WindowService(Window window) : IWindowService
             _setting.Topmost = true;
             _setting.Topmost = false;
         };
+    }
+
+    public void Show()
+    {
+        window.Show();
+        
+        if (window.WindowState == WindowState.Minimized)
+        {
+            window.WindowState = WindowState.Normal;
+        }
+        
+        window.Activate();
+    }
+
+    public void Hide()
+    {
+        window.Hide();
     }
 }

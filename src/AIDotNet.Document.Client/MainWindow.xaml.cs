@@ -16,15 +16,9 @@ namespace AIDotNet.Document.Client
         {
             InitializeComponent();
             
-
-            var services = new ServiceCollection();
-            services.AddWpfBlazorWebView();
-            services.AddDocumentRcl();
-            services.AddDocumentService();
-            services.AddSingleton<IWindowService>((_) => new WindowService(this));
-#if DEBUG
-            services.AddBlazorWebViewDeveloperTools();
-#endif
+            var services = ApplicationContext.CreateApplication();
+            
+            services.AddSingleton<IMainWindowService>((_) => new MainWindowService(this));
 
             BlazorWeb.RootComponents.Add(new Microsoft.AspNetCore.Components.WebView.Wpf.RootComponent()
             {
@@ -32,7 +26,7 @@ namespace AIDotNet.Document.Client
                 ComponentType = typeof(Document.App),
             });
 
-            var app = services.BuildServiceProvider();
+            var app = ApplicationContext.BuildApplication();
             
             app.UseDocumentService();
 

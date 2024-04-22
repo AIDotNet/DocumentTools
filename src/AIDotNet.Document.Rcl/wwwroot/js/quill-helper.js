@@ -48,6 +48,7 @@ export function init(quillElement, obj, toolBarContainer, additionalModules, rea
             },
             syntax: {
                 highlight: text => {
+                    console.log(text);
                     return hljs.highlightAuto(text).value; // 这里就是代码高亮需要配置的地方
                 }
             }

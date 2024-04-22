@@ -12,7 +12,7 @@ public sealed class OpenAIHttpClientHanlder(string uri) : HttpClientHandler
             request.RequestUri = uriBuilder.Uri;
         }
         else if (
-            request.RequestUri?.LocalPath == "/v1/embeddings" || request.RequestUri?.LocalPath == "/embeddings")
+            request.RequestUri?.LocalPath is "/v1/embeddings" or "/embeddings")
         {
             uriBuilder = new UriBuilder(uri.TrimEnd('/') + "/v1/embeddings");
             request.RequestUri = uriBuilder.Uri;

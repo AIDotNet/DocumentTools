@@ -17,7 +17,7 @@ public partial class MyFolder
     /// 用于笔记选择绑定
     /// </summary>
     public FolderItemDto FileItemDto { get; set; } = new();
-    
+
     private List<FolderItemDto> Folders { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
@@ -45,11 +45,11 @@ public partial class MyFolder
         if (FolderItemDto.ParentId == null)
         {
             FolderId = null;
-            
+
             Folders = await FolderService.GetFolderByParentIdAsync(null);
-            
+
             FolderItemDto = new FolderItemDto();
-            
+
             return;
         }
 
@@ -59,7 +59,10 @@ public partial class MyFolder
             return;
         }
 
-        FolderItemDto = Folders.First(x => x.Id == FolderItemDto.ParentId);
+        FolderItemDto = await FolderService.GetFolderByIdAsync(FolderItemDto.ParentId);
+
+        Folders = await FolderService.GetFolderByParentIdAsync(FolderItemDto.ParentId);
+
         FolderId = FolderItemDto.Id;
     }
 
@@ -72,19 +75,19 @@ public partial class MyFolder
         var item = Folders.First(x => x.Id == folderId);
 
         FolderId = folderId;
-        
-        if(item.IsFolder == false)
+
+        if (item.IsFolder == false)
         {
             FileItemDto = item;
             return;
         }
-        
+
 
         if (item.IsFolder == true)
         {
             Folders = await FolderService.GetFolderByParentIdAsync(folderId);
         }
-        
+
         FileItemDto = new FolderItemDto();
         FolderItemDto = item;
 
@@ -94,38 +97,79 @@ public partial class MyFolder
     /// <summary>
     /// 新建目录
     /// </summary>
-    private async Task NewFolder()
+    /// <param name="folderItemDto"></param>
+    private async Task NewFolder(FolderItemDto folderItemDto)
     {
-        var id = FolderItemDto.IsFolder == true ? FolderItemDto.Id : FolderItemDto.ParentId;
-
-        var item = new FolderItemDto()
+        if (folderItemDto.IsFolder == true)
         {
-            Name = "新建文件夹",
-            ParentId = id,
-            IsFolder = true,
-        };
-        await FolderService.CreateAsync(item);
+            var item = new FolderItemDto()
+            {
+                Name = "新建文件夹",
+                ParentId = folderItemDto.Id,
+                IsFolder = true,
+            };
+            await FolderService.CreateAsync(item);
 
-        Folders = await FolderService.GetFolderByParentIdAsync(id);
+            Folders = await FolderService.GetFolderByParentIdAsync(folderItemDto.Id);
+
+            FolderItemDto = folderItemDto;
+            FolderId = folderItemDto.Id;
+        }
+        else
+        {
+            var id = FolderItemDto?.IsFolder == true ? FolderItemDto.Id : FolderItemDto?.ParentId;
+
+            var item = new FolderItemDto()
+            {
+                Name = "新建文件夹",
+                ParentId = id,
+                IsFolder = true,
+            };
+            await FolderService.CreateAsync(item);
+
+            Folders = await FolderService.GetFolderByParentIdAsync(id);
+        }
     }
 
     /// <summary> 
     /// 新建笔记
     /// </summary>
-    private async Task NewNote()
+    /// <param name="folderItemDto"></param>
+    private async Task NewNote(FolderItemDto? folderItemDto)
     {
-        var id = FolderItemDto.IsFolder == true ? FolderItemDto.Id : FolderItemDto.ParentId;
-
-        var item = new FolderItemDto()
+        if (folderItemDto?.IsFolder == true)
         {
-            Name = "无标题笔记",
-            ParentId = id,
-            IsFolder = false,
-            Size = 0,
-        };
-        await FolderService.CreateAsync(item);
+            var item = new FolderItemDto()
+            {
+                Name = "无标题笔记",
+                ParentId = folderItemDto.Id,
+                IsFolder = false,
+                Size = 0,
+            };
 
-        Folders = await FolderService.GetFolderByParentIdAsync(id);
+            await FolderService.CreateAsync(item);
+
+            Folders = await FolderService.GetFolderByParentIdAsync(folderItemDto.Id);
+
+            FolderItemDto = folderItemDto;
+
+            FolderId = folderItemDto.Id;
+        }
+        else
+        {
+            var id = FolderItemDto?.IsFolder == true ? FolderItemDto.Id : FolderItemDto?.ParentId;
+
+            var item = new FolderItemDto()
+            {
+                Name = "无标题笔记",
+                ParentId = id,
+                IsFolder = false,
+                Size = 0,
+            };
+            await FolderService.CreateAsync(item);
+
+            Folders = await FolderService.GetFolderByParentIdAsync(id);
+        }
     }
 
     /// <summary>

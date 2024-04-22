@@ -157,10 +157,10 @@
                             </ActivatorContent>
                             <ChildContent>
                                 <MList Class="d-m-list">
-                                    <MListItem Class="d-list-item" OnClick="NewNote">
+                                    <MListItem Class="d-list-item" OnClick="()=>NewNote(item)">
                                         <MListItemTitle Style="font-size: 13px;">新增空白文档</MListItemTitle>
                                     </MListItem>
-                                    <MListItem Class="d-list-item" OnClick="NewFolder">
+                                    <MListItem Class="d-list-item" OnClick="()=>NewFolder(item)">
                                         <MListItemTitle Style="font-size: 13px;">新增目录</MListItemTitle>
                                     </MListItem>
                                     <MDivider></MDivider>
@@ -185,7 +185,7 @@
             {
                 <div style="text-align: center;padding-top: 20px;display: flex;flex-direction: column;justify-content: center;align-items: center;height: 100%;width: 100%;">
                     <div style="color: #999999;margin-bottom: 15px;user-select: none;">暂无笔记</div>
-                    <MButton OnClick="NewNote" Depressed Color="primary">
+                    <MButton OnClick="() => NewNote(null)" Depressed Color="primary">
                         新建笔记
                     </MButton>
                 </div>

@@ -167,14 +167,14 @@
                             </ActivatorContent>
                             <ChildContent>
                                 <MListItemGroup>
-                                    <MListItem Class="menuItem" OnClick="NewNote">
+                                    <MListItem Class="menuItem" OnClick="()=>NewNote(item)">
                                         <MIcon Small=true Left=true Class="my-auto" Color="teal darken-2">mdi-note-plus</MIcon>
                                         <MListItemContent>
                                             <MListItemTitle Class="menuItemLabel">新增空白文档</MListItemTitle>
                                         </MListItemContent>
                                     </MListItem>
 
-                                    <MListItem Class="menuItem" OnClick="NewFolder">
+                                    <MListItem Class="menuItem" OnClick="()=>NewFolder(item)">
                                         <MIcon Small=true Left=true Class="my-auto" Color="amber darken-3">mdi-folder-plus</MIcon>
                                         <MListItemContent>
                                             <MListItemTitle Class="menuItemLabel">新增目录</MListItemTitle>
@@ -208,11 +208,12 @@
                     </div>
                 </div>
             }
+
             @if (Folders.Count == 0)
             {
                 <div style="text-align: center;padding-top: 20px;display: flex;flex-direction: column;justify-content: center;align-items: center;height: 100%;width: 100%;">
                     <div style="color: #999999;margin-bottom: 15px;user-select: none;">暂无笔记</div>
-                    <MButton OnClick="NewNote" Depressed Color="primary">
+                    <MButton OnClick="()=>NewNote(FolderItemDto)" Depressed Color="primary">
                         新建笔记
                     </MButton>
                 </div>

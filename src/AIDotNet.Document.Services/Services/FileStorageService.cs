@@ -1,118 +1,143 @@
 ﻿using System.Text;
+using AIDotNet.Document.Services.Domain;
 
 namespace AIDotNet.Document.Services.Services;
 
-public sealed class FileStorageService(ILiteDatabase database) : IFileStorageService
+public sealed class FileStorageService(IFreeSql freeSql) : IFileStorageService
 {
-    public ValueTask CreateOrUpdateFileAsync(string fileId, Stream stream)
+    public async ValueTask CreateOrUpdateFileAsync(string fileId, Stream stream)
     {
         // 先判断是否存在
-        var file = database.FileStorage.FindById(fileId);
+        var file = freeSql.Select<FileStorageItem>().FirstAsync(x => x.Path == fileId);
         if (file != null)
         {
-            database.FileStorage.Delete(fileId);
+            await freeSql.Delete<FileStorageItem>().Where(x => x.Path == fileId)
+                .ExecuteAffrowsAsync();
         }
 
-        database.FileStorage.Upload(fileId, fileId, stream);
-        return ValueTask.CompletedTask;
+        using var memoryStream = new MemoryStream();
+        await stream.CopyToAsync(memoryStream);
+
+        await freeSql.Insert<FileStorageItem>(new FileStorageItem()
+        {
+            Path = fileId,
+            Content = memoryStream.ToArray(),
+            Size = memoryStream.Length
+        }).ExecuteAffrowsAsync();
     }
 
-    public void CreateOrUpdateFileAsync(string fileId, string content)
+    public async Task CreateOrUpdateFileAsync(string fileId, string content)
     {
         var bytes = Encoding.UTF8.GetBytes(content);
-         CreateOrUpdateFileAsync(fileId, bytes);
+        await CreateOrUpdateFileAsync(fileId, bytes);
     }
 
-    public void CreateOrUpdateFileAsync(string fileId, byte[] bytes)
+    public async Task CreateOrUpdateFileAsync(string fileId, byte[] bytes)
     {
         // 先判断是否存在
-        var file = database.FileStorage.FindById(fileId);
+        var file = freeSql.Select<FileStorageItem>().FirstAsync(x => x.Path == fileId);
         if (file != null)
         {
-            database.FileStorage.Delete(fileId);
+            await freeSql.Delete<FileStorageItem>().Where(x => x.Path == fileId)
+                .ExecuteAffrowsAsync();
         }
 
-        database.FileStorage.Upload(fileId, fileId, new MemoryStream(bytes));
-    }
-
-    public async Task<string> CreateOrUpdateImageAsync(string name, string base64)
-    {
-        return await Task.Run(() =>
+        await freeSql.Insert(new FileStorageItem()
         {
-            name = "https://image/" + name;
-            var file = database.FileStorage.FindById(name);
-
-            if (file != null)
-            {
-                database.FileStorage.Delete(name);
-            }
-            
-            // 去掉base64头部
-            base64 = base64.Substring(base64.IndexOf(',') + 1);
-
-            var bytes = Convert.FromBase64String(base64);
-
-            database.FileStorage.Upload(name, name, new MemoryStream(bytes));
-            return name;
-        });
+            Path = fileId,
+            Content = bytes,
+            Size = bytes.Length
+        }).ExecuteAffrowsAsync();
     }
 
-    public string CreateOrUpdateImage(string name, string base64)
+    public async Task<string> CreateOrUpdateImageAsync(string fileId, string base64)
     {
-        name = "https://image/" + name;
-        var file = database.FileStorage.FindById(name);
-
+        fileId = "https://image/" + fileId;
+        // 先判断是否存在
+        var file = freeSql.Select<FileStorageItem>().FirstAsync(x => x.Path == fileId);
         if (file != null)
         {
-            database.FileStorage.Delete(name);
+            await freeSql.Delete<FileStorageItem>().Where(x => x.Path == fileId)
+                .ExecuteAffrowsAsync();
         }
 
+        // 去掉base64头部
+        base64 = base64.Substring(base64.IndexOf(',') + 1);
         var bytes = Convert.FromBase64String(base64);
 
-        database.FileStorage.Upload(name, name, new MemoryStream(bytes));
-        return name;
+        await freeSql.Insert(new FileStorageItem()
+        {
+            Path = fileId,
+            Content = bytes,
+            Size = bytes.Length
+        }).ExecuteAffrowsAsync();
+
+        return fileId;
     }
 
-    public string GetFileContent(string fileId)
+    public async Task<string> CreateOrUpdateImage(string fileId, string base64)
     {
-        var file = database.FileStorage.FindById(fileId);
+        fileId = "https://image/" + fileId;
+        var file = freeSql.Select<FileStorageItem>().FirstAsync(x => x.Path == fileId);
+        if (file != null)
+        {
+            await freeSql.Delete<FileStorageItem>().Where(x => x.Path == fileId)
+                .ExecuteAffrowsAsync();
+        }
+
+        // 去掉base64头部
+        base64 = base64.Substring(base64.IndexOf(',') + 1);
+        var bytes = Convert.FromBase64String(base64);
+
+        await freeSql.Insert(new FileStorageItem()
+        {
+            Path = fileId,
+            Content = bytes,
+            Size = bytes.Length
+        }).ExecuteAffrowsAsync();
+
+        return fileId;
+    }
+
+    public async Task<string> GetFileContent(string fileId)
+    {
+        var file = await freeSql.Select<FileStorageItem>().Where(x => x.Path == fileId)
+            .FirstAsync();
         if (file == null)
         {
             return string.Empty;
         }
 
-        using var stream = new MemoryStream();
-        file.CopyTo(stream);
-        return Encoding.UTF8.GetString(stream.ToArray());
+        return Encoding.UTF8.GetString(file.Content);
     }
 
-    public ValueTask<byte[]> GetFileBytesAsync(string fileId)
+    public async ValueTask<byte[]> GetFileBytesAsync(string fileId)
     {
-        var file = database.FileStorage.FindById(fileId);
+        var file = await freeSql.Select<FileStorageItem>().Where(x => x.Path == fileId)
+            .FirstAsync();
         if (file == null)
         {
-            return new ValueTask<byte[]>(Array.Empty<byte>());
+            return Array.Empty<byte>();
         }
 
-        using var stream = new MemoryStream();
-        file.CopyTo(stream);
-        return new ValueTask<byte[]>(stream.ToArray());
+        return file.Content;
     }
 
-    public ValueTask<Stream> GetFileStreamAsync(string fileId)
+    public async ValueTask<Stream> GetFileStreamAsync(string fileId)
     {
-        var file = database.FileStorage.FindById(fileId);
+        var file = await freeSql.Select<FileStorageItem>().Where(x => x.Path == fileId)
+            .FirstAsync();
         if (file == null)
         {
-            return new ValueTask<Stream>(Stream.Null);
+            return new MemoryStream();
         }
 
-        return new ValueTask<Stream>(file.OpenRead());
+        return new MemoryStream(file.Content);
     }
 
-    public ValueTask RemoveFileAsync(string fileId)
+    public async ValueTask RemoveFileAsync(string fileId)
     {
-        database.FileStorage.Delete(fileId);
-        return ValueTask.CompletedTask;
+        await freeSql.Delete<FileStorageItem>().Where(x => x.Path == fileId)
+            .ExecuteAffrowsAsync();
     }
 }

@@ -10,12 +10,11 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddScoped<IMenuItemService, MenuItemService>();
             services.AddSingleton<IFreeSql>((_) => new FreeSqlBuilder()
-                .UseConnectionString(DataType.Sqlite, "Data Source=document.db")
+                .UseConnectionString(DataType.Sqlite, "Data Source=document.db;attachs=file_storage")
                 .UseAutoSyncStructure(true) //自动同步实体结构到数据库
                 .Build());
 
             services.AddSingleton<IFileStorageService, FileStorageService>();
-            services.AddSingleton<ILiteDatabase>(_ => new LiteDatabase("file-document.db"));
 
             services.AddSingleton<IFolderService, FolderService>();
             services.AddSingleton<ISettingService, SettingService>();

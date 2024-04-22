@@ -6,7 +6,7 @@ using ChatMessageRole = AIDotNet.Document.Contract.Models.ChatMessageRole;
 
 namespace AIDotNet.Document.Services.Services;
 
-public class KernelService(IKernelMemory kernelMemory, IServiceProvider serviceProvider, ISettingService settingService)
+public class KernelService(IKernelMemory kernelMemory, ISettingService settingService)
     : IKernelService
 {
     private const string PromptTemplate = """"
@@ -38,6 +38,7 @@ public class KernelService(IKernelMemory kernelMemory, IServiceProvider serviceP
         var prompt = string.Empty;
 
 
+        // 在这里会将搜索结果的分区拼接起来
         foreach (var item in result.Results)
         {
             prompt += string.Join(Environment.NewLine, item.Partitions.Select(x => x.Text));
@@ -45,6 +46,7 @@ public class KernelService(IKernelMemory kernelMemory, IServiceProvider serviceP
 
         if (!string.IsNullOrEmpty(prompt))
         {
+            // 替换模板的参数
             prompt = PromptTemplate.Replace("{{quote}}", prompt)
                 .Replace("{{question}}", content.Content);
 

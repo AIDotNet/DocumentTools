@@ -10,7 +10,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Include="logo.ico" />
+		<Content Include="logo.ico" />
+		<Content Include="ai.png" />
 	  <Content Update="wwwroot\ai.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
@@ -49,9 +50,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="logo.ico">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+		<None Update="logo.ico">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="ai.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>

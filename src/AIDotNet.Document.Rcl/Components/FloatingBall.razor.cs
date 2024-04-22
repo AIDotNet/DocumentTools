@@ -21,10 +21,10 @@ public partial class FloatingBall
 
         if (IsShowFloatingBall)
         {
-            await Task.Delay(100).ContinueWith(async _ =>
-            {
-                await jsRuntime.InvokeVoidAsync("util.dragElement", "floating-panel");
-            });
+            // await Task.Delay(100).ContinueWith(async _ =>
+            // {
+            //     await jsRuntime.InvokeVoidAsync("util.dragElement", "floating-panel");
+            // });
         }
 
         await InvokeAsync(StateHasChanged);

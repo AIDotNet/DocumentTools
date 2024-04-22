@@ -37,11 +37,11 @@
             <div>
                 @if (!IsEditName)
                 {
-                    @Item.Name
+                    @Value.Name
                 }
                 else
                 {
-                    <input type="text" autofocus class="name-input" @bind="Item.Name" @onblur="Blur"/>
+                    <input type="text" autofocus class="name-input" @bind="Value.Name" @onblur="Blur"/>
                 }
             </div>
 
@@ -56,7 +56,7 @@
                     </ActivatorContent>
                     <ChildContent>
                         <MList Class="d-m-list">
-                            <MButton Small OnClick="Vector" Text  Class="d-list-item" Disabled="_item.Status == VectorStatus.Processing">
+                            <MButton Small OnClick="Vector" Text Class="d-list-item" Disabled="_value.Status == VectorStatus.Processing">
                                 向量
                             </MButton>
                             <MDivider></MDivider>
@@ -66,6 +66,14 @@
             </div>
         </div>
     </div>
-    <DEditor @ref="Ref" BeforeAllUploadAsync="BeforeAllUploadAsync" Style="height: 100%;width: 100%;" @bind-Value="Content" Markdown ContentStyle="height:100%;">
-    </DEditor>
+    @if (Value.Type == FolderType.Note)
+    {
+        <DEditor @ref="DeditorRef" BeforeAllUploadAsync="BeforeAllUploadAsync" Style="height: 100%;width: 100%;" @bind-Value="Content" Markdown ContentStyle="height:100%;">
+        </DEditor>
+    }
+    else
+    {
+        <MMarkdown  BeforeAllUpload="HandleUploadAsync" @ref=MMarkdownRef @bind-Value="Content"  Options="_options" Style="height: 100%;">
+        </MMarkdown>
+    }
 </div>

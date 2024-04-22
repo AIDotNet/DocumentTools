@@ -7,33 +7,43 @@ namespace AIDotNet.Document.Rcl.Components;
 public partial class EditNote : IAsyncDisposable
 {
     [Inject] private IJSRuntime JS { get; set; }
-    private DEditor Ref { get; set; }
+    private DEditor DeditorRef { get; set; }
+    
+    private MMarkdown MMarkdownRef { get; set; }
 
-    private FolderItemDto _item;
+    private Dictionary<string, object> _options = new();
+    
+    private FolderItemDto _value;
 
     private async Task<bool> BeforeAllUploadAsync(List<EditorUploadFileItem> flist)
     {
-        await JS.InvokeVoidAsync("util.uploadFilePic", Ref.ContentRef, Ref.Ref, 0);
+        await JS.InvokeVoidAsync("util.uploadFilePic", DeditorRef.ContentRef, DeditorRef.Ref, 0);
         return await Task.FromResult(true);
     }
 
-    [Parameter]
-    public FolderItemDto Item
+    
+    private async Task HandleUploadAsync()
     {
-        get => _item;
+        await JS.InvokeVoidAsync("util.markdownUploadFile", MMarkdownRef.Ref, 0);
+    }
+    
+    [Parameter]
+    public FolderItemDto Value
+    {
+        get => _value;
         set
         {
-            if (_item?.Id == value.Id)
+            if (_value?.Id == value.Id)
             {
                 return;
             }
 
-            if (_item != null)
+            if (_value != null)
             {
                 AsyncHelper.RunSync(Save);
             }
 
-            _item = value;
+            _value = value;
             AsyncHelper.RunSync(LoadContent);
         }
     }
@@ -58,17 +68,18 @@ public partial class EditNote : IAsyncDisposable
 
     private async Task Blur()
     {
-        await OnBlur.InvokeAsync(Item);
+        await OnBlur.InvokeAsync(Value);
     }
 
     protected override async Task OnInitializedAsync()
     {
+        _options.Add("mode","ir");
         await LoadContent();
     }
 
     public async Task LoadContent()
     {
-        Content = await fileStorageService.GetFileContent(Item.Id);
+        Content = await fileStorageService.GetFileContent(Value.Id);
         _ = InvokeAsync(StateHasChanged);
     }
 
@@ -76,7 +87,7 @@ public partial class EditNote : IAsyncDisposable
     {
         if (_isEditContent == true)
         {
-            await fileStorageService.CreateOrUpdateFileAsync(Item.Id, Content ?? string.Empty);
+            await fileStorageService.CreateOrUpdateFileAsync(Value.Id, Content ?? string.Empty);
         }
     }
 
@@ -85,15 +96,15 @@ public partial class EditNote : IAsyncDisposable
     /// </summary>
     private async Task Vector()
     {
-        if (_item.Status == VectorStatus.Processing)
+        if (_value.Status == VectorStatus.Processing)
         {
             return;
         }
 
         // 防止重复点击
-        await folderService.QuantifyAsync(_item.Id);
+        await folderService.QuantifyAsync(_value.Id);
 
-        _item.Status = VectorStatus.Processing;
+        _value.Status = VectorStatus.Processing;
     }
 
     public async ValueTask DisposeAsync()

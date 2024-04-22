@@ -110,10 +110,10 @@
                             <div style="text-align:right; margin-bottom:10px;width: 85%;">
                                 <div>
                                     <div class="button-group">
-                                        <MButton Text XSmall Icon>
+                                        <MButton Text XSmall Icon OnClick="() => CopyMessage(item)">
                                             <MIcon>mdi-content-copy</MIcon>
                                         </MButton>
-                                        <MButton Text XSmall Icon>
+                                        <MButton Text XSmall Icon OnClick="() => RemoveMessage(item)">
                                             <MIcon>mdi-delete</MIcon>
                                         </MButton>
                                     </div>
@@ -134,10 +134,10 @@
                             <div style="text-align:left; margin-bottom:10px;width: 85%;">
                                 <div>
                                     智能助手
-                                    <MButton Text XSmall Icon>
+                                    <MButton Text XSmall Icon OnClick="() => CopyMessage(item)">
                                         <MIcon>mdi-content-copy</MIcon>
                                     </MButton>
-                                    <MButton Text XSmall Icon>
+                                    <MButton Text XSmall Icon OnClick="() => RemoveMessage(item)">
                                         <MIcon>mdi-delete</MIcon>
                                     </MButton>
                                 </div>

@@ -18,7 +18,7 @@
     }
 
     .ql-editor {
-        height: calc(100vh - 153px);
+        height: calc(100vh - 180px);
         overflow: auto;
     }
     
@@ -46,9 +46,23 @@
             </div>
 
             <div>
-                <MButton Small OnClick="Vector" Text Disabled="_item.Status == VectorStatus.Processing">
-                    向量
-                </MButton>
+
+                <MMenu Right
+                       Bottom>
+                    <ActivatorContent>
+                        <MButton Style="margin-right: 8px;" Text XSmall Fab @attributes="@context.Attrs">
+                            <MIcon>mdi-dots-vertical</MIcon>
+                        </MButton>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MList Class="d-m-list">
+                            <MButton Small OnClick="Vector" Text  Class="d-list-item" Disabled="_item.Status == VectorStatus.Processing">
+                                向量
+                            </MButton>
+                            <MDivider></MDivider>
+                        </MList>
+                    </ChildContent>
+                </MMenu>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 ﻿namespace AIDotNet.Document.Contract.Services;
 
-public interface IWindowService
+public interface IMainWindowService
 {
     void Minimize();
     
@@ -14,4 +14,8 @@ public interface IWindowService
     /// 打开设置
     /// </summary>
     void OpenSetting();
+    
+    void Show();
+    
+    void Hide();
 }

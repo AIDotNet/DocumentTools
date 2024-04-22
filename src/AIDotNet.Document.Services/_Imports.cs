@@ -3,7 +3,6 @@ global using AIDotNet.Document.Services.Services;
 global using AIDotNet.Document.Contract.Models;
 global using AIDotNet.Document.Services;
 global using FreeSql;
-global using LiteDB;
 global using Microsoft.KernelMemory;
 global using Microsoft.KernelMemory.Configuration;
 global using Microsoft.KernelMemory.FileSystem.DevTools;

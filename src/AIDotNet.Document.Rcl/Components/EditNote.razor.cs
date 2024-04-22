@@ -1,4 +1,5 @@
 ﻿using AIDotNet.Document.Contract.Services;
+using AIDotNet.Infrastructure.Helpers;
 using Masa.Blazor.Components.Editor;
 
 namespace AIDotNet.Document.Rcl.Components;
@@ -29,11 +30,11 @@ public partial class EditNote : IAsyncDisposable
 
             if (_item != null)
             {
-                Save();
+                AsyncHelper.RunSync(Save);
             }
 
             _item = value;
-            LoadContent();
+            AsyncHelper.RunSync(LoadContent);
         }
     }
 
@@ -60,22 +61,22 @@ public partial class EditNote : IAsyncDisposable
         await OnBlur.InvokeAsync(Item);
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        LoadContent();
+        await LoadContent();
     }
 
-    public void LoadContent()
+    public async Task LoadContent()
     {
-        Content = fileStorageService.GetFileContent(Item.Id);
+        Content = await fileStorageService.GetFileContent(Item.Id);
         _ = InvokeAsync(StateHasChanged);
     }
 
-    public void Save()
+    public async Task Save()
     {
         if (_isEditContent == true)
         {
-            fileStorageService.CreateOrUpdateFileAsync(Item.Id, Content ?? string.Empty);
+            await fileStorageService.CreateOrUpdateFileAsync(Item.Id, Content ?? string.Empty);
         }
     }
 
@@ -97,7 +98,7 @@ public partial class EditNote : IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        Save();
+        await Save();
 
         await ValueTask.CompletedTask;
     }

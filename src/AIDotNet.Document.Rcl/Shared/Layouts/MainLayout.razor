@@ -1,6 +1,5 @@
 ﻿@inherits LayoutComponentBase
-@inject IWindowService WindowService
-@inject IJSRuntime JSRuntime
+@inject IMainWindowService MainWindowService
 
 <style>
     .window-buttons {
@@ -49,11 +48,11 @@
 </MApp>
 
 <div class="window-buttons">
-    <MButton Small Icon OnClick="WindowService.Minimize">
+    <MButton Small Icon OnClick="MainWindowService.Minimize">
         <MIcon Small>mdi-minus</MIcon>
     </MButton>
-    <MButton Small Icon OnClick="WindowService.Maximize">
-        @if (WindowService.IsMaximized)
+    <MButton Small Icon OnClick="MainWindowService.Maximize">
+        @if (MainWindowService.IsMaximized)
         {
             <MIcon Small>mdi-window-restore</MIcon>
         }
@@ -62,7 +61,7 @@
             <MIcon Small>mdi-checkbox-blank-outline</MIcon>
         }
     </MButton>
-    <MButton Small Icon OnClick="WindowService.Close">
+    <MButton Small Icon OnClick="MainWindowService.Close">
         <MIcon Small>mdi-close</MIcon>
     </MButton>
 </div>

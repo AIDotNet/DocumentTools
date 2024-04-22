@@ -1,0 +1,18 @@
+﻿<Window x:Class="AIDotNet.Document.Client.ChatWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:AIDotNet.Document.Client"
+        xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation/blazor"
+        mc:Ignorable="d"
+        Title="ChatWindow" 
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" ResizeMode="CanResizeWithGrip"
+        Height="500"
+        Width="300">
+    <Grid>
+        <wpf:BlazorWebView HostPage="wwwroot\index.html" Name="BlazorWeb" Services="{DynamicResource services}">
+        </wpf:BlazorWebView>
+    </Grid>
+</Window>

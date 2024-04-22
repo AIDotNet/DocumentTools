@@ -16,7 +16,7 @@ public interface IFileStorageService
     /// <param name="fileId"></param>
     /// <param name="content"></param>
     /// <returns></returns>
-    void CreateOrUpdateFileAsync(string fileId, string content);
+    Task CreateOrUpdateFileAsync(string fileId, string content);
 
     /// <summary>
     /// 存储文件
@@ -24,7 +24,7 @@ public interface IFileStorageService
     /// <param name="fileId"></param>
     /// <param name="bytes"></param>
     /// <returns></returns>
-    void CreateOrUpdateFileAsync(string fileId, byte[] bytes);
+    Task CreateOrUpdateFileAsync(string fileId, byte[] bytes);
 
     /// <summary>
     /// 存储图片
@@ -40,14 +40,14 @@ public interface IFileStorageService
     /// <param name="name"></param>
     /// <param name="base64"></param>
     /// <returns></returns>
-    string CreateOrUpdateImage(string name, string base64);
-    
+    Task<string> CreateOrUpdateImage(string name, string base64);
+
     /// <summary>
     /// 获取文件内容
     /// </summary>
     /// <param name="fileId"></param>
     /// <returns></returns>
-    string GetFileContent(string fileId);
+    Task<string> GetFileContent(string fileId);
 
     /// <summary>
     /// 获取文件字节

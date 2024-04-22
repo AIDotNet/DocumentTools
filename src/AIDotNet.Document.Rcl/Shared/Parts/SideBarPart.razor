@@ -1,5 +1,5 @@
 ﻿
-@inject IWindowService WindowService
+@inject IMainWindowService MainWindowService
 
 <style>
     .m-navigation-drawer__content{
@@ -28,7 +28,7 @@
                 <ChildContent>
                     <div style="width: 220px;">
                         <MListItemGroup >
-                            <MListItem OnClick="WindowService.OpenSetting" Dense Link=true Class="pl-4" Style="min-height:32px">
+                            <MListItem OnClick="MainWindowService.OpenSetting" Dense Link=true Class="pl-4" Style="min-height:32px">
                                 <ItemContent>
                                     <MListItemIcon Class="my-auto">
                                         <MIcon>mdi-wrench</MIcon>

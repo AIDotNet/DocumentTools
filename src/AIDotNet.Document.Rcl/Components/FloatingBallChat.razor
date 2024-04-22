@@ -1,0 +1,147 @@
+﻿@inject IKernelService KernelService
+@inject IJSRuntime jsRuntime
+@inject IPopupService PopupService
+@inject IChatWindowService ChatWindowService
+
+<style>
+
+
+    .floating-panel { 
+        box-sizing: border-box;
+        overflow: hidden;
+        transition: height 0.5s ease-in-out;
+        box-shadow: 2px 2px 5px 0 grey;
+    }
+
+    .floating-panel.show {
+        display: block;
+        height: 100vh;
+    }
+
+    .panel-header {
+        -webkit-app-region:drag;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .header-title {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .close-button {
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .panel-body {
+        padding: 10px;
+        display: flex;
+    }
+
+    .panel-input {
+        width: 100%;
+        padding: 5px;
+        outline: none;
+    }
+    
+    .md-render{
+        width: 100%;
+        overflow: auto;
+    }
+
+    .button-group {
+        float: left;
+        display: contents;
+    }
+
+</style>
+
+<div id="floating-panel" class="floating-panel show">
+    <div style="display: flex;height: 100%;flex-direction: column;background-color: #ffffff;">
+        <div class="panel-header">
+            <span class="header-title">您的智能助手</span>
+            <MButton XSmall Text Icon OnClick="FloatingBall">
+                <MIcon>mdi-close</MIcon>
+            </MButton>
+        </div>
+        <div style="flex: 1;padding: 5px;overflow: auto;font-size: 14px;" id="@_id">
+            @foreach (var item in ChatMessages)
+            {
+                if (item.Role == ChatMessageRole.User)
+                {
+                    <div style="text-align:right; margin-bottom:10px;width: 85%;">
+                        <div>
+                            <div class="button-group">
+                                <MButton Text XSmall Icon OnClick="() => CopyMessage(item)">
+                                    <MIcon>mdi-content-copy</MIcon>
+                                </MButton>
+                                <MButton Text XSmall Icon OnClick="() => RemoveMessage(item)">
+                                    <MIcon>mdi-delete</MIcon>
+                                </MButton>
+                            </div>
+                            我
+                        </div>
+                        <div style="display:inline-block; background-color:#dcdcdc; padding:10px; border-radius:10px;">
+                            <MMarkdownIt Source="@item.Content"
+                                         Html="true"
+                                         Breaks="true"
+                                         Linkify="true"
+                                         Typographer="true"
+                                         Class="mt-4 pa-1 md-render"/>
+                        </div>
+                    </div>
+                }
+                else if (item.Role == ChatMessageRole.Assistant)
+                {
+                    <div style="text-align:left; margin-bottom:10px;width: 85%;">
+                        <div>
+                            智能助手
+                            <MButton Text XSmall Icon OnClick="() => CopyMessage(item)">
+                                <MIcon>mdi-content-copy</MIcon>
+                            </MButton>
+                            <MButton Text XSmall Icon OnClick="() => RemoveMessage(item)">
+                                <MIcon>mdi-delete</MIcon>
+                            </MButton>
+                        </div>
+                        <div style="display:inline-block; background-color:#f0f0f0; padding:10px; border-radius:10px;">
+                            <MMarkdownIt Source="@item.Content"
+                                         Html="true"
+                                         Breaks="true"
+                                         Linkify="true"
+                                         Typographer="true"
+                                         Class="mt-4 pa-1 md-render"/>
+                        </div>
+                    </div>
+                }
+            }
+            @if (ChatMessages.Count == 0)
+            {
+                <div style="text-align:left; margin-bottom:10px;">
+                    <span>智能助手</span>
+                    <div style="display:inline-block; background-color:#f0f0f0; padding:10px; border-radius:10px;">
+                        <MMarkdownIt Source="您好，我是您的智能文档助手，您可以提问您本地已经向量过的文件内容，我会快速为你解答！"
+                                     Html="true"
+                                     Breaks="true"
+                                     Linkify="true"
+                                     Typographer="true"
+                                     Class="mt-4 pa-1 md-render"/>
+                    </div>
+                </div>
+            }
+        </div>
+        <MDivider ></MDivider>
+        <div class="panel-body">
+            <input @bind=_message class="panel-input" type="text" placeholder="请输入内容"/>
+            <MButton Disabled="_isLoading" Small Text OnClick="SendMessageAsync">
+                发送
+            </MButton>
+        </div>
+    </div>
+</div>

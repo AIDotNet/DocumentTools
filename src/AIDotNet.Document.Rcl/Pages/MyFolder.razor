@@ -91,12 +91,22 @@
         width: 100%;
         font-size: 12px;
     }
-    
+
+    .menuItem {
+        min-height: 40px;
+        height: 40px;
+        padding-right: 32px;
+    }
+
+    .menuItemLabel {
+        font-size: 13px;
+        padding-left: 4px;
+    }
 </style>
 
 <SpliteerContent>
     <Left>
-        <div class="search-box">
+        <div class="search-box mt-4">
             <input type="text" class="search-input" placeholder="搜索">
         </div>
 
@@ -119,11 +129,12 @@
                     <div class="folder-icon">
                         @if (item.IsFolder == true)
                         {
-                            <MIcon>mdi-folder-text</MIcon>
+                            <MIcon Color="amber darken-3">mdi-folder</MIcon>
                         }
                         else
                         {
-                            <svg class="icon" viewBox="0 0 1024 1024" width="20" height="20">
+                            <MIcon Color="teal darken-2">mdi-note</MIcon>
+@*                             <svg class="icon" viewBox="0 0 1024 1024" width="20" height="20">
                                 <path d="M798.42 76.032c37.804 4.244 66.988 29.9 73.858 67.306C883.114 202.426 896 314.252 896 512c0 177.468-5.76 285.732-11.306 348.78-4.224 48.078-39.872 83.73-87.916 88.304C739.882 954.498 648.49 960 512 960s-227.882-5.5-284.78-10.916c-48.04-4.574-83.69-40.226-87.914-88.304C133.76 797.732 128 689.466 128 512c0-177.466 5.76-285.732 11.306-348.78 4.224-48.078 39.872-83.73 87.916-88.304C284.118 69.502 375.51 64 512 64c145.9 0 235.242 6.284 286.42 12.032z"
                                       fill="#53B5FF">
                                 </path>
@@ -133,13 +144,13 @@
                                 <path d="M426.666 268.05c0-16.306 12.268-29.768 28.544-30.596 25.686-1.306 70.572-2.788 142.124-2.788 71.552 0 116.436 1.48 142.122 2.788 16.278 0.828 28.544 14.29 28.544 30.596v18.568c0 16.304-12.266 29.766-28.544 30.594-25.686 1.308-70.57 2.788-142.122 2.788-71.552 0-116.438-1.48-142.124-2.788-16.276-0.828-28.544-14.29-28.544-30.594v-18.568zM426.666 438.716c0-16.306 12.268-29.916 28.524-30.96 18.708-1.202 45.674-2.422 78.144-2.422 32.468 0 59.434 1.22 78.144 2.42 16.256 1.046 28.522 14.656 28.522 30.96v18.57c0 16.306-12.266 29.916-28.522 30.96-18.71 1.202-45.676 2.422-78.144 2.422-32.47 0-59.436-1.22-78.144-2.42-16.256-1.046-28.524-14.656-28.524-30.96v-18.57z"
                                       fill="#FFFFFF">
                                 </path>
-                            </svg>
+                            </svg> *@
                         }
                     </div>
                     <div class="folder-info">
                         @if (item.IsEdit)
                         {
-                            <input autofocus @onblur="() => RenameOnBlur(item)" @bind="@item.Name" class="edit-input"/>
+                            <input autofocus @onblur="() => RenameOnBlur(item)" @bind="@item.Name" class="edit-input" />
                         }
                         else
                         {
@@ -148,33 +159,54 @@
                     </div>
                     <div class="folder-options">
 
-                        <MMenu Right
-                               Bottom>
+                        <MMenu Right=true Bottom=true OffsetX=true OffsetY=true>
                             <ActivatorContent>
-                                <MButton Text XSmall Fab @attributes="@context.Attrs">
+                                <MButton @attributes="@context.Attrs" Text=true Small=true Icon=true>
                                     <MIcon>mdi-dots-horizontal</MIcon>
                                 </MButton>
                             </ActivatorContent>
                             <ChildContent>
-                                <MList Class="d-m-list">
-                                    <MListItem Class="d-list-item" OnClick="() => NewNote(item)">
-                                        <MListItemTitle Style="font-size: 13px;">新增空白文档</MListItemTitle>
+                                <MListItemGroup>
+                                    <MListItem Class="menuItem" OnClick="()=>NewNote(item)">
+                                        <MIcon Small=true Left=true Class="my-auto" Color="teal darken-2">mdi-note-plus</MIcon>
+                                        <MListItemContent>
+                                            <MListItemTitle Class="menuItemLabel">新增空白文档</MListItemTitle>
+                                        </MListItemContent>
                                     </MListItem>
-                                    <MListItem Class="d-list-item" OnClick="() => NewNote(item,FolderType.Markdown)">
-                                        <MListItemTitle Style="font-size: 13px;">新增Markdown</MListItemTitle>
+
+                                    <MListItem Class="menuItem" OnClick="() => NewNote(item,FolderType.Markdown)">
+                                        <MIcon Small=true Left=true Class="my-auto" Color="teal darken-2">mdi-note-plus</MIcon>
+                                        <MListItemContent>
+                                            <MListItemTitle Class="menuItemLabel">新增Markdown</MListItemTitle>
+                                        </MListItemContent>
                                     </MListItem>
-                                    <MListItem Class="d-list-item" OnClick="() => NewFolder(item)">
-                                        <MListItemTitle Style="font-size: 13px;">新增目录</MListItemTitle>
+                                  
+                                    <MListItem Class="menuItem" OnClick="()=>NewFolder(item)">
+                                        <MIcon Small=true Left=true Class="my-auto" Color="amber darken-3">mdi-folder-plus</MIcon>
+                                        <MListItemContent>
+                                            <MListItemTitle Class="menuItemLabel">新增目录</MListItemTitle>
+                                        </MListItemContent>
+
                                     </MListItem>
-                                    <MDivider></MDivider>
-                                    <MListItem Class="d-list-item" OnClick="() => Remove(item)">
-                                        <MListItemTitle Style="font-size: 13px;">删除</MListItemTitle>
+
+                                    <MDivider Class="my-0" />
+
+                                    <MListItem Class="menuItem" OnClick="() => Remove(item)">
+                                        <MIcon Small=true Left=true Class="my-auto" Color="error">mdi-file-document-remove</MIcon>
+                                        <MListItemContent>
+                                            <MListItemTitle Class="menuItemLabel">删除</MListItemTitle>
+                                        </MListItemContent>
                                     </MListItem>
-                                    <MDivider></MDivider>
-                                    <MListItem Class="d-list-item" OnClick="() => Rename(item)">
-                                        <MListItemTitle Style="font-size: 13px;">重命名</MListItemTitle>
+
+                                    <MDivider Class="my-0" />
+
+                                    <MListItem Class="menuItem" OnClick="() => Rename(item)">
+                                        <MIcon Small=true Left=true Class="my-auto" Color="info">mdi-rename</MIcon>
+                                        <MListItemContent>
+                                            <MListItemTitle Class="menuItemLabel">重命名</MListItemTitle>
+                                        </MListItemContent>
                                     </MListItem>
-                                </MList>
+                                </MListItemGroup>
                             </ChildContent>
                         </MMenu>
                     </div>
@@ -184,11 +216,12 @@
                     </div>
                 </div>
             }
+
             @if (Folders.Count == 0)
             {
                 <div style="text-align: center;padding-top: 20px;display: flex;flex-direction: column;justify-content: center;align-items: center;height: 100%;width: 100%;">
                     <div style="color: #999999;margin-bottom: 15px;user-select: none;">暂无笔记</div>
-                    <MButton OnClick="() => NewNote(null)" Depressed Color="primary">
+                    <MButton OnClick="()=>NewNote(FolderItemDto)" Depressed Color="primary">
                         新建笔记
                     </MButton>
                 </div>
@@ -199,6 +232,7 @@
         @if (FileItemDto is { IsFolder: false })
         {
             <EditNote OnBlur="RenameOnBlur" Value="FileItemDto"/>
+
         }
     </Right>
 </SpliteerContent>

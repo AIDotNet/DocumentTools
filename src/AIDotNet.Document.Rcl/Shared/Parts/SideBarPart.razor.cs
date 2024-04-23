@@ -17,5 +17,8 @@
             await Task.Delay(1000);
             refreshing = false;
         }
+
+
+        bool speedDialOpen;
     }
 }

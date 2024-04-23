@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-@inject IMainWindowService MainWindowService
+@inject IJSRuntime JSRuntime
 
 <style>
     .window-buttons {
@@ -11,14 +11,14 @@
         width: 95px;
     }
 
-    .window-buttons button {
-        width: 20px;
-        height: 20px;
-        border: none;
-        border-radius: 2px;
-        color: white;
-        font-weight: bold;
-    }
+        .window-buttons button {
+            width: 20px;
+            height: 20px;
+            border: none;
+            border-radius: 2px;
+            color: white;
+            font-weight: bold;
+        }
 
     .minimize {
         background-color: #ffb700;
@@ -31,14 +31,13 @@
     .close {
         background-color: #ff5f5f;
     }
-    
 </style>
 
 <FloatingBall />
 
 <MApp>
 
-    <SideBarPart Width="240"/>
+    <SideBarPart Width="240" />
 
     <MMain>
         <MErrorHandler>
@@ -48,20 +47,15 @@
 </MApp>
 
 <div class="window-buttons">
-    <MButton Small Icon OnClick="MainWindowService.Minimize">
-        <MIcon Small>mdi-minus</MIcon>
+    <MButton Small=true Icon=true OnClick="WindowService.Minimize">
+        <MIcon Small=true>mdi-minus</MIcon>
     </MButton>
-    <MButton Small Icon OnClick="MainWindowService.Maximize">
-        @if (MainWindowService.IsMaximized)
-        {
-            <MIcon Small>mdi-window-restore</MIcon>
-        }
-        else
-        {
-            <MIcon Small>mdi-checkbox-blank-outline</MIcon>
-        }
+
+    <MButton Small=true Icon=true OnClick="WindowService.Maximize">
+        <MIcon Small=true Icon="@(WindowService.IsMaximized?"mdi-window-restore":"mdi-checkbox-blank-outline")" />
     </MButton>
-    <MButton Small Icon OnClick="MainWindowService.Close">
-        <MIcon Small>mdi-close</MIcon>
+
+    <MButton Small=true Icon=true OnClick="WindowService.Close">
+        <MIcon Small=true>mdi-close</MIcon>
     </MButton>
 </div>

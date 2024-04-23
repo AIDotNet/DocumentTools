@@ -28,8 +28,13 @@ public sealed class FolderItemDto
         VectorStatus.Processing => "量化中",
         VectorStatus.Failed => "量化失败",
         VectorStatus.Processed => "量化完成",
-        _ => "未知"
+        _ => "未量化"
     };
+    
+    /// <summary>
+    /// 文档类型 | 文件夹不需要
+    /// </summary>
+    public FolderType? Type { get; set; }
     
     /// <summary>
     /// 是否目录

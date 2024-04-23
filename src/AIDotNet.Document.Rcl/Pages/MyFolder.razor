@@ -174,11 +174,19 @@
                                         </MListItemContent>
                                     </MListItem>
 
+                                    <MListItem Class="menuItem" OnClick="() => NewNote(item,FolderType.Markdown)">
+                                        <MIcon Small=true Left=true Class="my-auto" Color="teal darken-2">mdi-note-plus</MIcon>
+                                        <MListItemContent>
+                                            <MListItemTitle Class="menuItemLabel">新增Markdown</MListItemTitle>
+                                        </MListItemContent>
+                                    </MListItem>
+                                  
                                     <MListItem Class="menuItem" OnClick="()=>NewFolder(item)">
                                         <MIcon Small=true Left=true Class="my-auto" Color="amber darken-3">mdi-folder-plus</MIcon>
                                         <MListItemContent>
                                             <MListItemTitle Class="menuItemLabel">新增目录</MListItemTitle>
                                         </MListItemContent>
+
                                     </MListItem>
 
                                     <MDivider Class="my-0" />
@@ -223,7 +231,8 @@
     <Right>
         @if (FileItemDto is { IsFolder: false })
         {
-            <EditNote OnBlur="RenameOnBlur" Item="FileItemDto" />
+            <EditNote OnBlur="RenameOnBlur" Value="FileItemDto"/>
+
         }
     </Right>
 </SpliteerContent>

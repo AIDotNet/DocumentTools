@@ -135,7 +135,7 @@ public partial class MyFolder
     /// 新建笔记
     /// </summary>
     /// <param name="folderItemDto"></param>
-    private async Task NewNote(FolderItemDto? folderItemDto)
+    private async Task NewNote(FolderItemDto? folderItemDto, FolderType type = FolderType.Note)
     {
         if (folderItemDto?.IsFolder == true)
         {
@@ -144,6 +144,7 @@ public partial class MyFolder
                 Name = "无标题笔记",
                 ParentId = folderItemDto.Id,
                 IsFolder = false,
+                Type = type,
                 Size = 0,
             };
 
@@ -163,6 +164,7 @@ public partial class MyFolder
             {
                 Name = "无标题笔记",
                 ParentId = id,
+                Type = type,
                 IsFolder = false,
                 Size = 0,
             };

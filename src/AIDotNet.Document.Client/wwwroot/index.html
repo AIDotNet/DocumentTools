@@ -348,6 +348,11 @@
                 reader.readAsArrayBuffer(file);
             }
         },
+        createTempUr: (data) => {
+            var blob = new Blob([new Uint8Array(data)], {type: 'application/octet-stream'});
+            var url = URL.createObjectURL(blob);
+            return url;
+        },
         AILevitatedSphereInit: () => {
             // var aiImg = document.getElementById('ai-img');
             // document.getElementById('floating-ball').addEventListener('mouseover', function() {

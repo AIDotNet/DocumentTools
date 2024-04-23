@@ -1,4 +1,5 @@
-﻿using AIDotNet.Document.Contract.Services;
+﻿using AIDotNet.Document.Client.Services;
+using AIDotNet.Document.Contract.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AIDotNet.Document.Client;
@@ -17,6 +18,7 @@ public static class ApplicationContext
         _services = new ServiceCollection();
         _services.AddDocumentRcl();
         _services.AddSingleton<IChatWindowService, ChatWindowService>();
+        _services.AddSingleton<IFileService, FileService>();
         _services.AddWpfBlazorWebView();
         _services.AddDocumentService();
 #if DEBUG

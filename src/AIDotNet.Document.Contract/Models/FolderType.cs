@@ -11,4 +11,9 @@ public enum FolderType
     /// MD
     /// </summary>
     Markdown = 2,
+    
+    /// <summary>
+    /// PDF
+    /// </summary>
+    Pdf = 3,
 }

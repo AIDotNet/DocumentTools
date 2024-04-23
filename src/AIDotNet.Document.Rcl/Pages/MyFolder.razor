@@ -1,4 +1,7 @@
 ﻿@page "/my-folder/{folderId?}"
+@inject IFileService FileService
+@inject IFileStorageService FileStorageService
+@inject IPopupService PopupService
 
 <style>
     .folder-item {
@@ -133,8 +136,19 @@
                         }
                         else
                         {
-                            <MIcon Color="teal darken-2">mdi-note</MIcon>
-@*                             <svg class="icon" viewBox="0 0 1024 1024" width="20" height="20">
+                            @if (item.Type == FolderType.Markdown)
+                            {
+                                <MIcon Color="teal darken-2">mdi-language-markdown</MIcon>
+                            }
+                            else if (item.Type == FolderType.Note)
+                            {
+                                <MIcon Color="teal darken-2">mdi-note</MIcon>
+                            }
+                            else if (item.Type == FolderType.Pdf)
+                            {
+                                <MIcon Color="teal darken-2">mdi-file-pdf-box</MIcon>
+                            }
+                            @*                             <svg class="icon" viewBox="0 0 1024 1024" width="20" height="20">
                                 <path d="M798.42 76.032c37.804 4.244 66.988 29.9 73.858 67.306C883.114 202.426 896 314.252 896 512c0 177.468-5.76 285.732-11.306 348.78-4.224 48.078-39.872 83.73-87.916 88.304C739.882 954.498 648.49 960 512 960s-227.882-5.5-284.78-10.916c-48.04-4.574-83.69-40.226-87.914-88.304C133.76 797.732 128 689.466 128 512c0-177.466 5.76-285.732 11.306-348.78 4.224-48.078 39.872-83.73 87.916-88.304C284.118 69.502 375.51 64 512 64c145.9 0 235.242 6.284 286.42 12.032z"
                                       fill="#53B5FF">
                                 </path>
@@ -150,7 +164,7 @@
                     <div class="folder-info">
                         @if (item.IsEdit)
                         {
-                            <input autofocus @onblur="() => RenameOnBlur(item)" @bind="@item.Name" class="edit-input" />
+                            <input autofocus @onblur="() => RenameOnBlur(item)" @bind="@item.Name" class="edit-input"/>
                         }
                         else
                         {
@@ -167,21 +181,28 @@
                             </ActivatorContent>
                             <ChildContent>
                                 <MListItemGroup>
-                                    <MListItem Class="menuItem" OnClick="()=>NewNote(item)">
+                                    <MListItem Class="menuItem" OnClick="() => NewNote(item)">
                                         <MIcon Small=true Left=true Class="my-auto" Color="teal darken-2">mdi-note-plus</MIcon>
                                         <MListItemContent>
                                             <MListItemTitle Class="menuItemLabel">新增空白文档</MListItemTitle>
                                         </MListItemContent>
                                     </MListItem>
 
-                                    <MListItem Class="menuItem" OnClick="() => NewNote(item,FolderType.Markdown)">
-                                        <MIcon Small=true Left=true Class="my-auto" Color="teal darken-2">mdi-note-plus</MIcon>
+                                    <MListItem Class="menuItem" OnClick="() => NewNote(item, FolderType.Markdown)">
+                                        <MIcon Small=true Left=true Class="my-auto" Color="teal darken-2">mdi-language-markdown</MIcon>
                                         <MListItemContent>
                                             <MListItemTitle Class="menuItemLabel">新增Markdown</MListItemTitle>
                                         </MListItemContent>
                                     </MListItem>
-                                  
-                                    <MListItem Class="menuItem" OnClick="()=>NewFolder(item)">
+
+                                    <MListItem Class="menuItem" OnClick="() => UploadPdf(item)">
+                                        <MIcon Small=true Left=true Class="my-auto" Color="teal darken-2">mdi-file-pdf-box</MIcon>
+                                        <MListItemContent>
+                                            <MListItemTitle Class="menuItemLabel">上传PDF</MListItemTitle>
+                                        </MListItemContent>
+                                    </MListItem>
+
+                                    <MListItem Class="menuItem" OnClick="() => NewFolder(item)">
                                         <MIcon Small=true Left=true Class="my-auto" Color="amber darken-3">mdi-folder-plus</MIcon>
                                         <MListItemContent>
                                             <MListItemTitle Class="menuItemLabel">新增目录</MListItemTitle>
@@ -189,7 +210,7 @@
 
                                     </MListItem>
 
-                                    <MDivider Class="my-0" />
+                                    <MDivider Class="my-0"/>
 
                                     <MListItem Class="menuItem" OnClick="() => Remove(item)">
                                         <MIcon Small=true Left=true Class="my-auto" Color="error">mdi-file-document-remove</MIcon>
@@ -198,7 +219,7 @@
                                         </MListItemContent>
                                     </MListItem>
 
-                                    <MDivider Class="my-0" />
+                                    <MDivider Class="my-0"/>
 
                                     <MListItem Class="menuItem" OnClick="() => Rename(item)">
                                         <MIcon Small=true Left=true Class="my-auto" Color="info">mdi-rename</MIcon>
@@ -221,7 +242,7 @@
             {
                 <div style="text-align: center;padding-top: 20px;display: flex;flex-direction: column;justify-content: center;align-items: center;height: 100%;width: 100%;">
                     <div style="color: #999999;margin-bottom: 15px;user-select: none;">暂无笔记</div>
-                    <MButton OnClick="()=>NewNote(FolderItemDto)" Depressed Color="primary">
+                    <MButton OnClick="() => NewNote(FolderItemDto)" Depressed Color="primary">
                         新建笔记
                     </MButton>
                 </div>
@@ -232,7 +253,6 @@
         @if (FileItemDto is { IsFolder: false })
         {
             <EditNote OnBlur="RenameOnBlur" Value="FileItemDto"/>
-
         }
     </Right>
 </SpliteerContent>

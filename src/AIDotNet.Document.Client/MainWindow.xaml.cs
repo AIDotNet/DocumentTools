@@ -15,9 +15,9 @@ namespace AIDotNet.Document.Client
         public MainWindow()
         {
             InitializeComponent();
-            
+
             var services = ApplicationContext.CreateApplication();
-            
+
             services.AddSingleton<IMainWindowService>((_) => new MainWindowService(this));
 
             BlazorWeb.RootComponents.Add(new Microsoft.AspNetCore.Components.WebView.Wpf.RootComponent()
@@ -27,7 +27,7 @@ namespace AIDotNet.Document.Client
             });
 
             var app = ApplicationContext.BuildApplication();
-            
+
             app.UseDocumentService();
 
             Resources.Add("services", app);
@@ -37,17 +37,29 @@ namespace AIDotNet.Document.Client
                 BlazorWeb.WebView.CoreWebView2.AddWebResourceRequestedFilter("https://image/*",
                     Microsoft.Web.WebView2.Core.CoreWebView2WebResourceContext.All);
 
+                // 监听pdf
+                BlazorWeb.WebView.CoreWebView2.AddWebResourceRequestedFilter("https://pdf/*",
+                    Microsoft.Web.WebView2.Core.CoreWebView2WebResourceContext.All);
+                
                 var fileStorageService = app.GetService<IFileStorageService>();
 
                 BlazorWeb.WebView.CoreWebView2.WebResourceRequested += async (s, e) =>
                 {
-                    if (!e.Request.Uri.StartsWith("https://image/")) return;
+                    if (e.Request.Uri.StartsWith("https://image/"))
+                    {
+                        var bytes = await fileStorageService!.GetFileBytesAsync(e.Request.Uri);
 
-                    var bytes = await fileStorageService!.GetFileBytesAsync(e.Request.Uri);
+                        e.Response =
+                            BlazorWeb.WebView.CoreWebView2.Environment.CreateWebResourceResponse(
+                                new System.IO.MemoryStream(bytes), 200, "OK", "Content-Type: image/png");
+                    }
+                    else if (e.Request.Uri.StartsWith("https://pdf/"))
+                    {
+                        var bytes = await fileStorageService!.GetFileBytesAsync(e.Request.Uri);
 
-                    e.Response =
-                        BlazorWeb.WebView.CoreWebView2.Environment.CreateWebResourceResponse(
-                            new System.IO.MemoryStream(bytes), 200, "OK", "Content-Type: image/png");
+                        e.Response = BlazorWeb.WebView.CoreWebView2.Environment.CreateWebResourceResponse(
+                            new System.IO.MemoryStream(bytes), 200, "OK", "Content-Type: application/pdf");
+                    }
                 };
 
                 // 注册一个js调用的方法
@@ -56,9 +68,9 @@ namespace AIDotNet.Document.Client
                 // 获取当前窗口句柄
                 var windowHandle = new System.Windows.Interop.WindowInteropHelper(this).Handle;
                 var eventForwarder = new EventForwarder(windowHandle);
-                
+
                 BlazorWeb.WebView.CoreWebView2.AddHostObjectToScript("eventForwarder", eventForwarder);
-                
+
                 BlazorWeb.WebView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
                     "var fileStorageService = window.chrome.webview.hostObjects.fileStorageService;");
             };

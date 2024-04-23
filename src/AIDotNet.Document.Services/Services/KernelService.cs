@@ -1,4 +1,6 @@
 ﻿using AIDotNet.Document.Contract;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 using OpenAI_API;
 using OpenAI_API.Chat;
 using ChatMessage = AIDotNet.Document.Contract.Models.ChatMessage;
@@ -6,7 +8,7 @@ using ChatMessageRole = AIDotNet.Document.Contract.Models.ChatMessageRole;
 
 namespace AIDotNet.Document.Services.Services;
 
-public class KernelService(IKernelMemory kernelMemory, ISettingService settingService)
+public class KernelService(IKernelMemory kernelMemory, Kernel kernel)
     : IKernelService
 {
     private const string PromptTemplate = """"
@@ -63,37 +65,21 @@ public class KernelService(IKernelMemory kernelMemory, ISettingService settingSe
         }
 
 
-        var chatHistory = new List<OpenAI_API.Chat.ChatMessage>();
+        var chatHistory = new ChatHistory();
 
-        var history = input.History.Select(x => new OpenAI_API.Chat.ChatMessage()
+        var history = input.History.Select(x => new ChatMessageContent()
         {
             Content = x.Content,
-            Role = OpenAI_API.Chat.ChatMessageRole.FromString(x.Role!.ToString()),
+            Role = new AuthorRole(x.Role!.ToString()),
         }).ToList();
 
         chatHistory.AddRange(history);
 
+        var chat = kernel.GetRequiredService<IChatCompletionService>();
 
-        var options = settingService.GetSetting<OpenAIOptions>(Constant.Settings.OpenAIOptions);
-
-        var api = new OpenAIAPI(options.ApiKey)
+        await foreach (var item in chat.GetStreamingChatMessageContentsAsync(chatHistory))
         {
-            ApiUrlFormat = $"{options.Endpoint.TrimEnd('/')}/{{0}}/{{1}}",
-        };
-
-        var request = new ChatRequest()
-        {
-            Model = options.ChatModel,
-            MaxTokens = 2048,
-            Messages = chatHistory,
-            Temperature = 0.5f,
-            FrequencyPenalty = 0.5f,
-            PresencePenalty = 0.5f,
-        };
-
-        await foreach (var item in api.Chat.StreamChatEnumerableAsync(request))
-        {
-            yield return item?.Choices?.FirstOrDefault()?.Message?.Content ?? string.Empty;
+            yield return item.Content;
         }
     }
 }

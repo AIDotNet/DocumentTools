@@ -8,11 +8,11 @@ public partial class EditNote : IAsyncDisposable
 {
     [Inject] private IJSRuntime JS { get; set; }
     private DEditor DeditorRef { get; set; }
-    
+
     private MMarkdown MMarkdownRef { get; set; }
 
     private Dictionary<string, object> _options = new();
-    
+
     private FolderItemDto _value;
 
     private async Task<bool> BeforeAllUploadAsync(List<EditorUploadFileItem> flist)
@@ -21,12 +21,12 @@ public partial class EditNote : IAsyncDisposable
         return await Task.FromResult(true);
     }
 
-    
+
     private async Task HandleUploadAsync()
     {
         await JS.InvokeVoidAsync("util.markdownUploadFile", MMarkdownRef.Ref, 0);
     }
-    
+
     [Parameter]
     public FolderItemDto Value
     {
@@ -73,13 +73,21 @@ public partial class EditNote : IAsyncDisposable
 
     protected override async Task OnInitializedAsync()
     {
-        _options.Add("mode","ir");
+        _options.Add("mode", "ir");
         await LoadContent();
     }
 
     public async Task LoadContent()
     {
-        Content = await fileStorageService.GetFileContent(Value.Id);
+        if (Value.Type == FolderType.Note || Value.Type == FolderType.Markdown)
+        {
+            Content = await fileStorageService.GetFileContent(Value.Id);
+        }
+        else
+        {
+            Content = Value.Id;
+        }
+
         _ = InvokeAsync(StateHasChanged);
     }
 

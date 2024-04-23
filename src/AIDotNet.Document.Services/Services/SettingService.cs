@@ -56,9 +56,9 @@ public class SettingService(IFreeSql freeSql) : ISettingService
         }
         
         // 判断是否存在
-        if (freeSql.Select<Settings>().Where(x => x.Key == key).Count() > 0)
+        if (await freeSql.Select<Settings>().Where(x => x.Key == key).CountAsync() > 0)
         {
-            freeSql.Update<Settings>().Set(x => x.Value, value).Where(x => x.Key == key).ExecuteAffrows();
+            await freeSql.Update<Settings>().Set(x => x.Value, value).Where(x => x.Key == key).ExecuteAffrowsAsync();
         }
         else
         {

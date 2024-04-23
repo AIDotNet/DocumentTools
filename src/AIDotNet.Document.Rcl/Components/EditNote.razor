@@ -1,5 +1,6 @@
 ﻿@inject IFileStorageService fileStorageService
 @inject IFolderService folderService
+@inject IJSRuntime JSRuntime
 
 <style>
     .node-title {
@@ -71,9 +72,16 @@
         <DEditor @ref="DeditorRef" BeforeAllUploadAsync="BeforeAllUploadAsync" Style="height: 100%;width: 100%;" @bind-Value="Content" Markdown ContentStyle="height:100%;">
         </DEditor>
     }
-    else
+    else if (Value.Type == FolderType.Markdown)
     {
-        <MMarkdown  BeforeAllUpload="HandleUploadAsync" @ref=MMarkdownRef @bind-Value="Content"  Options="_options" Style="height: 100%;">
+        <MMarkdown BeforeAllUpload="HandleUploadAsync" @ref=MMarkdownRef @bind-Value="Content" Options="_options" Style="height: 100%;">
         </MMarkdown>
+    }
+    else if (Value.Type == FolderType.Pdf)
+    {
+        // 显示一个pdf
+        <div style="height: 100%;width: 100%;">
+            <iframe src="@("https://pdf/" + Content)" style="height: 100%;width: 100%;" frameborder="0"></iframe>
+        </div>
     }
 </div>

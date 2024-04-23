@@ -48,25 +48,75 @@ public sealed class FolderService : IFolderService
         {
             try
             {
-                var content = await fileStorageService.GetFileContent(folder.Id);
-
-                var tag = new TagCollection()
+                if (folder.Type == FolderType.Note || folder.Type == FolderType.Markdown)
                 {
+                    var content = await fileStorageService.GetFileContent(folder.Id);
+
+                    var tag = new TagCollection()
                     {
-                        "fileId", folder.Id
+                        {
+                            "fileId", folder.Id
+                        }
+                    };
+
+                    Console.WriteLine($"开始导入文件：{folder.Id}");
+
+                    await kernelMemory.ImportTextAsync(content, folder.Id, tag, index: "document");
+
+                    Console.WriteLine($"导入文件：{folder.Id} 完成");
+
+                    await freeSql.Update<Folder>()
+                        .Set(f => f.Status, VectorStatus.Processed)
+                        .Where(f => f.Id == folder.Id)
+                        .ExecuteAffrowsAsync();
+                }
+                else if (folder.Type == FolderType.Pdf)
+                {
+                    // 获取临时目录
+                    var tempPath = Path.Combine(Path.GetTempPath(), folder.Id);
+                    if (!Directory.Exists(tempPath))
+                    {
+                        Directory.CreateDirectory(tempPath);
                     }
-                };
 
-                Console.WriteLine($"开始导入文件：{folder.Id}");
+                    try
+                    {
+                        var content = await fileStorageService.GetFileBytesAsync(folder.Id);
 
-                await kernelMemory.ImportTextAsync(content, folder.Id, tag, index: "document");
+                        var filePath = Path.Combine(tempPath, folder.Id + ".pdf");
+                        await File.WriteAllBytesAsync(filePath, content);
 
-                Console.WriteLine($"导入文件：{folder.Id} 完成");
+                        var tag = new TagCollection()
+                        {
+                            {
+                                "fileId", folder.Id
+                            }
+                        };
 
-                await freeSql.Update<Folder>()
-                    .Set(f => f.Status, VectorStatus.Processed)
-                    .Where(f => f.Id == folder.Id)
-                    .ExecuteAffrowsAsync();
+                        Console.WriteLine($"开始导入文件：{folder.Id}");
+
+                        await kernelMemory.ImportDocumentAsync(filePath, folder.Id, tag, index: "document");
+
+                        Console.WriteLine($"导入文件：{folder.Id} 完成");
+
+                        await freeSql.Update<Folder>()
+                            .Set(f => f.Status, VectorStatus.Processed)
+                            .Where(f => f.Id == folder.Id)
+                            .ExecuteAffrowsAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"导入文件：{folder.Id} 失败 {e.Message}");
+                        await freeSql.Update<Folder>()
+                            .Set(f => f.Status, VectorStatus.Failed)
+                            .Where(f => f.Id == folder.Id)
+                            .ExecuteAffrowsAsync();
+                    }
+                    finally
+                    {
+                        Directory.Delete(tempPath, true);
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -120,7 +170,10 @@ public sealed class FolderService : IFolderService
         }
         else
         {
-            var folderItem = new Folder(folder.Name, folder.ParentId, folder.Size);
+            var folderItem = new Folder(folder.Name, folder.ParentId, folder.Size)
+            {
+                Type = folder.Type
+            };
             await _freeSql.Insert(folderItem)
                 .ExecuteAffrowsAsync();
 
@@ -155,6 +208,7 @@ public sealed class FolderService : IFolderService
             Status = x.Status,
             CreatedTime = x.CreatedTime,
             IsFolder = x.IsFolder,
+            Type = x.Type
         }).ToList();
     }
 

@@ -44,25 +44,24 @@
     <MSpeedDial @bind-Value=speedDialOpen
                 Direction="top" OpenOnHover="true"
                 Bottom="true" Left="true" Absolute=true
-                Transition="slide-y-reverse-transition">
+                Transition="slide-x-transition">
         <ActivatorContent>
-            <MButton @attributes="@context.Attrs" Color="blue darken-2" Dark=true Fab=true>
-                <MIcon Icon="@(speedDialOpen?"mdi-close":"mdi-menu")" />
+            <MButton @attributes="@context.Attrs" Color="blue darken-2" Dark=true Fab=true Small=true>
+                <MIcon Icon="@(speedDialOpen?"mdi-close":"mdi-menu")" Small=true />
             </MButton>
         </ActivatorContent>
         <ChildContent>
-
             <MTooltip Right=true>
                 <ActivatorContent>
                     <MButton @attributes=context.Attrs
                              Color="indigo darken-4"
-                             Fab=true Small=true Dark=true
+                             Fab=true Small=true Dark=true Width=36 Height=36
                              OnClick="WindowService.OpenSetting">
                         <MIcon Small=true>mdi-wrench</MIcon>
                     </MButton>
                 </ActivatorContent>
                 <ChildContent>
-                    设置
+                    打开设置
                 </ChildContent>
             </MTooltip>
 
@@ -70,7 +69,7 @@
                 <ActivatorContent>
                     <MButton @attributes=context.Attrs
                              Color="pink darken-3"
-                             Fab=true Small=true Dark=true>
+                             Fab=true Small=true Dark=true Width=36 Height=36>
                         <MIcon Small=true>mdi-information-variant</MIcon>
                     </MButton>
                 </ActivatorContent>

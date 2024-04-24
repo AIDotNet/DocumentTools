@@ -289,15 +289,16 @@
             });
         },
         markdownUploadFile: (element, index) => {
+            debugger
             let _that = this;
             let vditor = element.Vditor;
             let fileInput = element.querySelector('input[type=file]')
-            //Here is the upload logic. This is just an example. You can write your own processing logic
-            let formData = new FormData()
             let files = fileInput.files;
-            for (let i = 0; i < files.length; i++) {
-                let file = files[i];
-                let fileName = file.name;
+            for (let i = 0; i < vditorFiles.length; i++) {
+                let file = vditorFiles[i];
+                // 随机生成文件名
+                const random = Math.random().toString(36).substring(7);
+                const fileName = `${random}.png`;
                 let reader = new FileReader();
                 reader.onload = async function (event) {
                     let fileData = event.target.result;
@@ -317,6 +318,8 @@
                         fileInput.value = '';
                     }
 
+                    // 上传完成释放file
+                    file.release();
                 };
                 reader.readAsArrayBuffer(file);
             }
@@ -330,7 +333,8 @@
             // 循环files
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
-                let fileName = file.name;
+                const random = Math.random().toString(36).substring(7);
+                const fileName = `${random}.png`;
                 let reader = new FileReader();
                 reader.onload = async function (event) {
                     let fileData = event.target.result;

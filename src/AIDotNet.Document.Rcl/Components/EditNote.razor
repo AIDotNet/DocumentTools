@@ -30,6 +30,11 @@
         outline: none;
         border: none;
     }
+    
+    .vditor-ir pre.vditor-reset{
+        height: calc(100vh - 180px);
+        overflow: auto;
+    }
 </style>
 
 <div style="height: 100%;width: 100%;">
@@ -74,8 +79,8 @@
     }
     else if (Value.Type == FolderType.Markdown)
     {
-        <MMarkdown BeforeAllUpload="HandleUploadAsync" @ref=MMarkdownRef @bind-Value="Content" Options="_options" Style="height: 100%;">
-        </MMarkdown>
+        <DMarkdown BeforeAllUpload="HandleUploadAsync" @ref=MMarkdownRef @bind-Value="Content" Options="_options" Style="height: 100%;">
+        </DMarkdown>
     }
     else if (Value.Type == FolderType.Pdf)
     {

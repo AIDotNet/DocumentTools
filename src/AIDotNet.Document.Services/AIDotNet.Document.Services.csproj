@@ -10,7 +10,7 @@
     <PackageReference Include="FreeSql.Provider.Sqlite" Version="3.2.821" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.36.240416.1" />
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.7.0" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.7.1" />
     <PackageReference Include="OpenAI" Version="1.11.0" />
   </ItemGroup>
 

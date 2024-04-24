@@ -81,7 +81,7 @@ public sealed class FolderService : IFolderService
 
                     try
                     {
-                        var content = await fileStorageService.GetFileBytesAsync(folder.Id);
+                        var content = await fileStorageService.GetFileBytesAsync("https://pdf/"+folder.Id);
 
                         var filePath = Path.Combine(tempPath, folder.Id + ".pdf");
                         await File.WriteAllBytesAsync(filePath, content);
@@ -184,6 +184,10 @@ public sealed class FolderService : IFolderService
     public async Task RemoveAsync(string id)
     {
         await _freeSql.Delete<Folder>().Where(f => f.Id == id).ExecuteAffrowsAsync();
+
+        await _freeSql.Delete<FileStorageItem>()
+            .Where(x => x.Path.EndsWith(id))
+            .ExecuteAffrowsAsync();
     }
 
     public async Task UpdateAsync(FolderItemDto folder)

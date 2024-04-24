@@ -7,7 +7,7 @@
     accept: 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon',
     pathKey: 'path'
 }
-const defaultToolbarContainer = [ [{header: [1, 2, 3, 4, 5, 6, false]}], // 标题 —— 下拉选择
+const defaultToolbarContainer = [[{header: [1, 2, 3, 4, 5, 6, false]}], // 标题 —— 下拉选择
     [{size: ["small", false, "large", "huge"]}], // 字体大小
     [{list: "ordered"}, {list: "bullet"}], // 有序、无序列表
     ['code-block'], // 引用  代码块
@@ -48,7 +48,6 @@ export function init(quillElement, obj, toolBarContainer, additionalModules, rea
             },
             syntax: {
                 highlight: text => {
-                    console.log(text);
                     return hljs.highlightAuto(text).value; // 这里就是代码高亮需要配置的地方
                 }
             }
@@ -73,6 +72,29 @@ export function init(quillElement, obj, toolBarContainer, additionalModules, rea
         const quillMarkdown = new QuillMarkdown(editor, markdownOptions);
     }
 
+    // 解决粘贴板默认Base64图片的问题
+    editor.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+        var embeds = delta.ops.filter(op => op.insert && op.insert.image);
+        if (embeds.length > 0) {
+            embeds.forEach(embed => {
+                if (embed.insert && embed.insert.image && embed.insert.image.startsWith('data:')) {
+                    // 提取图片文件
+                    var base64Image = embed.insert.image;
+
+                    const random = Math.random().toString(36).substring(7);
+                    const fileName = `${random}.png`;
+                    fileStorageService.CreateOrUpdateImageAsync(fileName, base64Image)
+                        .then(res => {
+                            var index = editor.getSelection(true).index;
+                            editor.deleteText(index, embed.insert.image.length);
+                            editor.insertEmbed(index, 'image', res);
+                        })
+                }
+            });
+            return new Delta();
+        }
+        return delta;
+    });
     obj.invokeMethodAsync("HandleRenderedAsync");
     editor.on('selection-change', range => {
         if (!range) {

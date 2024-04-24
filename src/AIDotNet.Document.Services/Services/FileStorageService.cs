@@ -36,7 +36,7 @@ public sealed class FileStorageService(IFreeSql freeSql) : IFileStorageService
     {
         // 先判断是否存在
         var file = await freeSql.Select<FileStorageItem>().FirstAsync(x => x.Path == fileId);
-        if (file != null)
+        if (file)
         {
             await freeSql.Delete<FileStorageItem>().Where(x => x.Path == fileId)
                 .ExecuteAffrowsAsync();
@@ -54,8 +54,8 @@ public sealed class FileStorageService(IFreeSql freeSql) : IFileStorageService
     {
         fileId = "https://image/" + fileId;
         // 先判断是否存在
-        var file = freeSql.Select<FileStorageItem>().FirstAsync(x => x.Path == fileId);
-        if (file != null)
+        var file = await freeSql.Select<FileStorageItem>().FirstAsync(x => x.Path == fileId);
+        if (file)
         {
             await freeSql.Delete<FileStorageItem>().Where(x => x.Path == fileId)
                 .ExecuteAffrowsAsync();

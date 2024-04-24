@@ -9,7 +9,7 @@ public partial class EditNote : IAsyncDisposable
     [Inject] private IJSRuntime JS { get; set; }
     private DEditor DeditorRef { get; set; }
 
-    private MMarkdown MMarkdownRef { get; set; }
+    private DMarkdown MMarkdownRef { get; set; }
 
     private Dictionary<string, object> _options = new();
 

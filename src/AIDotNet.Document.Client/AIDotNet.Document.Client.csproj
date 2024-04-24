@@ -7,6 +7,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
 		<ApplicationIcon>logo.ico</ApplicationIcon>
+		<AssemblyName>智能本地笔记</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>

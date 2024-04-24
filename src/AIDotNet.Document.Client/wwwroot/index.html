@@ -7,8 +7,7 @@
     <title>AIDotNet.Document</title>
     <base href="/"/>
     <link href="_content/Masa.Blazor/css/masa-blazor.min.css" rel="stylesheet">
-    <link href="css/app.css" rel="stylesheet"/>
-    <link href="AIDotNet.Document.styles.css" rel="stylesheet"/>
+    <link href="_content/AIDotNet.Document.Rcl/css/docs.css" rel="stylesheet">
     <link href="https://cdn.masastack.com/npm/@mdi/font@7.1.96/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.masastack.com/npm/materialicons/materialicons.css" rel="stylesheet">
     <link href="https://cdn.masastack.com/npm/fontawesome/v5.0.13/css/all.css" rel="stylesheet">
@@ -60,26 +59,6 @@
 
         .blazor-error-boundary::after {
             content: "An error has occurred."
-        }
-
-        .status-bar-safe-area {
-            display: none;
-        }
-
-        @supports (-webkit-touch-callout: none) {
-            .status-bar-safe-area {
-                display: flex;
-                position: sticky;
-                top: 0;
-                height: env(safe-area-inset-top);
-                background-color: #f7f7f7;
-                width: 100%;
-                z-index: 1;
-            }
-
-            .flex-column, .navbar-brand {
-                padding-left: env(safe-area-inset-left);
-            }
         }
 
         /* 隐藏滚动条 */
@@ -222,10 +201,8 @@
 </head>
 
 <body>
-
-<div class="status-bar-safe-area"></div>
-
-<div id="app">Loading...</div>
+<div id="app">
+</div>
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
@@ -233,7 +210,7 @@
     <a class="dismiss">🗙</a>
 </div>
 
-<script src="_framework/blazor.webview.js"></script>
+<script src="_framework/blazor.webview.js" ></script>
 <script src="_content/BlazorComponent/js/blazor-component.js"></script>
 <script src="_content/Blazor.ContextMenu/blazorContextMenu.min.js"></script>
 <script src="https://cdn.masastack.com/npm/quill/1.3.6/quill.js"></script>
@@ -245,9 +222,9 @@
 <script src="https://cdn.masastack.com/npm/vditor/3.8.12/dist/index.min.js"></script>
 <script src="_content/AIDotNet.Document.Rcl/js/image-resize.min.js"></script>
 <script src="_content/AIDotNet.Document.Rcl/js/rcl.js"></script>
+<script src="_content/AIDotNet.Document.Rcl/js/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it-emoji/2.0.2/markdown-it-emoji.min.js"></script>
 
-<script>
-</script>
 </body>
 
 </html>

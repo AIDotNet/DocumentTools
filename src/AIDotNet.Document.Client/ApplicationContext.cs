@@ -20,6 +20,8 @@ public static class ApplicationContext
         _services.AddSingleton<IChatWindowService, ChatWindowService>();
         _services.AddSingleton<IFileService, FileService>();
         _services.AddWpfBlazorWebView();
+        // 忽略SKEXP0010错误
+        //  
         _services.AddDocumentService();
 #if DEBUG
         _services.AddBlazorWebViewDeveloperTools();

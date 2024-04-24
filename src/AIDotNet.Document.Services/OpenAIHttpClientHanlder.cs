@@ -20,6 +20,11 @@ public sealed class OpenAIHttpClientHanlder(string uri) : HttpClientHandler
 
         var response = await base.SendAsync(request, cancellationToken);
 
+        if (response.IsSuccessStatusCode)
+        {
+            return response;
+        }
+        
         return response;
     }
 }

@@ -35,11 +35,16 @@ public sealed class FileStorageService(IFreeSql freeSql) : IFileStorageService
     public async Task CreateOrUpdateFileAsync(string fileId, byte[] bytes)
     {
         // 先判断是否存在
-        var file = await freeSql.Select<FileStorageItem>().FirstAsync(x => x.Path == fileId);
+        var file = await freeSql.Select<FileStorageItem>().AnyAsync(x => x.Path == fileId);
         if (file)
         {
-            await freeSql.Delete<FileStorageItem>().Where(x => x.Path == fileId)
+            await freeSql
+                .Update<FileStorageItem>()
+                .Where(x => x.Path == fileId)
+                .Set(x => x.Content, bytes)
+                .Set(x => x.Size, bytes.Length)
                 .ExecuteAffrowsAsync();
+            return;
         }
 
         await freeSql.Insert(new FileStorageItem()

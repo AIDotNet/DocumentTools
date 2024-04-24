@@ -66,7 +66,6 @@ namespace AIDotNet.Document.Client
                     }
                     else if (e.Request.Uri.Contains("/api/v1/upload"))
                     {
-                        
                     }
                 };
 
@@ -82,6 +81,85 @@ namespace AIDotNet.Document.Client
                 BlazorWeb.WebView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
                     "var fileStorageService = window.chrome.webview.hostObjects.fileStorageService;");
             };
+
+            RegisterEvents();
+        }
+
+
+        private void RegisterEvents()
+        {
+            //Task线程内未捕获异常处理事件
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException; //Task异常 
+
+            //UI线程未捕获异常处理事件（UI主线程）
+            this.Dispatcher.UnhandledException += App_DispatcherUnhandledException;
+
+            //非UI线程未捕获异常处理事件(例如自己创建的一个子线程)
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
+        private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            try
+            {
+                var exception = e.Exception as Exception;
+                if (exception != null)
+                {
+                    HandleException(exception);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+            finally
+            {
+                e.SetObserved();
+            }
+        }
+
+        //非UI线程未捕获异常处理事件(例如自己创建的一个子线程)      
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                var exception = e.ExceptionObject as Exception;
+                if (exception != null)
+                {
+                    HandleException(exception);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+            finally
+            {
+                //ignore
+            }
+        }
+
+        //UI线程未捕获异常处理事件（UI主线程）
+        private static void App_DispatcherUnhandledException(object sender,
+            System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                HandleException(e.Exception);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+            finally
+            {
+                e.Handled = true;
+            }
+        }
+
+        private static void HandleException(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }

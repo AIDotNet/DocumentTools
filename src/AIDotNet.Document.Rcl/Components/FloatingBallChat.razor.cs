@@ -1,11 +1,23 @@
-﻿namespace AIDotNet.Document.Rcl.Components;
+﻿using Microsoft.AspNetCore.Components.Web;
+
+namespace AIDotNet.Document.Rcl.Components;
 
 public partial class FloatingBallChat
 {
     /// <summary>
-    /// 显示浮动对话框
+    /// 开场白
     /// </summary>
-    private bool IsShowFloatingBall { get; set; }
+    private const string Opening =
+        """
+        您好欢迎使用AIDotNet智能本地笔记助手，您可以提问您在当前服务器的所有笔记的内容，我会尽可能详细的回复您！
+        """;
+
+    private static readonly MarkdownItAnchorOptions s_anchorOptions = new()
+    {
+        Level = 1,
+        PermalinkClass = "",
+        PermalinkSymbol = ""
+    };
 
     private string _id = Guid.NewGuid().ToString("N");
 
@@ -22,6 +34,11 @@ public partial class FloatingBallChat
 
     private async Task SendMessageAsync()
     {
+        if (_message.IsNullOrWhiteSpace())
+        {
+            return;
+        }
+
         ChatMessages.Add(new ChatMessage()
         {
             Content = _message,
@@ -89,14 +106,28 @@ public partial class FloatingBallChat
         await PopupService.EnqueueSnackbarAsync("复制成功", AlertTypes.Success);
     }
 
+    private void HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e is { Key: "Enter", ShiftKey: false })
+        {
+            _ = SendMessageAsync();
+        }
+    }
+    
+    private void RemoveAllMessage()
+    {
+        ChatMessages.Clear();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             // 等待1s
-            await Task.Delay(400).ContinueWith(async _ =>
+            await Task.Delay(600).ContinueWith(async _ =>
             {
                 await jsRuntime.InvokeVoidAsync("util.AILevitatedSphereInit");
+                await jsRuntime.InvokeVoidAsync("util.initTextEditor", "panel-textarea");
             });
         }
     }

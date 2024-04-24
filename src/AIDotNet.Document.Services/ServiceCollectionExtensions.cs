@@ -1,4 +1,5 @@
-﻿using AIDotNet.Document.Contract;
+﻿using System.Diagnostics.CodeAnalysis;
+using AIDotNet.Document.Contract;
 using Azure.AI.OpenAI;
 using Microsoft.SemanticKernel;
 
@@ -19,20 +20,44 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IFolderService, FolderService>();
             services.AddSingleton<ISettingService, SettingService>();
 
-            services.AddTransient<IKernelMemory>((provider) =>
+            services.AddTransient<Kernel>(provider =>
             {
                 var settingService = provider.GetRequiredService<ISettingService>();
 
                 var options = settingService.GetSetting<OpenAIOptions>(Constant.Settings.OpenAIOptions);
+
+                options ??= new();
+
+                var kernel = Kernel.CreateBuilder()
+                    .AddOpenAIChatCompletion(
+                        modelId: options.ChatModel,
+                        apiKey: options.ApiKey,
+                        httpClient: new HttpClient(new OpenAIHttpClientHanlder(options.Endpoint)))
+                    .Build();
+                return kernel;
+            });
+
+            services.AddScoped<IKernelService, KernelService>();
+
+            services.AddTransient((services) =>
+            {
+                var settingService = services.GetRequiredService<ISettingService>();
                 
-                options ??= new ();
+                var options = settingService.GetSetting<OpenAIOptions>(Constant.Settings.OpenAIOptions);
+
+                options ??= new();
 
                 return new KernelMemoryBuilder()
                     .WithOpenAI(new OpenAIConfig()
                     {
                         TextModel = options.ChatModel,
                         APIKey = options.ApiKey,
-                        Endpoint = options.Endpoint,
+                        EmbeddingModel = options.EmbeddingModel,
+                    }, httpClient: new HttpClient(new OpenAIHttpClientHanlder(options.Endpoint)))
+                    .WithOpenAITextEmbeddingGeneration(new OpenAIConfig()
+                    {
+                        TextModel = options.ChatModel,
+                        APIKey = options.ApiKey,
                         EmbeddingModel = options.EmbeddingModel,
                     }, httpClient: new HttpClient(new OpenAIHttpClientHanlder(options.Endpoint)))
                     .WithCustomTextPartitioningOptions(new TextPartitioningOptions
@@ -43,29 +68,11 @@ namespace Microsoft.Extensions.DependencyInjection
                     })
                     .WithSimpleVectorDb(new SimpleVectorDbConfig
                     {
-                        StorageType = FileSystemTypes.Disk
+                        StorageType = FileSystemTypes.Disk,
+                        Directory = "vector"
                     })
-                    .Build();
+                    .Build<MemoryServerless>();
             });
-
-            services.AddTransient<Kernel>(provider =>
-            {
-                var settingService = provider.GetRequiredService<ISettingService>();
-
-                var options = settingService.GetSetting<OpenAIOptions>(Constant.Settings.OpenAIOptions);
-
-                options ??= new ();
-                
-                var kernel = Kernel.CreateBuilder()
-                    .AddOpenAIChatCompletion(
-                        modelId: options.ChatModel,
-                        apiKey: options.ApiKey,
-                        httpClient: new HttpClient(new OpenAIHttpClientHanlder(options.Endpoint)))
-                    .Build();
-                return kernel;
-            });
-
-            services.AddSingleton<IKernelService, KernelService>();
 
             return services;
         }

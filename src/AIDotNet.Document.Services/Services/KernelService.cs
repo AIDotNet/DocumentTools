@@ -1,14 +1,13 @@
 ﻿using AIDotNet.Document.Contract;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
-using OpenAI_API;
-using OpenAI_API.Chat;
 using ChatMessage = AIDotNet.Document.Contract.Models.ChatMessage;
 using ChatMessageRole = AIDotNet.Document.Contract.Models.ChatMessageRole;
 
 namespace AIDotNet.Document.Services.Services;
 
-public class KernelService(IKernelMemory kernelMemory, Kernel kernel)
+public class KernelService(IServiceProvider serviceProvider, ISettingService settingService)
     : IKernelService
 {
     private const string PromptTemplate = """"
@@ -30,38 +29,47 @@ public class KernelService(IKernelMemory kernelMemory, Kernel kernel)
 
     public async IAsyncEnumerable<string> CompletionAsync(CompletionInput input)
     {
-        // 向量搜索
-
-        var content = input.History.Last();
-
-        var result = await kernelMemory.SearchAsync(content.Content, "document", limit: 3,
-            minRelevance: input.Relevancy);
-
         var prompt = string.Empty;
 
 
-        // 在这里会将搜索结果的分区拼接起来
-        foreach (var item in result.Results)
+        try
         {
-            prompt += string.Join(Environment.NewLine, item.Partitions.Select(x => x.Text));
-        }
+            // 向量搜索
 
-        if (!string.IsNullOrEmpty(prompt))
-        {
-            // 替换模板的参数
-            prompt = PromptTemplate.Replace("{{quote}}", prompt)
-                .Replace("{{question}}", content.Content);
+            var content = input.History.Last();
 
-            // 往input.History最上面添加
-            input.History.Insert(0, new ChatMessage()
+            var kernelMemory = serviceProvider.GetRequiredService<MemoryServerless>();
+
+            var result = await kernelMemory.SearchAsync(content.Content, "document", limit: 3,
+                minRelevance: input.Relevancy);
+
+            // 在这里会将搜索结果的分区拼接起来
+            foreach (var item in result.Results)
             {
-                Content = prompt,
-                CreateAt = DateTime.Now,
-                Extra = new Dictionary<string, string>(),
-                Id = Guid.NewGuid().ToString(),
-                Meta = new Dictionary<string, string>(),
-                Role = ChatMessageRole.System
-            });
+                prompt += string.Join(Environment.NewLine, item.Partitions.Select(x => x.Text));
+            }
+
+            if (!string.IsNullOrEmpty(prompt))
+            {
+                // 替换模板的参数
+                prompt = PromptTemplate.Replace("{{quote}}", prompt)
+                    .Replace("{{question}}", content.Content);
+
+                // 往input.History最上面添加
+                input.History.Insert(0, new ChatMessage()
+                {
+                    Content = prompt,
+                    CreateAt = DateTime.Now,
+                    Extra = new Dictionary<string, string>(),
+                    Id = Guid.NewGuid().ToString(),
+                    Meta = new Dictionary<string, string>(),
+                    Role = ChatMessageRole.System
+                });
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
         }
 
 
@@ -74,6 +82,8 @@ public class KernelService(IKernelMemory kernelMemory, Kernel kernel)
         }).ToList();
 
         chatHistory.AddRange(history);
+
+        var kernel = serviceProvider.GetRequiredService<Kernel>();
 
         var chat = kernel.GetRequiredService<IChatCompletionService>();
 

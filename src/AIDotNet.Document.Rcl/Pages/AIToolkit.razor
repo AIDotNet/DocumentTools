@@ -1,2 +1,75 @@
 ﻿@page "/ai-toolkit"
 
+<style>
+    .ai-toolkit-title {
+        transition: all 0.3s;
+        height: 80px;
+        margin: 8px;
+        border-radius: 18px;
+        color: white !important;
+        font-family: Arial, sans-serif;
+        user-select: none;
+        cursor: pointer;
+    }
+    
+    .ai-toolkit-title:hover {
+        transition: all 0.3s;
+        transform: scale(1.01);
+        
+    }
+    
+    .ai-toolkit-subtitle {
+        color: white;
+    }
+    
+    /*将为你推荐标题放小*/
+    .recommend-title {
+        font-size: 16px;
+        margin-left: 10px;
+        margin-top: 20px;
+        font-weight: normal;
+        font-family: Arial, sans-serif;
+    }
+</style>
+
+<h2 class="recommend-title">
+    为您推荐
+</h2>
+<MRow NoGutters>
+
+    <MCol Cols="12"
+          Sm="4">
+        <MCard Style="background: linear-gradient(to right, #6a5acd, #7b68ee);" Outlined Class="ai-toolkit-title">
+            <MCardTitle Style="font-size: 16px;padding: 10px;">
+                AI助手
+            </MCardTitle>
+            <MCardSubtitle Class="ai-toolkit-subtitle">
+                智能创造，高效工作！
+            </MCardSubtitle>
+        </MCard>
+    </MCol>
+
+    <MCol Cols="12"
+          Sm="4">
+        <MCard Style="background: linear-gradient(to right, #B097FD, #978CFD);"  Outlined Class="ai-toolkit-title">
+            <MCardTitle Style="font-size: 16px;padding: 10px;">
+                暂无
+            </MCardTitle>
+            <MCardSubtitle Class="ai-toolkit-subtitle">
+                智能创造，高效工作！
+            </MCardSubtitle>
+        </MCard>
+    </MCol>
+
+    <MCol Cols="12"
+          Sm="4">
+        <MCard Style="background: linear-gradient(to right, #46b4E7, #40CBAF);"  Outlined Class="ai-toolkit-title">
+            <MCardTitle Style="font-size: 16px;padding: 10px;">
+                暂无
+            </MCardTitle>
+            <MCardSubtitle Class="ai-toolkit-subtitle">
+                智能创造，高效工作！
+            </MCardSubtitle>
+        </MCard>
+    </MCol>
+</MRow>

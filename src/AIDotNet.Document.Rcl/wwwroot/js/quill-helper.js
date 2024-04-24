@@ -78,12 +78,9 @@ export function init(quillElement, obj, toolBarContainer, additionalModules, rea
         if (embeds.length > 0) {
             embeds.forEach(embed => {
                 if (embed.insert && embed.insert.image && embed.insert.image.startsWith('data:')) {
-                    // 提取图片文件
-                    var base64Image = embed.insert.image;
-
                     const random = Math.random().toString(36).substring(7);
                     const fileName = `${random}.png`;
-                    fileStorageService.CreateOrUpdateImageAsync(fileName, base64Image)
+                    fileStorageService.CreateOrUpdateImageAsync(fileName, embed.insert.image)
                         .then(res => {
                             var index = editor.getSelection(true).index;
                             editor.deleteText(index, embed.insert.image.length);

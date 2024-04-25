@@ -9,9 +9,10 @@ namespace AIDotNet.Document.Client
     /// </summary>
     public partial class App : Application
     {
+        readonly System.Windows.Forms.NotifyIcon notifyIcon;
         public App()
         {
-            var notifyIcon = new System.Windows.Forms.NotifyIcon()
+            notifyIcon = new System.Windows.Forms.NotifyIcon()
             {
                 Icon = new System.Drawing.Icon("logo.ico"),
                 Visible = true,
@@ -50,6 +51,8 @@ namespace AIDotNet.Document.Client
             });
 
             notifyIcon.ContextMenuStrip.Items.Add("退出", null, (sender, args) => { Shutdown(); });
+
+            this.Exit += (sender, args) => notifyIcon.Dispose();
         }
     }
 }

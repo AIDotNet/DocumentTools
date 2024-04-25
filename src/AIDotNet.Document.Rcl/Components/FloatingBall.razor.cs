@@ -11,14 +11,14 @@ public partial class FloatingBall
 
     private async Task FloatingBallAsync()
     {
-        mainWindowService.Hide();
+        WindowService.Hide();
         IsShowFloatingBall = true;
 
-        chatWindowService.Show(() =>
+        ChatWindowService.Show(() =>
         {
             IsShowFloatingBall = false;
 
-            mainWindowService.Show();
+            WindowService.Show();
             _ = InvokeAsync(StateHasChanged);
         });
 
@@ -32,7 +32,7 @@ public partial class FloatingBall
             // 等待1s
             await Task.Delay(400).ContinueWith(async _ =>
             {
-                await jsRuntime.InvokeVoidAsync("util.AILevitatedSphereInit");
+                await JsRuntime.InvokeVoidAsync("util.AILevitatedSphereInit");
             });
         }
     }

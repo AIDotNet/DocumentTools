@@ -48,13 +48,13 @@ public partial class Setting
             new("gpt-4-vision-preview")
         ];
         
-        _options = settingService.GetSetting<OpenAIOptions?>(Constant.Settings.OpenAIOptions) ?? new OpenAIOptions();
+        _options = SettingService.GetSetting<OpenAIOptions?>(Constant.Settings.OpenAIOptions) ?? new OpenAIOptions();
     }
 
     private async Task Save()
     {
-        await settingService.SetSetting(Constant.Settings.OpenAIOptions, _options);
+        await SettingService.SetSetting(Constant.Settings.OpenAIOptions, _options);
 
-        await popupService.EnqueueSnackbarAsync("保存成功！",AlertTypes.Success);
+        await PopupService.EnqueueSnackbarAsync("保存成功！",AlertTypes.Success);
     }
 }

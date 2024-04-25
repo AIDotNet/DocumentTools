@@ -1,0 +1,44 @@
+
+<MSpeedDial @bind-Value=open
+            Direction="top" OpenOnHover="true"
+            Bottom="true" Left="true" Absolute=true
+            Transition="slide-x-transition" 
+            Style="transform:translateZ(1px);z-index:999">
+    <ActivatorContent>
+        <MButton @attributes="@context.Attrs" Color="blue darken-2" Dark=true Fab=true Small=true>
+            <MIcon Icon="@(open?"mdi-close":"mdi-menu")" Small=true />
+        </MButton>
+    </ActivatorContent>
+    <ChildContent>
+        <MTooltip Right=true>
+            <ActivatorContent>
+                <MButton @attributes=context.Attrs
+                         Color="indigo darken-4"
+                         Fab=true Small=true Dark=true Width=36 Height=36
+                         OnClick="WindowService.OpenSetting">
+                    <MIcon Small=true>mdi-wrench</MIcon>
+                </MButton>
+            </ActivatorContent>
+            <ChildContent>
+                打开设置
+            </ChildContent>
+        </MTooltip>
+
+        <MTooltip Right=true>
+            <ActivatorContent>
+                <MButton @attributes=context.Attrs
+                         Color="pink darken-3"
+                         Fab=true Small=true Dark=true Width=36 Height=36>
+                    <MIcon Small=true>mdi-information-variant</MIcon>
+                </MButton>
+            </ActivatorContent>
+            <ChildContent>
+                关于我们
+            </ChildContent>
+        </MTooltip>
+    </ChildContent>
+</MSpeedDial>
+
+@code {
+    bool open;
+}

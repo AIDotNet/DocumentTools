@@ -5,85 +5,50 @@
     }
 </style>
 
-<MNavigationDrawer App=true Permanent="true" Color="grey lighten-5" Width="@Width">
-    <MRow Dense=true Class="pa-1 mb-3">
-        <MCol Cols="12" Class="text-end pb-3">
-            <MButton Icon=true Small=true OnClick="RefreshClick" Loading=refreshing>
-                <MIcon Small=true>mdi-refresh</MIcon>
-            </MButton>
-        </MCol>
-        <MCol Cols="12" Class="text-center">
-            <MAvatar Size="50">
-                <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
-            </MAvatar>
-        </MCol>
+<MNavigationDrawer App=true Permanent="true" Color="grey lighten-5" Width="@Width" Clipped=Clipped Class="elevation-0">
+    <PrependContent>
+        <MSpacer/>
+        <MButton Icon=true Small=true OnClick="RefreshClick" Loading=refreshing>
+            <MIcon Small=true>mdi-refresh</MIcon>
+        </MButton>
+    </PrependContent>
+    <ChildContent>
 
-        @* vip
-        <MCol Cols="12">
-        <MRow NoGutters=true Align="AlignTypes.Center" Justify="JustifyTypes.Center">
-        <img src="assets/img/vip/common.png" height="13" width="35" />
-        <MDivider Vertical=true Class="ma-2" />
-        <a><small>开通会员</small></a>
+        <MRow Dense=true Class="pa-1 mb-3">
+            <MCol Cols="12" Class="text-center">
+                <MAvatar Size="50">
+                    <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
+                </MAvatar>
+            </MCol>
+
+            @* vip
+            <MCol Cols="12">
+            <MRow NoGutters=true Align="AlignTypes.Center" Justify="JustifyTypes.Center">
+            <img src="assets/img/vip/common.png" height="13" width="35" />
+            <MDivider Vertical=true Class="ma-2" />
+            <a><small>开通会员</small></a>
+            </MRow>
+            </MCol>
+            *@
+
+            <MCol Cols="12" Class="text-center">
+                <MButton Depressed=true Color="primary" Dark=true Width="@("80%")" Class="my-2">
+                    <MIcon>mdi-plus</MIcon>
+                    新建
+                </MButton>
+            </MCol>
         </MRow>
+
+
+        <MCol Cols="12">
+            <NavTreePart />
         </MCol>
-        *@
 
-        <MCol Cols="12" Class="text-center">
-            <MButton Depressed=true Color="primary" Dark=true Width="@("80%")" Class="my-2">
-                <MIcon>mdi-plus</MIcon>
-                新建
-            </MButton>
-        </MCol>
-    </MRow>
+    </ChildContent>
 
+    <AppendContent>
 
-    <MCol Cols="12">
-        <NavTreePart />
-    </MCol>
-
-    <MSpeedDial @bind-Value=speedDialOpen
-                Direction="top" OpenOnHover="true"
-                Bottom="true" Left="true" Absolute=true
-                Transition="slide-x-transition">
-        <ActivatorContent>
-            <MButton @attributes="@context.Attrs" Color="blue darken-2" Dark=true Fab=true Small=true>
-                <MIcon Icon="@(speedDialOpen?"mdi-close":"mdi-menu")" Small=true />
-            </MButton>
-        </ActivatorContent>
-        <ChildContent>
-            <MTooltip Right=true>
-                <ActivatorContent>
-                    <MButton @attributes=context.Attrs
-                             Color="indigo darken-4"
-                             Fab=true Small=true Dark=true Width=36 Height=36
-                             OnClick="WindowService.OpenSetting">
-                        <MIcon Small=true>mdi-wrench</MIcon>
-                    </MButton>
-                </ActivatorContent>
-                <ChildContent>
-                    打开设置
-                </ChildContent>
-            </MTooltip>
-
-            <MTooltip Right=true>
-                <ActivatorContent>
-                    <MButton @attributes=context.Attrs
-                             Color="pink darken-3"
-                             Fab=true Small=true Dark=true Width=36 Height=36>
-                        <MIcon Small=true>mdi-information-variant</MIcon>
-                    </MButton>
-                </ActivatorContent>
-                <ChildContent>
-                    关于我们
-                </ChildContent>
-            </MTooltip>
-        </ChildContent>
-    </MSpeedDial>
-
-
-
-
-
+    </AppendContent>
 
 </MNavigationDrawer>
 

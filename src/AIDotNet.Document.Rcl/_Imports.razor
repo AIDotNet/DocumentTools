@@ -1,28 +1,39 @@
-﻿@using Microsoft.AspNetCore.Components.Web
+﻿@using AIDotNet.Document.Contract
+@using AIDotNet.Document.Contract.Services
+@using AIDotNet.Document.Rcl.Components
 @using AIDotNet.Document.Rcl.Shared
-@using System.Net.Http
+@using AIDotNet.Document.Rcl.Shared.Layouts
+@using AIDotNet.Document.Rcl.Shared.Parts
+@using BlazorComponent
+@using BlazorContextMenu
+@using Masa.Blazor
+@using Masa.Blazor.Components.Editor
+@using Masa.Blazor.Presets
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.JSInterop
-@using BlazorComponent
-@using Masa.Blazor
-@using Masa.Blazor.Presets
+@using System.IO
+@using System.Net.Http
 @using System.Net.Http.Json
-@using System.IO;
-@using AIDotNet.Document.Contract.Services
-@using System.Text.Json;
-@using BlazorContextMenu
-@using AIDotNet.Document.Rcl.Components
-@using AIDotNet.Document.Contract
-@using AIDotNet.Document.Rcl.Shared.Layouts
+@using System.Text.Json
 
-@using Masa.Blazor.Components.Editor
-@using AIDotNet.Document.Rcl.Shared.Parts
+
 @*DI*@
 
-@inject IFolderService FolderService
-@inject IMenuItemService MenuItemService
 @inject NavigationManager NavigationManager
+
+@inject IChatWindowService ChatWindowService
+@inject IFileService FileService
+@inject IFileStorageService FileStorageService
+@inject IFolderService FolderService
+@inject IJSRuntime JsRuntime
+@inject IKernelService KernelService
 @inject IMainWindowService WindowService
+@inject IMenuItemService MenuItemService
+@inject IPopupService PopupService
+@inject ISettingService SettingService
+
+
 @*DI*@

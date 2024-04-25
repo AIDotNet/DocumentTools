@@ -70,7 +70,7 @@ public sealed class FolderService : IFolderService
                         .Where(f => f.Id == folder.Id)
                         .ExecuteAffrowsAsync();
                 }
-                else if (folder.Type == FolderType.Pdf)
+                else if (folder.Type is FolderType.Pdf or FolderType.Word)
                 {
                     // 获取临时目录
                     var tempPath = Path.Combine(Path.GetTempPath(), folder.Id);
@@ -81,7 +81,7 @@ public sealed class FolderService : IFolderService
 
                     try
                     {
-                        var content = await fileStorageService.GetFileBytesAsync("https://pdf/"+folder.Id);
+                        var content = await fileStorageService.GetFileBytesAsync("https://pdf/" + folder.Id);
 
                         var filePath = Path.Combine(tempPath, folder.Id + ".pdf");
                         await File.WriteAllBytesAsync(filePath, content);

@@ -16,4 +16,9 @@ public enum FolderType
     /// PDF
     /// </summary>
     Pdf = 3,
+    
+    /// <summary>
+    /// Word
+    /// </summary>
+    Word = 4,
 }

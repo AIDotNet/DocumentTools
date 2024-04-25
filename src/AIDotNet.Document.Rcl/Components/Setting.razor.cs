@@ -10,8 +10,13 @@ public partial class Setting
 
     private List<EmbeddingDto> _embeddings;
 
+    private string _version = string.Empty;
+
     protected override void OnInitialized()
     {
+        // 获取当前程序集版本
+        _version = typeof(Setting).Assembly.GetName().Version?.ToString();
+
         _embeddings =
         [
             new("text-embedding-3-large"),
@@ -47,7 +52,7 @@ public partial class Setting
             new("gpt-4-turbo-preview"),
             new("gpt-4-vision-preview")
         ];
-        
+
         _options = SettingService.GetSetting<OpenAIOptions?>(Constant.Settings.OpenAIOptions) ?? new OpenAIOptions();
     }
 
@@ -55,6 +60,6 @@ public partial class Setting
     {
         await SettingService.SetSetting(Constant.Settings.OpenAIOptions, _options);
 
-        await PopupService.EnqueueSnackbarAsync("保存成功！",AlertTypes.Success);
+        await PopupService.EnqueueSnackbarAsync("保存成功！", AlertTypes.Success);
     }
 }

@@ -174,6 +174,48 @@ public partial class MyFolder
         }
     }
 
+    private async Task UploadWord(FolderItemDto? folderItemDto)
+    {
+        await FileService.OpenFileAsync(
+            "Word Files (*.doc;*.docx)|*.doc;*.docx"
+            , async path =>
+        {
+            // 限制一下文件大小
+            var info = new FileInfo(path);
+
+            if (info.Length > 1024 * 1024 * 10)
+            {
+                await PopupService.EnqueueSnackbarAsync("文件大小不能超过10M", AlertTypes.Error);
+                return;
+            }
+
+            var parentId = folderItemDto?.IsFolder == true ? folderItemDto.Id : folderItemDto?.ParentId;
+
+            var item = new FolderItemDto()
+            {
+                Name = Path.GetFileName(path),
+                ParentId = parentId,
+                Type = FolderType.Word,
+                IsFolder = false,
+                Size = 0,
+            };
+
+            var id = await FolderService.CreateAsync(item);
+
+            // TODO: 使用image协议让WebView2加载本地文件
+            Folders = await FolderService.GetFolderByParentIdAsync(parentId);
+
+            // 读取文件内容
+            var bytes = await File.ReadAllBytesAsync(path);
+
+            await FileStorageService.CreateOrUpdateFileAsync("https://pdf/" + id, bytes);
+
+            FolderId = parentId;
+
+            FolderItemDto = item;
+        });
+    }
+
     private async Task UploadPdf(FolderItemDto? folderItemDto)
     {
         await FileService.OpenFileAsync("PDF Files (*.pdf)|*.pdf", async path =>
@@ -207,7 +249,7 @@ public partial class MyFolder
             var bytes = await File.ReadAllBytesAsync(path);
 
             await FileStorageService.CreateOrUpdateFileAsync("https://pdf/" + id, bytes);
-            
+
             FolderId = parentId;
 
             FolderItemDto = item;

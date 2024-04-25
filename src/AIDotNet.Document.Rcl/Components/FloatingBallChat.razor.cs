@@ -79,7 +79,7 @@ public partial class FloatingBallChat
                 chat.Content += item;
                 _ = InvokeAsync(StateHasChanged);
 
-                await jsRuntime.InvokeVoidAsync("util.scrollToBottom", _id);
+                await JsRuntime.InvokeVoidAsync("util.scrollToBottom", _id);
             }
         }
         catch (Exception e)
@@ -101,7 +101,7 @@ public partial class FloatingBallChat
 
     private async Task CopyMessage(ChatMessage message)
     {
-        await jsRuntime.InvokeVoidAsync("util.copyToClipboard", message.Content);
+        await JsRuntime.InvokeVoidAsync("util.copyToClipboard", message.Content);
 
         await PopupService.EnqueueSnackbarAsync("复制成功", AlertTypes.Success);
     }
@@ -126,8 +126,8 @@ public partial class FloatingBallChat
             // 等待1s
             await Task.Delay(600).ContinueWith(async _ =>
             {
-                await jsRuntime.InvokeVoidAsync("util.AILevitatedSphereInit");
-                await jsRuntime.InvokeVoidAsync("util.initTextEditor", "panel-textarea");
+                await JsRuntime.InvokeVoidAsync("util.AILevitatedSphereInit");
+                await JsRuntime.InvokeVoidAsync("util.initTextEditor", "panel-textarea");
             });
         }
     }

@@ -1,43 +1,17 @@
 ﻿@inherits LayoutComponentBase
-@inject IJSRuntime JSRuntime
-
-<style>
-    .window-buttons {
-        position: absolute;
-        top: 0;
-        right: 0;
-        display: flex;
-        justify-content: space-between;
-        width: 95px;
-    }
-
-        .window-buttons button {
-            width: 20px;
-            height: 20px;
-            border: none;
-            border-radius: 2px;
-            color: white;
-            font-weight: bold;
-        }
-
-    .minimize {
-        background-color: #ffb700;
-    }
-
-    .maximize {
-        background-color: #00ca00;
-    }
-
-    .close {
-        background-color: #ff5f5f;
-    }
-</style>
 
 <FloatingBall />
 
+
+
 <MApp>
 
-    <SideBarPart Width="240" />
+    <LeftFloatingBallPart />
+
+    <TopBarPart Height="40" Clipped=clipped />
+
+    <SideBarPart Width="240" Clipped=clipped />
+
 
     <MMain>
         <MErrorHandler>
@@ -45,17 +19,3 @@
         </MErrorHandler>
     </MMain>
 </MApp>
-
-<div class="window-buttons">
-    <MButton Small=true Icon=true OnClick="WindowService.Minimize">
-        <MIcon Small=true>mdi-minus</MIcon>
-    </MButton>
-
-    <MButton Small=true Icon=true OnClick="WindowService.Maximize">
-        <MIcon Small=true Icon="@(WindowService.IsMaximized?"mdi-window-restore":"mdi-checkbox-blank-outline")" />
-    </MButton>
-
-    <MButton Small=true Icon=true OnClick="WindowService.Close">
-        <MIcon Small=true>mdi-close</MIcon>
-    </MButton>
-</div>

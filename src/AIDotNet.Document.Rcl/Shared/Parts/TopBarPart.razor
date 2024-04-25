@@ -1,0 +1,35 @@
+﻿<style>
+    div.m-toolbar__content {
+        -webkit-app-region: drag;
+        webkit-app-region: drag;
+    }
+
+        div.m-toolbar__content button {
+            /*             width: 20px;
+                height: 20px;
+              border: none; */
+            border-radius: 0px;
+/*             color: white;
+            font-weight: bold; */
+        }
+</style>
+
+<MAppBar App=true Flat=true Height="Height" ClippedLeft=Clipped Color="grey lighten-5">
+    <MSpacer />
+
+    <MButton Small=true Icon=true OnClick="WindowService.Minimize">
+        <MIcon Small=true>mdi-minus</MIcon>
+    </MButton>
+
+    <MButton Small=true Icon=true OnClick="WindowService.Maximize">
+        <MIcon Small=true Icon="@(WindowService.IsMaximized?"mdi-window-restore":"mdi-checkbox-blank-outline")" />
+    </MButton>
+
+    <MButton Small=true Icon=true OnClick="WindowService.Close">
+        <MIcon Small=true>mdi-close</MIcon>
+    </MButton>
+
+</MAppBar>
+
+
+

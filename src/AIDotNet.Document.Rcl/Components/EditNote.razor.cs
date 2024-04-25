@@ -81,7 +81,7 @@ public partial class EditNote : IAsyncDisposable
     {
         if (Value.Type == FolderType.Note || Value.Type == FolderType.Markdown)
         {
-            Content = await fileStorageService.GetFileContent(Value.Id);
+            Content = await FileStorageService.GetFileContent(Value.Id);
         }
         else
         {
@@ -95,7 +95,7 @@ public partial class EditNote : IAsyncDisposable
     {
         if (_isEditContent == true)
         {
-            await fileStorageService.CreateOrUpdateFileAsync(Value.Id, Content ?? string.Empty);
+            await FileStorageService.CreateOrUpdateFileAsync(Value.Id, Content ?? string.Empty);
         }
     }
 
@@ -110,7 +110,7 @@ public partial class EditNote : IAsyncDisposable
         }
 
         // 防止重复点击
-        await folderService.QuantifyAsync(_value.Id);
+        await FolderService.QuantifyAsync(_value.Id);
 
         _value.Status = VectorStatus.Processing;
     }

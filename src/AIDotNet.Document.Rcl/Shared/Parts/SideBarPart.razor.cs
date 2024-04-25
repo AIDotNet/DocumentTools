@@ -4,7 +4,8 @@
     {
         [Parameter]
         public StringNumber Width { get; set; } = 210;
-
+        [Parameter]
+        public bool Clipped { get; set; }
 
         bool refreshing;
         /// <summary>
@@ -18,7 +19,5 @@
             refreshing = false;
         }
 
-
-        bool speedDialOpen;
     }
 }

@@ -41,6 +41,10 @@ namespace AIDotNet.Document.Client
                 BlazorWeb.WebView.CoreWebView2.AddWebResourceRequestedFilter("https://pdf/*",
                     Microsoft.Web.WebView2.Core.CoreWebView2WebResourceContext.All);
 
+                // 监听word
+                BlazorWeb.WebView.CoreWebView2.AddWebResourceRequestedFilter("https://word/*",
+                    Microsoft.Web.WebView2.Core.CoreWebView2WebResourceContext.All);
+
                 // 监听 */api/v1/upload
                 BlazorWeb.WebView.CoreWebView2.AddWebResourceRequestedFilter("*/api/v1/upload",
                     Microsoft.Web.WebView2.Core.CoreWebView2WebResourceContext.All);
@@ -63,6 +67,19 @@ namespace AIDotNet.Document.Client
 
                         e.Response = BlazorWeb.WebView.CoreWebView2.Environment.CreateWebResourceResponse(
                             new System.IO.MemoryStream(bytes), 200, "OK", "Content-Type: application/pdf");
+                    }
+                    else if (e.Request.Uri.StartsWith("https://word/"))
+                    {
+                        var bytes = await fileStorageService!.GetFileBytesAsync(e.Request.Uri);
+
+                        var cors = "Access-Control-Allow-Origin: *";
+                        // 长度
+                        cors += "\nContent-Length: " + bytes.Length;
+                        
+                        e.Response = BlazorWeb.WebView.CoreWebView2.Environment.CreateWebResourceResponse(
+                            new System.IO.MemoryStream(bytes), 200, "OK",
+                            "Content-Type: application/msword\n" +
+                            cors);
                     }
                     else if (e.Request.Uri.Contains("/api/v1/upload"))
                     {

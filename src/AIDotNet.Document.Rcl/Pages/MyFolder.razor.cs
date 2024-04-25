@@ -208,7 +208,7 @@ public partial class MyFolder
             // 读取文件内容
             var bytes = await File.ReadAllBytesAsync(path);
 
-            await FileStorageService.CreateOrUpdateFileAsync("https://pdf/" + id, bytes);
+            await FileStorageService.CreateOrUpdateFileAsync("https://word/" + id, bytes);
 
             FolderId = parentId;
 

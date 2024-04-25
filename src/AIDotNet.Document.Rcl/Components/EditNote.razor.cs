@@ -6,7 +6,6 @@ namespace AIDotNet.Document.Rcl.Components;
 
 public partial class EditNote : IAsyncDisposable
 {
-    [Inject] private IJSRuntime JS { get; set; }
     private DEditor DeditorRef { get; set; }
 
     private DMarkdown MMarkdownRef { get; set; }
@@ -17,14 +16,14 @@ public partial class EditNote : IAsyncDisposable
 
     private async Task<bool> BeforeAllUploadAsync(List<EditorUploadFileItem> flist)
     {
-        await JS.InvokeVoidAsync("util.uploadFilePic", DeditorRef.ContentRef, DeditorRef.Ref, 0);
+        await JsRuntime.InvokeVoidAsync("util.uploadFilePic", DeditorRef.ContentRef, DeditorRef.Ref, 0);
         return await Task.FromResult(true);
     }
 
 
     private async Task HandleUploadAsync()
     {
-        await JS.InvokeVoidAsync("util.markdownUploadFile", MMarkdownRef.Ref, 0);
+        await JsRuntime.InvokeVoidAsync("util.markdownUploadFile", MMarkdownRef.Ref, 0);
     }
 
     [Parameter]
@@ -79,13 +78,23 @@ public partial class EditNote : IAsyncDisposable
 
     public async Task LoadContent()
     {
-        if (Value.Type == FolderType.Note || Value.Type == FolderType.Markdown)
+        if (Value.Type is FolderType.Note or FolderType.Markdown)
         {
             Content = await FileStorageService.GetFileContent(Value.Id);
         }
         else
         {
             Content = Value.Id;
+        }
+
+        if (Value.Type == FolderType.Word)
+        {
+            Task.Run((async () =>
+            {
+                await Task.Delay(100);
+                
+                await Js.InvokeVoidAsync("util.loadDocs", "https://word/" + Content, "load-docs");
+            }));
         }
 
         _ = InvokeAsync(StateHasChanged);

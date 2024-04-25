@@ -1,4 +1,6 @@
-﻿<style>
+﻿@inject  IJSRuntime Js 
+
+<style>
     .node-title {
         font-size: 25px;
         padding-top: 50px;
@@ -78,11 +80,16 @@
         <DMarkdown BeforeAllUpload="HandleUploadAsync" @ref=MMarkdownRef @bind-Value="Content" Options="_options" Style="height: 100%;">
         </DMarkdown>
     }
-    else if (Value.Type == FolderType.Pdf)
+    else if (Value.Type is FolderType.Pdf)
     {
-        // 显示一个pdf
         <div style="height: 100%;width: 100%;">
             <iframe src="@("https://pdf/" + Content)" style="height: 100%;width: 100%;" frameborder="0"></iframe>
+        </div>
+    }
+    else if (Value.Type is FolderType.Word)
+    {
+        <div id="load-docs" style="height: 100%;width: 100%;">
+            
         </div>
     }
 </div>

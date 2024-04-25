@@ -1,0 +1,13 @@
+<Project>
+    <PropertyGroup>
+        <Version>0.1.0.0</Version>
+        <AssemblyVersion>0.1.0.0</AssemblyVersion>
+        <Authors>AIDotNet</Authors>
+        <Company>AIDotNet</Company>
+        <PackageId>$(AssemblyName)</PackageId>
+        <Copyright>© AIDotNet Corporation. All rights reserved.</Copyright>
+        <RepositoryUrl>https://github.com/AIDotNet/DocumentTools</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    </PropertyGroup>
+</Project>

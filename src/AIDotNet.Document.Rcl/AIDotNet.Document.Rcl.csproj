@@ -34,7 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="JsInterop\" />
+    <Content Update="wwwroot\js\docx-preview.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\js\jszip.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

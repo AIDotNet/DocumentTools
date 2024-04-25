@@ -77,7 +77,7 @@ window.util = {
         }
     },
     initTextEditor: (id) => {
-        
+
         const editor = document.getElementById(id);
         if (!editor) return;
 
@@ -212,6 +212,11 @@ window.util = {
         var panel = document.getElementById("floating-ball");
         panel.style.height = "60px";
         panel.style.width = "60px";
+    }, loadDocs: (url, id) => {
+
+        fetch(url)
+            .then(resp => resp.blob()).then(blob => docx.renderAsync(blob, document.getElementById(id)));
+
     }
 };
 

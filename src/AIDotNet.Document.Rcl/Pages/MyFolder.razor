@@ -230,6 +230,14 @@
                                             <MListItemTitle Class="menuItemLabel">重命名</MListItemTitle>
                                         </MListItemContent>
                                     </MListItem>
+                                    <MDivider Class="my-0"/>
+
+                                    <MListItem Class="menuItem" OnClick="() => ExportFile(item)">
+                                        <MIcon Small=true Left=true Class="my-auto" Color="info">mdi-rename</MIcon>
+                                        <MListItemContent>
+                                            <MListItemTitle Class="menuItemLabel">导出文件</MListItemTitle>
+                                        </MListItemContent>
+                                    </MListItem>
                                 </MListItemGroup>
                             </ChildContent>
                         </MMenu>

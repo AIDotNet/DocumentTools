@@ -179,41 +179,41 @@ public partial class MyFolder
         await FileService.OpenFileAsync(
             "Word Files (*.doc;*.docx)|*.doc;*.docx"
             , async path =>
-        {
-            // 限制一下文件大小
-            var info = new FileInfo(path);
-
-            if (info.Length > 1024 * 1024 * 10)
             {
-                await PopupService.EnqueueSnackbarAsync("文件大小不能超过10M", AlertTypes.Error);
-                return;
-            }
+                // 限制一下文件大小
+                var info = new FileInfo(path);
 
-            var parentId = folderItemDto?.IsFolder == true ? folderItemDto.Id : folderItemDto?.ParentId;
+                if (info.Length > 1024 * 1024 * 10)
+                {
+                    await PopupService.EnqueueSnackbarAsync("文件大小不能超过10M", AlertTypes.Error);
+                    return;
+                }
 
-            var item = new FolderItemDto()
-            {
-                Name = Path.GetFileName(path),
-                ParentId = parentId,
-                Type = FolderType.Word,
-                IsFolder = false,
-                Size = 0,
-            };
+                var parentId = folderItemDto?.IsFolder == true ? folderItemDto.Id : folderItemDto?.ParentId;
 
-            var id = await FolderService.CreateAsync(item);
+                var item = new FolderItemDto()
+                {
+                    Name = Path.GetFileName(path),
+                    ParentId = parentId,
+                    Type = FolderType.Word,
+                    IsFolder = false,
+                    Size = 0,
+                };
 
-            // TODO: 使用image协议让WebView2加载本地文件
-            Folders = await FolderService.GetFolderByParentIdAsync(parentId);
+                var id = await FolderService.CreateAsync(item);
 
-            // 读取文件内容
-            var bytes = await File.ReadAllBytesAsync(path);
+                // TODO: 使用image协议让WebView2加载本地文件
+                Folders = await FolderService.GetFolderByParentIdAsync(parentId);
 
-            await FileStorageService.CreateOrUpdateFileAsync("https://word/" + id, bytes);
+                // 读取文件内容
+                var bytes = await File.ReadAllBytesAsync(path);
 
-            FolderId = parentId;
+                await FileStorageService.CreateOrUpdateFileAsync("https://word/" + id, bytes);
 
-            FolderItemDto = item;
-        });
+                FolderId = parentId;
+
+                FolderItemDto = item;
+            });
     }
 
     private async Task UploadPdf(FolderItemDto? folderItemDto)
@@ -271,6 +271,45 @@ public partial class MyFolder
     {
         item.IsEdit = true;
         await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ExportFile(FolderItemDto item)
+    {
+        await FileService.SaveFileAsync("", async path =>
+        {
+            var info = new FileInfo(path);
+
+
+            switch (item.Type)
+            {
+                case FolderType.Markdown:
+
+                    var bytes = await FileStorageService.GetFileBytesAsync(item.Id);
+
+                    await File.WriteAllBytesAsync(Path.Combine(info.DirectoryName, item.Name + ".md"), bytes);
+
+                    await PopupService.EnqueueSnackbarAsync("导出成功", AlertTypes.Success);
+                    break;
+                case FolderType.Note:
+
+                    await File.WriteAllBytesAsync(Path.Combine(info.DirectoryName, item.Name + ".html"),
+                        await FileStorageService.GetFileBytesAsync(item.Id));
+
+                    break;
+                case FolderType.Word:
+                    var wordBytes = await FileStorageService.GetFileBytesAsync("https://word/" + item.Id);
+
+                    await File.WriteAllBytesAsync(Path.Combine(info.DirectoryName, item.Name + ".docx"), wordBytes);
+                    break;
+                case FolderType.Pdf:
+                    var pdfBytes = await FileStorageService.GetFileBytesAsync("https://pdf/" + item.Id);
+
+                    await File.WriteAllBytesAsync(Path.Combine(info.DirectoryName, item.Name + ".pdf"), pdfBytes);
+                    break;
+            }
+
+            await PopupService.EnqueueSnackbarAsync("导出成功", AlertTypes.Success);
+        });
     }
 
     private async Task RenameOnBlur(FolderItemDto item)

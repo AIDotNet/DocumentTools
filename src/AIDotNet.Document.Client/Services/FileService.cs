@@ -20,4 +20,20 @@ public class FileService : IFileService
             }
         });
     }
+
+    public async Task SaveFileAsync(string filter, Action<string> callback)
+    {
+        await Task.Run(() =>
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = filter
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                callback(saveFileDialog.FileName);
+            }
+        });
+    }
 }

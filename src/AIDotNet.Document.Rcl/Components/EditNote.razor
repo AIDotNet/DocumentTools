@@ -17,7 +17,7 @@
     }
 
     .ql-editor {
-        height: calc(100vh - 180px);
+        height: calc(100vh - 220px);
         overflow: auto;
     }
     
@@ -33,6 +33,16 @@
         height: calc(100vh - 180px);
         overflow: auto;
     }
+        .menuItem {
+            min-height: 40px;
+            height: 40px;
+            padding-right: 32px;
+        }
+    
+        .menuItemLabel {
+            font-size: 13px;
+            padding-left: 4px;
+        }
 </style>
 
 <div style="height: 100%;width: 100%;">
@@ -59,12 +69,15 @@
                         </MButton>
                     </ActivatorContent>
                     <ChildContent>
-                        <MList Class="d-m-list">
-                            <MButton Small OnClick="Vector" Text Class="d-list-item" Disabled="_value.Status == VectorStatus.Processing">
-                                向量
-                            </MButton>
-                            <MDivider></MDivider>
-                        </MList>
+                        <MListItemGroup>
+                            <MListItem Class="menuItem" OnClick="Vector" Disabled="_value.Status == VectorStatus.Processing">
+                                <MIcon Small=true Left=true Class="my-auto" Color="teal darken-2">mdi-vector-polyline</MIcon>
+                                <MListItemContent>
+                                    <MListItemTitle Class="menuItemLabel">向量</MListItemTitle>
+                                </MListItemContent>
+                            </MListItem>
+
+                        </MListItemGroup>
                     </ChildContent>
                 </MMenu>
             </div>
@@ -89,7 +102,7 @@
     else if (Value.Type is FolderType.Word)
     {
         <div id="load-docs" style="height: 100%;width: 100%;">
-            
+
         </div>
     }
 </div>

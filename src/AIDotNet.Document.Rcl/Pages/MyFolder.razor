@@ -232,12 +232,16 @@
                                     </MListItem>
                                     <MDivider Class="my-0"/>
 
-                                    <MListItem Class="menuItem" OnClick="() => ExportFile(item)">
-                                        <MIcon Small=true Left=true Class="my-auto" Color="info">mdi-rename</MIcon>
-                                        <MListItemContent>
-                                            <MListItemTitle Class="menuItemLabel">导出文件</MListItemTitle>
-                                        </MListItemContent>
-                                    </MListItem>
+                                    @if (item.IsFolder == false)
+                                    {
+                                        <MListItem Class="menuItem" OnClick="() => ExportFile(item)">
+                                            <MIcon Small=true Left=true Class="my-auto" Color="info">mdi-rename</MIcon>
+                                            <MListItemContent>
+                                                <MListItemTitle Class="menuItemLabel">导出文件</MListItemTitle>
+                                            </MListItemContent>
+                                        </MListItem>
+                                    }
+                                    
                                 </MListItemGroup>
                             </ChildContent>
                         </MMenu>

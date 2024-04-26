@@ -275,7 +275,16 @@ public partial class MyFolder
 
     private async Task ExportFile(FolderItemDto item)
     {
-        await FileService.SaveFileAsync("", async path =>
+        var suffix = item.Type switch
+        {
+            FolderType.Markdown => ".md",
+            FolderType.Note => ".html",
+            FolderType.Word => ".docx",
+            FolderType.Pdf => ".pdf",
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        
+        await FileService.SaveFileAsync(item.Name,suffix, async path =>
         {
             var info = new FileInfo(path);
 

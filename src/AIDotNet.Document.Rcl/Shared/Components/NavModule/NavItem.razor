@@ -4,16 +4,37 @@
 }
 else
 {
-    <MListItem Dense=Dense Link=true Href="@Menu.Href" Class="pl-4" Style="min-height:32px">
-        <ItemContent>
-            <MListItemIcon Class="my-auto">
-                <MIcon>@Menu.Icon</MIcon>
-            </MListItemIcon>
-            <MListItemContent>
-                <MListItemTitle>@Menu.Title</MListItemTitle>
-            </MListItemContent>
-        </ItemContent>
-    </MListItem>
+    @if (Mini)
+    {
+        <MTooltip Right=true Context="tipContext">
+            <ActivatorContent>
+                <MListItem @attributes=tipContext.Attrs
+                           Dense=Dense Link=true
+                           Href="@Menu.Href" Context="itemContext"
+                           Class="pa-1" Style="min-height:32px;">
+                    <ItemContent>
+                        <MIcon Class="@(GetColor(itemContext.Active)+" mx-auto")" Icon="Menu.Icon" />
+                    </ItemContent>
+                </MListItem>
+            </ActivatorContent>
+            <ChildContent>
+                @Menu.Title
+            </ChildContent>
+        </MTooltip>
+    }
+    else
+    {
+        <MListItem Dense=Dense Link=true Href="@Menu.Href" Class="pl-4" Style="min-height:32px" ActiveClass="@ActiveClass">
+            <ItemContent>
+                <MListItemIcon Class="my-auto">
+                    <MIcon>@Menu.Icon</MIcon>
+                </MListItemIcon>
+                <MListItemContent>
+                    <MListItemTitle>@Menu.Title</MListItemTitle>
+                </MListItemContent>
+            </ItemContent>
+        </MListItem>
+    }
 }
 
 
@@ -24,4 +45,12 @@ else
 
     [Parameter]
     public bool Dense { get; set; }
+
+    [Parameter]
+    public bool Mini { get; set; }
+
+    [Parameter]
+    public string ActiveClass { get; set; }
+
+    string GetColor(bool active) => active ? ActiveClass : string.Empty;
 }

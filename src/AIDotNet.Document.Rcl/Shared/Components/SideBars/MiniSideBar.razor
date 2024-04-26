@@ -1,0 +1,30 @@
+﻿@using AIDotNet.Document.Rcl.Shared.Components.NavModule
+
+<style>
+    .m-navigation-drawer__content {
+        -webkit-app-region: drag;
+        webkit-app-region: drag;
+    }
+</style>
+
+<MNavigationDrawer App=true Permanent="true" Color="grey lighten-5" Width="@Width" Clipped=Clipped Style="overflow-x:visible" Class="text-center">
+    <PrependContent>
+        <MAvatar Tile=true Size="36" Class="mt-6">
+            <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
+        </MAvatar>
+        <MDivider Class="my-2"/>
+    </PrependContent>
+
+    <ChildContent>
+        <NavTree Items="Menus"
+                 Mini=true
+                 Dense="true" Nav="true" Routable="true"
+                 ActiveClass="blue--text text--darken-1"
+                 Color="@null" />
+    </ChildContent>
+
+    <AppendContent>
+        脚
+    </AppendContent>
+
+</MNavigationDrawer>

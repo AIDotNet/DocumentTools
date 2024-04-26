@@ -3,6 +3,9 @@
     public partial class NavTree
     {
         [Parameter]
+        public bool Mini { get; set; }
+
+        [Parameter]
         public List<MenuItem> Items { get; set; } = new();
 
         [Parameter]

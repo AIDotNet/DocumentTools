@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using Components.SideBars;
+
+@inherits LayoutComponentBase
 
 <FloatingBall />
 
@@ -10,8 +12,7 @@
 
     <TopBarPart Height="40" Clipped=clipped />
 
-    <SideBarPart Width="240" Clipped=clipped />
-
+    <SideBarPart FullWidth="240" SideBarType=SideBarType.Mini Clipped=clipped />
 
     <MMain>
         <MErrorHandler>

@@ -1,23 +1,38 @@
-﻿namespace AIDotNet.Document.Rcl.Shared.Parts
+﻿using AIDotNet.Document.Rcl.Shared.Components.SideBars;
+
+namespace AIDotNet.Document.Rcl.Shared.Parts
 {
     public partial class SideBarPart
     {
         [Parameter]
-        public StringNumber Width { get; set; } = 210;
+        public StringNumber FullWidth { get; set; } = 210;
+
         [Parameter]
         public bool Clipped { get; set; }
 
-        bool refreshing;
+        [Parameter]
+        public SideBarType SideBarType { get; set; } = SideBarType.Full;
+
+
+
         /// <summary>
         /// 客户端独有的刷新
         /// </summary>
         /// <returns></returns>
         async Task RefreshClick()
         {
-            refreshing = true;
             await Task.Delay(1000);
-            refreshing = false;
+            await PopupService.ConfirmAsync("fake loading");
         }
 
+
+        List<MenuItem> menus = [];
+
+        protected override async Task OnInitializedAsync()
+        {
+            var menuItems = await MenuItemService.GetMenuItemsAsync();
+
+            menus = menuItems.ToList();
+        }
     }
 }

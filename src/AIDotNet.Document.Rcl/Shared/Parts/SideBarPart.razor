@@ -5,16 +5,15 @@
     }
 </style>
 
-<MNavigationDrawer App=true Permanent="true" Color="grey lighten-5" Width="@Width" Clipped=Clipped >
+<MNavigationDrawer App=true Permanent="true" Color="grey lighten-5" Width="@Width" Clipped=Clipped>
     <PrependContent>
-        <MSpacer/>
-        <MButton Icon=true Small=true OnClick="RefreshClick" Loading=refreshing>
-            <MIcon Small=true>mdi-refresh</MIcon>
-        </MButton>
-    </PrependContent>
-    <ChildContent>
-
         <MRow Dense=true Class="pa-1 mb-3">
+            <MCol Cols="12" Class="text-end">
+                <MButton Icon=true Small=true OnClick="RefreshClick" Loading=refreshing>
+                    <MIcon Small=true>mdi-refresh</MIcon>
+                </MButton>
+            </MCol>
+
             <MCol Cols="12" Class="text-center">
                 <MAvatar Size="50">
                     <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
@@ -38,16 +37,13 @@
                 </MButton>
             </MCol>
         </MRow>
-
-
-        <MCol Cols="12">
-            <NavTreePart />
-        </MCol>
-
+    </PrependContent>
+    <ChildContent>
+        <NavTreePart />
     </ChildContent>
 
     <AppendContent>
-
+        脚
     </AppendContent>
 
 </MNavigationDrawer>

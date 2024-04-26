@@ -1,33 +1,20 @@
-﻿<style>
-    div.m-toolbar__content {
-        -webkit-app-region: drag;
-        webkit-app-region: drag;
-    }
+﻿<MAppBar App=true Flat=true Height="Height" ClippedLeft=Clipped Color="white" Style="padding-right:-14px">
 
-        div.m-toolbar__content button {
-            /*             width: 20px;
-                height: 20px;
-              border: none; */
-            border-radius: 0px;
-/*             color: white;
-            font-weight: bold; */
-        }
-</style>
+    <MSpacer Style="height:100%;margin-left:-14px ;-webkit-app-region: drag; webkit-app-region: drag;" @ondblclick="WindowService.Maximize" />
 
-<MAppBar App=true Flat=true Height="Height" Style="background-color: #ffffff !important;" ClippedLeft=Clipped Color="grey lighten-5">
-    <MSpacer />
-
-    <MButton Small=true Icon=true OnClick="WindowService.Minimize">
+    <MButton Text=true Style="min-width:36px" OnClick="WindowService.Minimize">
         <MIcon Small=true>mdi-minus</MIcon>
     </MButton>
 
-    <MButton Small=true Icon=true OnClick="WindowService.Maximize">
+    <MButton Text=true Style="min-width:36px" OnClick="WindowService.Maximize">
         <MIcon Small=true Icon="@(WindowService.IsMaximized?"mdi-window-restore":"mdi-checkbox-blank-outline")" />
     </MButton>
 
-    <MButton Small=true Icon=true OnClick="WindowService.Close">
-        <MIcon Small=true>mdi-close</MIcon>
-    </MButton>
+    <MHover>
+        <MButton @attributes=context.Attrs Text=true Style="min-width:36px;margin-right:-14px" Class="@(context.Hover?"red":string.Empty)" OnClick="WindowService.Close">
+            <MIcon Small=true Color="@(context.Hover?"white":string.Empty)">mdi-close</MIcon>
+        </MButton>
+    </MHover>
 
 </MAppBar>
 

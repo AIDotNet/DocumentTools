@@ -1,9 +1,9 @@
 
 <MSpeedDial @bind-Value=open
             Direction="top" OpenOnHover="true"
-            Bottom="true" Left="true" Absolute=true
+            Top="true" Left="true" Absolute=true
             Transition="slide-x-transition" 
-            Style="transform:translateZ(1px);z-index:999">
+            Style="z-index:999; top:calc(100vh - 50px);">
     <ActivatorContent>
         <MButton @attributes="@context.Attrs" Color="blue darken-2" Dark=true Fab=true Small=true>
             <MIcon Icon="@(open?"mdi-close":"mdi-menu")" Small=true />

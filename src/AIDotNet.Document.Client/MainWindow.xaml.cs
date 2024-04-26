@@ -16,6 +16,8 @@ namespace AIDotNet.Document.Client
         {
             InitializeComponent();
 
+            this.Closing += MainWindow_Closing;
+
             var services = ApplicationContext.CreateApplication();
 
             services.AddSingleton<IMainWindowService>((_) => new MainWindowService(this));
@@ -75,7 +77,7 @@ namespace AIDotNet.Document.Client
                         var cors = "Access-Control-Allow-Origin: *";
                         // 长度
                         cors += "\nContent-Length: " + bytes.Length;
-                        
+
                         e.Response = BlazorWeb.WebView.CoreWebView2.Environment.CreateWebResourceResponse(
                             new System.IO.MemoryStream(bytes), 200, "OK",
                             "Content-Type: application/msword\n" +
@@ -102,6 +104,64 @@ namespace AIDotNet.Document.Client
             RegisterEvents();
         }
 
+
+        /// <summary>
+        /// <para>从 settingpage 控制是否真的关闭</para>
+        /// <para>warning 目前没做持久化 需要setting那边处理</para>
+        /// </summary>
+        public bool? TrueClose { get; set; }
+
+        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (TrueClose is null)
+            {
+                var userSet = SetCloseOption();
+                if (userSet is null)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+                else
+                {
+                    TrueClose = userSet;
+                }
+            }
+
+            if (TrueClose is true)
+            {
+                return;
+            }
+            else if (TrueClose is false)
+            {
+                e.Cancel = true;
+                this.Hide();
+            }
+            else
+            {
+
+            }
+        }
+        /// <summary>
+        /// 以后美化 先running
+        /// </summary>
+        /// <returns></returns>
+        static bool? SetCloseOption()
+        {
+            var content = 
+                "*DeBug开发模式* 设置关闭模式 设置后不在询问 设置类型如下:" +
+                "\r\n\t是(Y)\t=>\t关闭应用" +
+                "\r\n\t否(N)\t=>\t最小化到托盘" +
+                "\r\n\t取消\t=>\t取消本次操作";
+
+            var result = MessageBox.Show(content, "关闭设置", MessageBoxButton.YesNoCancel);
+            return result switch
+            {
+                MessageBoxResult.Yes => true,
+                MessageBoxResult.No => false,
+                MessageBoxResult.Cancel => null,
+                _ => null
+            };
+        }
 
         private void RegisterEvents()
         {

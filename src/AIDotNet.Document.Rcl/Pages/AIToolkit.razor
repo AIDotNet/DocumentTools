@@ -1,27 +1,25 @@
 ﻿@page "/ai-toolkit"
 
-<style>
+@* <style>
     .ai-toolkit-title {
         transition: all 0.3s;
         height: 80px;
         margin: 8px;
         border-radius: 18px;
-        color: white !important;
         font-family: Arial, sans-serif;
         user-select: none;
         cursor: pointer;
     }
-    
-    .ai-toolkit-title:hover {
-        transition: all 0.3s;
-        transform: scale(1.01);
-        
-    }
-    
+
+        .ai-toolkit-title:hover {
+            transition: all 0.3s;
+            transform: scale(1.01);
+        }
+
     .ai-toolkit-subtitle {
         color: white;
     }
-    
+
     /*将为你推荐标题放小*/
     .recommend-title {
         font-size: 16px;
@@ -30,46 +28,82 @@
         font-weight: normal;
         font-family: Arial, sans-serif;
     }
-</style>
+</style> *@
+
+@* @code {
+    // 调试用
+    Breakpoints s;
+    protected override void OnInitialized()
+    {
+        s = MasaBlazor.Breakpoint.Name;
+
+        MasaBlazor.BreakpointChanged += (_, _) =>
+        {
+            s = MasaBlazor.Breakpoint.Name;
+            StateHasChanged();
+        };
+    }
+} *@
 
 <h2 class="recommend-title">
     为您推荐
+    @* @s *@
 </h2>
-<MRow NoGutters>
 
-    <MCol Cols="12"
-          Sm="4">
-        <MCard Style="background: linear-gradient(to right, #6a5acd, #7b68ee);" Outlined Class="ai-toolkit-title">
-            <MCardTitle Style="font-size: 16px;padding: 10px;">
-                AI助手
-            </MCardTitle>
-            <MCardSubtitle Class="ai-toolkit-subtitle">
-                智能创造，高效工作！
-            </MCardSubtitle>
-        </MCard>
+<MRow NoGutters=true Class="pa-2">
+    @for (int i = 0; i < 12; i++)
+    {
+    @* background: linear - gradient(to right, #6a5acd, #7b68ee); *@
+        <MCol Cols="12" Sm=6 Md="4" Lg="3" Xl="2" Class="pa-2">
+            <MCard Style="user-select:none"
+                   Color="#ff0000"
+                   Outlined=true Dark=true Class="ai-toolkit-title pb-2"
+                   Hover=true>
+                <MCardTitle Style="font-size: 16px;padding: 10px;">
+                    AI助手
+                </MCardTitle>
+                <MCardSubtitle Class="ai-toolkit-subtitle">
+                    智能创造，高效工作！
+                </MCardSubtitle>
+            </MCard>
+        </MCol>
+    }
+
+
+    @*     <MCol Cols="12" Sm=6 Md="4" Lg="3" Xl="2">
+    <MCard Href="https://api.token-ai.cn/" Style="background: linear-gradient(to right, #B097FD, #978CFD);"
+    Outlined=true Dark=true Class="ai-toolkit-title">
+    <MCardTitle Style="font-size: 16px;padding: 10px;">
+    低价OpenAI平台
+    </MCardTitle>
+    <MCardSubtitle Class="ai-toolkit-subtitle">
+    更低的价格，更好的体验！
+    </MCardSubtitle>
+    </MCard>
     </MCol>
 
-    <MCol Cols="12"
-          Sm="4">
-        <MCard Href="https://api.token-ai.cn/" Style="background: linear-gradient(to right, #B097FD, #978CFD);"  Outlined Class="ai-toolkit-title">
-            <MCardTitle Style="font-size: 16px;padding: 10px;">
-                低价OpenAI平台
-            </MCardTitle>
-            <MCardSubtitle Class="ai-toolkit-subtitle">
-                更低的价格，更好的体验！
-            </MCardSubtitle>
-        </MCard>
+    <MCol Cols="12" Sm=6 Md="4" Lg="3" Xl="2">
+    <MCard Style="background: linear-gradient(to right, #46b4E7, #40CBAF);"
+    Outlined=true Dark=true Class="ai-toolkit-title">
+    <MCardTitle Style="font-size: 16px;padding: 10px;">
+    购买AI套餐
+    </MCardTitle>
+    <MCardSubtitle Class="ai-toolkit-subtitle">
+    一键购买，轻松使用！
+    </MCardSubtitle>
+    </MCard>
     </MCol>
 
-    <MCol Cols="12"
-          Sm="4">
-        <MCard Style="background: linear-gradient(to right, #46b4E7, #40CBAF);"  Outlined Class="ai-toolkit-title">
-            <MCardTitle Style="font-size: 16px;padding: 10px;">
-                购买AI套餐
-            </MCardTitle>
-            <MCardSubtitle Class="ai-toolkit-subtitle">
-                一键购买，轻松使用！
-            </MCardSubtitle>
-        </MCard>
-    </MCol>
+    <MCol Cols="12" Sm=6 Md="4" Lg="3" Xl="2">
+    <MCard Style="background: linear-gradient(to right, #46b4E7, #40CBAF);"
+    Outlined=true Dark=true Class="ai-toolkit-title">
+    <MCardTitle Style="font-size: 16px;padding: 10px;">
+    购买AI套餐
+    </MCardTitle>
+    <MCardSubtitle Class="ai-toolkit-subtitle">
+    一键购买，轻松使用！
+    </MCardSubtitle>
+    </MCard>
+    </MCol> *@
+
 </MRow>

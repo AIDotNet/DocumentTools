@@ -17,13 +17,14 @@ public class MainWindowService(Window window) : IMainWindowService
 
     public void Close()
     {
-        // 如果是MainWindow，则隐藏窗口
-        if (window is MainWindow mainWindow)
-        {
-            mainWindow.Hide();
+        //// 如果是MainWindow，则隐藏窗口
+        //if (window is MainWindow mainWindow)
+        //{
+        //    mainWindow.Hide();
 
-            return;
-        }
+        //    return;
+        //}
+        // mainwindow处理
 
         window.Close();
     }

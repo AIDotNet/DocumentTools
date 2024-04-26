@@ -95,7 +95,8 @@ public sealed class FolderService : IFolderService
 
                         Console.WriteLine($"开始导入文件：{folder.Id}");
 
-                        await kernelMemory.ImportDocumentAsync(filePath, folder.Id, tag, index: "document");
+                        await kernelMemory.ImportDocumentAsync(filePath, Guid.NewGuid().ToString("N"), tag,
+                            index: "document");
 
                         Console.WriteLine($"导入文件：{folder.Id} 完成");
 

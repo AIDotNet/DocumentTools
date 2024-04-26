@@ -54,12 +54,6 @@ namespace Microsoft.Extensions.DependencyInjection
                         APIKey = options.ApiKey,
                         EmbeddingModel = options.EmbeddingModel,
                     }, httpClient: new HttpClient(new OpenAIHttpClientHanlder(options.Endpoint)))
-                    .WithOpenAITextEmbeddingGeneration(new OpenAIConfig()
-                    {
-                        TextModel = options.ChatModel,
-                        APIKey = options.ApiKey,
-                        EmbeddingModel = options.EmbeddingModel,
-                    }, httpClient: new HttpClient(new OpenAIHttpClientHanlder(options.Endpoint)))
                     .WithCustomTextPartitioningOptions(new TextPartitioningOptions
                     {
                         MaxTokensPerParagraph = 1000,
@@ -69,7 +63,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     .WithSimpleVectorDb(new SimpleVectorDbConfig
                     {
                         StorageType = FileSystemTypes.Disk,
-                        Directory = "vector"
                     })
                     .Build<MemoryServerless>();
             });

@@ -80,8 +80,12 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceProvider UseDocumentService(this IServiceProvider provider)
         {
             var settingService = provider.GetRequiredService<ISettingService>();
-
+            var folderService = provider.GetRequiredService<IFolderService>();
+            
+            
             settingService.Update();
+            
+            
             return provider;
         }
     }

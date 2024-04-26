@@ -28,7 +28,7 @@ public sealed class FolderService : IFolderService
             while (await FolderChannel.Reader.WaitToReadAsync())
             {
                 var folder = await FolderChannel.Reader.ReadAsync();
-                var kernelMemory = scope.ServiceProvider.GetRequiredService<IKernelMemory>();
+                var kernelMemory = scope.ServiceProvider.GetRequiredService<MemoryServerless>();
                 await HandlerVectorAsync(folder, kernelMemory, fileStorageService, sql);
             }
         });

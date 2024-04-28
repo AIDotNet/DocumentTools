@@ -19,6 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton<IFolderService, FolderService>();
             services.AddSingleton<ISettingService, SettingService>();
+            services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
 
             services.AddTransient<Kernel>(provider =>
             {

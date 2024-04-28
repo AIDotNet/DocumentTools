@@ -1,2 +1,64 @@
 @page "/"
+@inject IDataStatisticsService DataStatisticsService
 
+<h2 class="recommend-title">
+    智能笔记统计
+</h2>
+
+<MRow NoGutters=true Class="pa-2">
+
+    <MCol Cols="12" Sm=6 Md="4" Lg="3" Xl="2" Class="pa-2">
+        <MCard Style="user-select:none; background: linear-gradient(to right, #4facfe 0%, #7F99FD 50%, #7590FD 100%);"
+               
+               Outlined=true Dark=true Class="ai-toolkit-title pb-2"
+               Hover=true>
+            <MCardTitle Style="font-size: 16px;padding: 10px;">
+                最近使用笔记
+            </MCardTitle>
+            <MCardSubtitle Class="ai-toolkit-subtitle">
+
+                @if (_data.LatestUsageNote != null)
+                {
+                    @(_data.LatestUsageNote.Name)
+                }
+                else
+                {
+                    <span>暂无</span>
+                }
+            </MCardSubtitle>
+        </MCard>
+    </MCol>
+    <MCol Cols="12" Sm=6 Md="4" Lg="3" Xl="2" Class="pa-2">
+        <MCard Style="user-select:none; background: linear-gradient(to right, #B096FD 0%, #A592FD 50%, #988DfD 100%);"
+               Outlined=true Dark=true Class="ai-toolkit-title pb-2"
+               Hover=true>
+            <MCardTitle Style="font-size: 16px;padding: 10px;">
+                最近编辑笔记
+            </MCardTitle>
+            <MCardSubtitle Class="ai-toolkit-subtitle">
+
+                @if (_data.LatestUpdateNote != null)
+                {
+                    @(_data.LatestUpdateNote.Name)
+                }
+                else
+                {
+                    <span>暂无</span>
+                }
+            </MCardSubtitle>
+        </MCard>
+    </MCol>
+    <MCol Cols="12" Sm=6 Md="4" Lg="3" Xl="2" Class="pa-2">
+        <MCard Style="user-select:none; background: linear-gradient(to right, #46D4bb 0%, #42CEB1 50%, #41CCAF 100%);"
+               Outlined=true Dark=true Class="ai-toolkit-title pb-2"
+               Hover=true>
+            <MCardTitle Style="font-size: 16px;padding: 10px;">
+                笔记总数
+            </MCardTitle>
+            <MCardSubtitle Class="ai-toolkit-subtitle">
+                @(_data.TotalNoteCount)
+            </MCardSubtitle>
+        </MCard>
+    </MCol>
+
+</MRow>

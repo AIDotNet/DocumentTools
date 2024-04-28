@@ -18,6 +18,11 @@ public class Folder
     public DateTime CreatedTime { get; set; }
 
     /// <summary>
+    /// 编辑时间
+    /// </summary>
+    public DateTime? UpdateTime { get; set; }
+    
+    /// <summary>
     /// 是否目录
     /// </summary>
     public bool IsFolder { get; set; }

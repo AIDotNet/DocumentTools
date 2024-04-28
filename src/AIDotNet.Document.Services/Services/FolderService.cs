@@ -197,6 +197,7 @@ public sealed class FolderService : IFolderService
             .Where(f => f.Id == folder.Id)
             .Set(f => f.Name, folder.Name)
             .Set(x => x.ParentId, folder.ParentId)
+            .Set(x => x.UpdateTime, DateTime.Now)
             .Set(x => x.Size, folder.Size)
             .ExecuteAffrowsAsync();
     }

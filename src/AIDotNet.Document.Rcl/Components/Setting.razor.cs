@@ -17,18 +17,38 @@ public partial class Setting
         // 获取当前程序集版本
         _version = typeof(Setting).Assembly.GetName().Version?.ToString();
 
-        _embeddings =
-        [
-            new("text-embedding-3-large"),
-            new("text-embedding-3-small"),
-            new("text-embedding-ada-002"),
-            new("text-embedding-v1"),
-            new("text-moderation-latest"),
-            new("text-moderation-stable"),
-            new("text-search-ada-doc-001")
-        ];
+        _embeddings = [new("text-embedding-3-large"), new("text-embedding-3-small"), new("text-embedding-ada-002"), new("text-embedding-v1"), new("text-moderation-latest"), new("text-moderation-stable"), new("text-search-ada-doc-001")];
 
-        _models =
+        _models = GetDefModels();
+
+        _options = SettingService.GetSetting<OpenAIOptions?>(Constant.Settings.OpenAIOptions) ?? new OpenAIOptions();
+    }
+
+    void SearchInputUpdate(string search)
+    {
+        if (search.Length > 0)
+        {
+            if (_models.Any(x => x.Name == search) is false)
+            {
+                _models = GetDefModels(search.ToLower());
+            }
+        }
+        else
+        {
+            var def = GetDefModels();
+            if (_models.Count != def.Count)
+            {
+                _models = def;
+            }
+        }
+    }
+    static List<ModelDto> GetDefModels(string key)
+    {
+        var models = GetDefModels();
+        models.Insert(0, new(key));
+        return models;
+    }
+    static List<ModelDto> GetDefModels() =>
         [
             new("gpt-3.5-turbo-0125"),
             new("gpt-3.5-turbo"),
@@ -52,9 +72,6 @@ public partial class Setting
             new("gpt-4-turbo-preview"),
             new("gpt-4-vision-preview")
         ];
-
-        _options = SettingService.GetSetting<OpenAIOptions?>(Constant.Settings.OpenAIOptions) ?? new OpenAIOptions();
-    }
 
     private async Task Save()
     {

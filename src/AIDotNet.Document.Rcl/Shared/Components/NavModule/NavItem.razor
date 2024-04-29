@@ -1,47 +1,43 @@
-﻿@if (Menu.IsDivider)
+﻿@if (NavMenu.IsDivider)
 {
-    <MDivider Class=@($"my-{Menu.DivNumber}") />
+    <MDivider Class=@($"my-{NavMenu.DivNumber}") />
 }
 else
 {
-    @if (Mini)
-    {
-        <MTooltip Right=true Context="tipContext">
-            <ActivatorContent>
-                <MListItem @attributes=tipContext.Attrs
-                           Dense=Dense Link=true
-                           Href="@Menu.Href" Context="itemContext"
-                           Class="pa-1" Style="min-height:32px;">
-                    <ItemContent>
-                        <MIcon Class="@(GetColor(itemContext.Active)+" mx-auto")" Icon="Menu.Icon" />
-                    </ItemContent>
-                </MListItem>
-            </ActivatorContent>
-            <ChildContent>
-                @Menu.Title
-            </ChildContent>
-        </MTooltip>
-    }
-    else
-    {
-        <MListItem Dense=Dense Link=true Href="@Menu.Href" Class="pl-4" Style="min-height:32px" ActiveClass="@ActiveClass">
-            <ItemContent>
-                <MListItemIcon Class="my-auto">
-                    <MIcon>@Menu.Icon</MIcon>
-                </MListItemIcon>
-                <MListItemContent>
-                    <MListItemTitle>@Menu.Title</MListItemTitle>
-                </MListItemContent>
-            </ItemContent>
-        </MListItem>
-    }
+    <MTooltip Right=true Context="tipContext" Disabled=!Mini>
+        <ActivatorContent>
+            <MListItem @attributes=tipContext.Attrs
+                       Class="@(Mini?"px-1":"pl-4")"
+                       Dense=Dense Href="@NavMenu.Href"
+                       Link=true Style="min-height:32px" ActiveClass="@(Mini?ActiveClass:ActiveClass)">
+                <ItemContent>
+                    @if (false)
+                    {
+                        <MIcon Class=@GetClass(context.Active) Icon="NavMenu.Icon" />
+                    }
+                    else
+                    {
+                        <MListItemIcon Class="@(Mini?"ma-auto":"my-auto")">
+                            <MIcon Class="mx-auto">@NavMenu.Icon</MIcon>
+                        </MListItemIcon>
+                        <MListItemContent>
+                            <MListItemTitle>@NavMenu.Title</MListItemTitle>
+                        </MListItemContent>
+                    }
+                </ItemContent>
+            </MListItem>
+        </ActivatorContent>
+        <ChildContent>
+            @NavMenu.Title
+        </ChildContent>
+    </MTooltip>
+
 }
 
 
 @code {
-
     [Parameter, EditorRequired]
-    public MenuItem Menu { get; set; } = null!;
+    public MenuItem NavMenu { get; set; } = null!;
 
     [Parameter]
     public bool Dense { get; set; }
@@ -52,5 +48,6 @@ else
     [Parameter]
     public string ActiveClass { get; set; }
 
-    string GetColor(bool active) => active ? ActiveClass : string.Empty;
+    string? GetColor(bool active) => active ? ActiveClass : null;
+    string GetClass(bool active) => string.Join(" ", "mx-auto", GetColor(active));
 }

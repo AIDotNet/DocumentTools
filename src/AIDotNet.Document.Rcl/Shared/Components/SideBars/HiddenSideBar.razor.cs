@@ -4,8 +4,10 @@ namespace AIDotNet.Document.Rcl.Shared.Components.SideBars
     /// <summary>
     /// 方案废弃
     /// </summary>
-    public partial class MiniSideBar
+    public partial class HiddenSideBar
     {
+        bool? open;
+
         [Parameter]
         public SideBarType SideBarType { get; set; }
 

@@ -1,15 +1,22 @@
 ﻿@using AIDotNet.Document.Rcl.Shared.Components.SideBars;
 
+<style>
+    .m-navigation-drawer__content {
+        -webkit-app-region: drag;
+        webkit-app-region: drag;
+    }
 
-@if (SideBarType is SideBarType.Hidden)
-{
+    .menuItem {
+        min-height: 40px;
+        height: 40px;
+        padding-right: 32px;
+    }
 
-}
-else if (SideBarType is SideBarType.Mini)
-{
-    <MiniSideBar Width="54" Menus="menus" OnRefreshClick="RefreshClick" Clipped=Clipped />
-}
-else
-{
-    <FullSideBar Width="FullWidth" Menus="menus" OnRefreshClick="RefreshClick" Clipped=Clipped />
-}
+    .menuItemLabel {
+        font-size: 13px;
+        padding-left: 4px;
+    }
+</style>
+
+
+<MultiSideBar Menus="menus" Clipped=Clipped Width="FullWidth" />

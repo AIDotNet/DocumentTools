@@ -1,63 +1,63 @@
 ﻿<MApp>
-    <MTabs Vertical>
-        <MTab>
-            OpenAI设置
-        </MTab>
+    <MTabs Vertical=true>
+        <MTab>OpenAI设置</MTab>
 
-        <MTab>
-            关于
-        </MTab>
+        <MTab>关于</MTab>
 
         <MTabItem>
-            <MCard Flat Style="margin:5px;">
-                <MTextField
-                    Dense
-                    Label="OpenAI代理地址"
-                    @bind-Value=_options.Endpoint
-                    Outlined>
-                </MTextField>
-                <MTextField
-                    Label="ApiKey"
-                    Dense
-                    @bind-Value=_options.ApiKey
-                    Outlined>
-                </MTextField>
+            <MCard Flat=true Style="margin:5px;">
+                <MTextField @bind-Value=_options.Endpoint
+                            Label="OpenAI代理地址"
+                            Dense=true Outlined=true />
 
-                <MSelect Items="_models"
-                         @bind-Value="@_options.ChatModel"
-                         ItemText="u => u.Name"
-                         ItemValue="u => u.Value"
-                         Label="请选择您的聊天模型"
-                         Dense
-                         Outlined>
-                </MSelect>
+                <MTextField @bind-Value=_options.ApiKey
+                            Label="ApiKey"
+                            Dense=true Outlined=true />
 
-                <MSelect Items="_embeddings"
-                         @bind-Value="@_options.EmbeddingModel"
+
+                @*                 <MSelect @bind-Value="@_options.ChatModel"
+                Items="_models"
+                ItemText="u => u.Name"
+                ItemValue="u => u.Value"
+                Label="请选择您的聊天模型"
+                Dense=true Outlined=true>
+                </MSelect> *@
+
+                <MAutocomplete @bind-Value="@_options.ChatModel"
+                               Items="_models"
+                               ItemText="u => u.Name"
+                               ItemValue="u => u.Value"
+                               OnSearchInputUpdate="SearchInputUpdate"
+                               Label="请选择您的聊天模型"
+                               Dense=true Outlined=true>
+                </MAutocomplete>
+
+
+                <MSelect @bind-Value="@_options.EmbeddingModel"
+                         Items="_embeddings"
                          ItemText="u => u.Name"
                          ItemValue="u => u.Value"
                          Label="请选择您的嵌入模型"
-                         Dense
-                         Outlined>
+                         Dense=true Outlined=true>
                 </MSelect>
 
-                <MButton  OnClick="Save" Block>
+                <MButton OnClick="Save" Block=true>
                     保存
                 </MButton>
             </MCard>
         </MTabItem>
-        
+
         <MTabItem>
-            <MCard Flat Style="margin:5px;text-align: center;">
-                
+            <MCard Flat=true Style="margin:5px;text-align: center;">
+
                 <div style="font-size: 40px; font-weight: bold; background: linear-gradient(to right, #30CFD0 0%, #330867 100%); -webkit-background-clip: text; color: transparent;">
                     智能笔记工具
                 </div>
 
                 <div>
-                    版本：@_version <br/>
+                    版本：@_version <br />
                 </div>
-                
+
             </MCard>
         </MTabItem>
     </MTabs>

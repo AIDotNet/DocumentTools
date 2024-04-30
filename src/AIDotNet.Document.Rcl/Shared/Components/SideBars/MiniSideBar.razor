@@ -1,18 +1,26 @@
-﻿@using AIDotNet.Document.Rcl.Shared.Components.NavModule
+﻿@attribute [Obsolete("方案废弃", true)]
 
-<style>
-    .m-navigation-drawer__content {
-        -webkit-app-region: drag;
-        webkit-app-region: drag;
-    }
-</style>
+@using AIDotNet.Document.Rcl.Shared.Components.NavModule
 
 <MNavigationDrawer App=true Permanent="true" Color="grey lighten-5" Width="@Width" Clipped=Clipped Style="overflow-x:visible" Class="text-center">
     <PrependContent>
-        <MAvatar Tile=true Size="36" Class="mt-6">
-            <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
-        </MAvatar>
-        <MDivider Class="my-2"/>
+        <MMenu OffsetX=true>
+            <ActivatorContent>
+                <MAvatar @attributes=context.Attrs Tile=true Size="36" Class="mt-4 mb-2">
+                    <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
+                </MAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <MCard Class="pa-2 pt-4">
+                    <MChip Class="ma-0" Color="success">
+                        显示点什么
+                    </MChip>
+                    <p>比如退出登录</p>
+                </MCard>
+
+            </ChildContent>
+        </MMenu>
+        <MDivider Class="my-2" />
     </PrependContent>
 
     <ChildContent>
@@ -24,7 +32,70 @@
     </ChildContent>
 
     <AppendContent>
-        脚
+        <MListItemGroup Max="0" Class="pb-2">
+            <MMenu OffsetX=true Top=true OpenOnHover=true>
+                <ActivatorContent>
+                    <MListItem @attributes=context.Attrs
+                               Dense=true Context="itemContext"
+                               Class="pa-0" Style="min-height:32px;">
+                        <ItemContent>
+                            <MIcon Small=true Class="mx-auto">mdi-backburger</MIcon>
+                            @* @SideBarType.Full *@
+                        </ItemContent>
+                    </MListItem>
+                </ActivatorContent>
+                <ChildContent>
+                    <MListItemGroup>
+                        <MListItem Class="menuItem" OnClick="_=>SideBarTypeChanged.InvokeAsync(SideBarType.Full)">
+                            <MIcon Small=true Left=true Class="my-auto" Color="teal darken-2">mdi-backburger</MIcon>
+                            <MListItemContent>
+                                <MListItemTitle Class="menuItemLabel">@SideBarType.Full</MListItemTitle>
+                            </MListItemContent>
+                        </MListItem>
+
+                        <MListItem Class="menuItem">
+                            <MIcon Small=true Left=true Class="my-auto" Color="teal darken-2">mdi-backburger</MIcon>
+                            <MListItemContent>
+                                <MListItemTitle Class="menuItemLabel">@SideBarType.Hidden</MListItemTitle>
+                            </MListItemContent>
+                        </MListItem>
+
+                    </MListItemGroup>
+                </ChildContent>
+            </MMenu>
+
+            <MTooltip Right=true Context="tipContext">
+                <ActivatorContent>
+                    <MListItem @attributes=tipContext.Attrs
+                               OnClick="WindowService.OpenSetting"
+                               Dense=true Context="itemContext"
+                               Class="pa-0" Style="min-height:32px;">
+                        <ItemContent>
+                            <MIcon Small=true Class="mx-auto">mdi-wrench</MIcon>
+                        </ItemContent>
+                    </MListItem>
+                </ActivatorContent>
+                <ChildContent>
+                    打开设置
+                </ChildContent>
+            </MTooltip>
+
+            <MTooltip Right=true Context="tipContext">
+                <ActivatorContent>
+                    <MListItem @attributes=tipContext.Attrs
+                               Dense=true Context="itemContext"
+                               Class="pa-0" Style="min-height:32px;">
+                        <ItemContent>
+                            <MIcon Small=true Class="mx-auto">mdi-information-variant</MIcon>
+                        </ItemContent>
+                    </MListItem>
+                </ActivatorContent>
+                <ChildContent>
+                    关于我们
+                </ChildContent>
+            </MTooltip>
+
+        </MListItemGroup>
     </AppendContent>
 
 </MNavigationDrawer>

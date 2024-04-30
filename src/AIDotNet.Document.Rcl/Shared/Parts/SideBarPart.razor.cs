@@ -10,8 +10,8 @@ namespace AIDotNet.Document.Rcl.Shared.Parts
         [Parameter]
         public bool Clipped { get; set; }
 
-        [Parameter]
-        public SideBarType SideBarType { get; set; } = SideBarType.Full;
+
+        SideBarType sideBarType = SideBarType.Full;
 
 
 

@@ -1,8 +1,18 @@
 ﻿
 namespace AIDotNet.Document.Rcl.Shared.Components.SideBars
 {
+    /// <summary>
+    /// 方案废弃
+    /// </summary>
     public partial class FullSideBar
     {
+        [Parameter]
+        public SideBarType SideBarType { get; set; }
+
+        [Parameter]
+        public EventCallback<SideBarType> SideBarTypeChanged { get; set; }
+
+
         [Parameter, EditorRequired]
         public StringNumber Width { get; set; } = null!;
 
@@ -19,9 +29,10 @@ namespace AIDotNet.Document.Rcl.Shared.Components.SideBars
 
         async Task RefreshClick()
         {
-            refreshing = true;
-            await OnRefreshClick.InvokeAsync();
-            refreshing = false;
+            temp = !temp;
+            //refreshing = true;
+            //await OnRefreshClick.InvokeAsync();
+            //refreshing = false;
         }
     }
 }

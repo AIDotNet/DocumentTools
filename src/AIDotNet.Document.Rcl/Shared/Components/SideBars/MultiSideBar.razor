@@ -1,0 +1,160 @@
+﻿@using AIDotNet.Document.Rcl.Shared.Components.NavModule
+
+
+<MNavigationDrawer @bind-Value=open App=true Color="grey lighten-5" Width="@Width" Clipped=Clipped Permanent=Permanent MiniVariant=Mini Temporary=Temp>
+    <PrependContent>
+        <MRow Dense=true NoGutters=true>
+
+            <MCol Cols="12" Class="text-center">
+                <MMenu OffsetX=true>
+                    <ActivatorContent>
+                        <MAvatar @attributes=context.Attrs Tile=Mini Size="@(Mini?36:64)" Class="@(Mini?"mt-4 mb-2":"mt-10 mb-2")">
+                            <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
+                        </MAvatar>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MCard Class="pa-2 pt-4">
+                            <MChip Class="ma-0" Color="success">
+                                显示点什么
+                            </MChip>
+                            <p>比如退出登录</p>
+                        </MCard>
+                    </ChildContent>
+                </MMenu>
+            </MCol>
+
+            <MCol Cols="12" Class="text-center">
+                @if (Mini)
+                {
+                    <MDivider Class="my-2" />
+                }
+                else
+                {
+                    <MButton Depressed=true Color="primary" Dark=true Width="@("80%")" Class="my-2">
+                        <MIcon>mdi-plus</MIcon>
+                        新建
+                    </MButton>
+                }
+            </MCol>
+        </MRow>
+    </PrependContent>
+
+    <ChildContent>
+        <NavTree Items="Menus"
+                 Mini=Mini
+                 Dense="true" Nav="true" Routable="true"
+                 ActiveClass="blue--text text--darken-1"
+                 Color="@null" />
+    </ChildContent>
+
+    <AppendContent>
+
+        <MDivider Class="mb-3" />
+
+        @if (Mini is false)
+        {
+            <MRow NoGutters=true Class="px-2 pb-6">
+                <MButton Color="indigo darken-4"
+                         Text=true Small=true Dark=true
+                         OnClick="WindowService.OpenSetting">
+                    <MIcon Left=true Small=true>mdi-wrench</MIcon>
+                    打开设置
+                </MButton>
+                <MButton Color="pink darken-3"
+                         Text=true Small=true Dark=true>
+                    <MIcon Small=true>mdi-information-variant</MIcon>
+                    关于我们
+                </MButton>
+
+                <MMenu OffsetX=true Top=true OpenOnHover=true>
+                    <ActivatorContent>
+                        <MButton @attributes=context.Attrs
+                                 Icon=true Small=true Color="success">
+                            <MIcon Small=true>mdi-backburger</MIcon>
+                        </MButton>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MListItemGroup>
+                            @for (int i = 0; i < ModeSwitchModels.Length; i++)
+                            {
+                                var model = ModeSwitchModels[i];
+
+                                <MListItem Class="menuItem" OnClick="_=>SetType(model.type)">
+                                    <MIcon Small=true Left=true Class="my-auto" Color="@model.color" Icon="model.icon" />
+                                    <MListItemContent>
+                                        <MListItemTitle Class="menuItemLabel">@model.label</MListItemTitle>
+                                    </MListItemContent>
+                                </MListItem>
+                            }
+                        </MListItemGroup>
+                    </ChildContent>
+                </MMenu>
+            </MRow>
+        }
+        else
+        {
+            <MListItemGroup Max="0" Class="pb-2">
+                <MMenu OffsetX=true Top=true OpenOnHover=true>
+                    <ActivatorContent>
+                        <MListItem @attributes=context.Attrs
+                                   Dense=true Context="itemContext"
+                                   Class="pa-0" Style="min-height:32px;">
+                            <ItemContent>
+                                <MIcon Small=true Class="mx-auto">mdi-backburger</MIcon>
+                                @* @SideBarType.Full *@
+                            </ItemContent>
+                        </MListItem>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MListItemGroup>
+                            @for (int i = 0; i < ModeSwitchModels.Length; i++)
+                            {
+                                var model = ModeSwitchModels[i];
+
+                                <MListItem Class="menuItem" OnClick="_=>SetType(model.type)">
+                                    <MIcon Small=true Left=true Class="my-auto" Color="@model.color" Icon="model.icon" />
+                                    <MListItemContent>
+                                        <MListItemTitle Class="menuItemLabel">@model.label</MListItemTitle>
+                                    </MListItemContent>
+                                </MListItem>
+                            }
+                        </MListItemGroup>
+                    </ChildContent>
+                </MMenu>
+
+                <MTooltip Right=true Context="tipContext">
+                    <ActivatorContent>
+                        <MListItem @attributes=tipContext.Attrs
+                                   OnClick="WindowService.OpenSetting"
+                                   Dense=true Context="itemContext"
+                                   Class="pa-0" Style="min-height:32px;">
+                            <ItemContent>
+                                <MIcon Small=true Class="mx-auto">mdi-wrench</MIcon>
+                            </ItemContent>
+                        </MListItem>
+                    </ActivatorContent>
+                    <ChildContent>
+                        打开设置
+                    </ChildContent>
+                </MTooltip>
+
+                <MTooltip Right=true Context="tipContext">
+                    <ActivatorContent>
+                        <MListItem @attributes=tipContext.Attrs
+                                   Dense=true Context="itemContext"
+                                   Class="pa-0" Style="min-height:32px;">
+                            <ItemContent>
+                                <MIcon Small=true Class="mx-auto">mdi-information-variant</MIcon>
+                            </ItemContent>
+                        </MListItem>
+                    </ActivatorContent>
+                    <ChildContent>
+                        关于我们
+                    </ChildContent>
+                </MTooltip>
+
+            </MListItemGroup>
+        }
+    </AppendContent>
+
+</MNavigationDrawer>

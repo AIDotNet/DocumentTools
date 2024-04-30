@@ -4,15 +4,19 @@
 
 <FloatingBall />
 
-
+<style>
+    * {
+        user-select: none;
+    }
+</style>
 
 <MApp>
 
-    <LeftFloatingBallPart />
+    @* <LeftFloatingBallPart SideBarTypeSet=SideBarTypeSet /> *@
 
     <TopBarPart Height="40" Clipped=clipped />
 
-    <SideBarPart FullWidth="240" SideBarType=SideBarType.Mini Clipped=clipped />
+    <SideBarPart FullWidth="240" Clipped=clipped />
 
     <MMain>
         <MErrorHandler>

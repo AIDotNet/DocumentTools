@@ -2,7 +2,7 @@
 <MSpeedDial @bind-Value=open
             Direction="top" OpenOnHover="true"
             Top="true" Left="true" Absolute=true
-            Transition="slide-x-transition" 
+            Transition="slide-x-transition"
             Style="z-index:999; top:calc(100vh - 50px);">
     <ActivatorContent>
         <MButton @attributes="@context.Attrs" Color="blue darken-2" Dark=true Fab=true Small=true>
@@ -36,5 +36,16 @@
                 关于我们
             </ChildContent>
         </MTooltip>
+
+        <MButton Fab=true OnClick="SideBarTypeSet">
+            123
+        </MButton>
     </ChildContent>
 </MSpeedDial>
+
+
+@code {
+    [Parameter]
+    public EventCallback SideBarTypeSet { get; set; }
+
+}

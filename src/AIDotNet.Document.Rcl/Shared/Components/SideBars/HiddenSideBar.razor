@@ -1,11 +1,9 @@
-ï»¿@attribute [Obsolete("æ–¹æ¡ˆåºŸå¼ƒ",true)]
+@attribute [Obsolete("·½°¸·ÏÆú", true)]
 
 @using AIDotNet.Document.Rcl.Shared.Components.NavModule
 @using Components.SideBars
-@code {
-    bool temp;
-}
-<MNavigationDrawer App=true Permanent="true" Color="grey lighten-5" Width="@Width" Clipped=Clipped MiniVariant=temp>
+
+<MNavigationDrawer @bind-Value=open App=true Color="grey lighten-5" Width="@Width" Clipped=Clipped>
     <PrependContent>
         <MRow Dense=true Class="pa-1 mb-3">
             <MCol Cols="12" Class="text-end">
@@ -25,25 +23,23 @@
             <MRow NoGutters=true Align="AlignTypes.Center" Justify="JustifyTypes.Center">
             <img src="assets/img/vip/common.png" height="13" width="35" />
             <MDivider Vertical=true Class="ma-2" />
-            <a><small>å¼€é€šä¼šå‘˜</small></a>
+            <a><small>¿ªÍ¨»áÔ±</small></a>
             </MRow>
             </MCol>
             *@
-            @if (temp is false)
-            {
-                <MCol Cols="12" Class="text-center">
-                    <MButton Depressed=true Color="primary" Dark=true Width="@("80%")" Class="my-2">
-                        <MIcon>mdi-plus</MIcon>
-                        æ–°å»º
-                    </MButton>
-                </MCol>
-            }
+
+            <MCol Cols="12" Class="text-center">
+                <MButton Depressed=true Color="primary" Dark=true Width="@("80%")" Class="my-2">
+                    <MIcon>mdi-plus</MIcon>
+                    ÐÂ½¨
+                </MButton>
+            </MCol>
         </MRow>
     </PrependContent>
 
     <ChildContent>
         <NavTree Items="Menus"
-                 Mini=temp
+                 Mini=false
                  Dense="true" Nav="true" Routable="true"
                  ActiveClass="blue--text text--darken-1"
                  Color="@null" />
@@ -58,12 +54,12 @@
                      Text=true Small=true Dark=true
                      OnClick="WindowService.OpenSetting">
                 <MIcon Left=true Small=true>mdi-wrench</MIcon>
-                æ‰“å¼€è®¾ç½®
+                ´ò¿ªÉèÖÃ
             </MButton>
             <MButton Color="pink darken-3"
                      Text=true Small=true Dark=true>
                 <MIcon Small=true>mdi-information-variant</MIcon>
-                å…³äºŽæˆ‘ä»¬
+                ¹ØÓÚÎÒÃÇ
             </MButton>
 
             <MMenu OffsetY=false OffsetX=true Top=true OpenOnHover=true>

@@ -46,7 +46,7 @@ namespace AIDotNet.Document.Rcl.Shared.Components.SideBars
                 open = false;
             }
 
-            ModeSwitchModels = AllModeSwitchModels.Where(x => x.type != _sideBarType).ToArray();
+            _modeSwitchModels = _allModeSwitchModels.Where(x => x.type != _sideBarType).ToArray();
 
             await Task.Delay(200);
         }
@@ -76,15 +76,15 @@ namespace AIDotNet.Document.Rcl.Shared.Components.SideBars
                     open = false;
                 }
 
-                ModeSwitchModels = AllModeSwitchModels.Where(x => x.type != _sideBarType).ToArray();
+                _modeSwitchModels = _allModeSwitchModels.Where(x => x.type != _sideBarType).ToArray();
 
                 await SetSideBarType();
             }
         }
 
-        (SideBarType type, string color, string icon, string label)[] ModeSwitchModels = [];
+        private (SideBarType type, string color, string icon, string label)[] _modeSwitchModels = [];
 
-        readonly (SideBarType type, string color, string icon, string label)[] AllModeSwitchModels =
+        private readonly (SideBarType type, string color, string icon, string label)[] _allModeSwitchModels =
         [
             (SideBarType.Hidden, "teal darken-2", "mdi-backburger", SideBarType.Hidden.ToString()),
             (SideBarType.Mini, "teal darken-2", "mdi-backburger", SideBarType.Mini.ToString()),

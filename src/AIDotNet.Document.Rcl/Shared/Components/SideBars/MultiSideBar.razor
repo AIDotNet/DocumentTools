@@ -1,6 +1,5 @@
 ﻿@using AIDotNet.Document.Rcl.Shared.Components.NavModule
 
-
 <MNavigationDrawer @bind-Value=open App=true Color="grey lighten-5" Width="@Width" Clipped=Clipped Permanent=Permanent MiniVariant=Mini Temporary=Temp>
     <PrependContent>
         <MRow Dense=true NoGutters=true>
@@ -76,14 +75,12 @@
                     </ActivatorContent>
                     <ChildContent>
                         <MListItemGroup>
-                            @for (int i = 0; i < ModeSwitchModels.Length; i++)
+                            @foreach (var model in _modeSwitchModels)
                             {
-                                var model = ModeSwitchModels[i];
-
                                 <MListItem Class="menuItem" OnClick="_ => SetType(model.type)">
                                     <MIcon Small=true Left=true Class="my-auto" Color="@model.color" Icon="model.icon"/>
                                     <MListItemContent>
-                                        <MListItemTitle Class="menuItemLabel">@model.label</MListItemTitle>
+                                        <MListItemTitle Class=@("menuItemLabel")>@model.label</MListItemTitle>
                                     </MListItemContent>
                                 </MListItem>
                             }
@@ -108,9 +105,9 @@
                     </ActivatorContent>
                     <ChildContent>
                         <MListItemGroup>
-                            @for (int i = 0; i < ModeSwitchModels.Length; i++)
+                            @for (int i = 0; i < _modeSwitchModels.Length; i++)
                             {
-                                var model = ModeSwitchModels[i];
+                                var model = _modeSwitchModels[i];
 
                                 <MListItem Class="menuItem" OnClick="_ => SetType(model.type)">
                                     <MIcon Small=true Left=true Class="my-auto" Color="@model.color" Icon="model.icon"/>

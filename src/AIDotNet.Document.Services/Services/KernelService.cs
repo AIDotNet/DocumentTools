@@ -1,5 +1,6 @@
 ﻿using AIDotNet.Document.Contract;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using ChatMessage = AIDotNet.Document.Contract.Models.ChatMessage;
@@ -7,7 +8,7 @@ using ChatMessageRole = AIDotNet.Document.Contract.Models.ChatMessageRole;
 
 namespace AIDotNet.Document.Services.Services;
 
-public class KernelService(IServiceProvider serviceProvider, ISettingService settingService)
+public class KernelService(IServiceProvider serviceProvider, ILogger<KernelService> logger)
     : IKernelService
 {
     private const string PromptTemplate = """"
@@ -69,7 +70,7 @@ public class KernelService(IServiceProvider serviceProvider, ISettingService set
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            logger.LogError("向量搜索异常：" + e.Message);
         }
 
 

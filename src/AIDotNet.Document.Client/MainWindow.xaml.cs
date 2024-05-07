@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Shell;
 using AIDotNet.Document.Client.Services;
 using AIDotNet.Document.Contract.Services;
+using Serilog;
 
 namespace AIDotNet.Document.Client
 {
@@ -16,12 +17,25 @@ namespace AIDotNet.Document.Client
         {
             InitializeComponent();
 
-            this.Closing += MainWindow_Closing;
+            // 创建Serilog
+            Log.Logger = new LoggerConfiguration()
+#if DEBUG
+                .MinimumLevel.Information()
+#else
+                .MinimumLevel.Warning()
+#endif
+                .WriteTo.File(
+                    "./logs/log.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.Console()
+                .CreateLogger();
+
+            Closing += MainWindow_Closing;
 
             var services = ApplicationContext.CreateApplication();
 
             services.AddSingleton<IMainWindowService>((_) => new MainWindowService(this));
 
+            services.AddSerilog();
             BlazorWeb.RootComponents.Add(new Microsoft.AspNetCore.Components.WebView.Wpf.RootComponent()
             {
                 Selector = "#app",
@@ -138,16 +152,16 @@ namespace AIDotNet.Document.Client
             }
             else
             {
-
             }
         }
+
         /// <summary>
         /// 以后美化 先running
         /// </summary>
         /// <returns></returns>
         static bool? SetCloseOption()
         {
-            var content = 
+            var content =
                 "*DeBug开发模式* 设置关闭模式 设置后不在询问 设置类型如下:" +
                 "\r\n\t是(Y)\t=>\t关闭应用" +
                 "\r\n\t否(N)\t=>\t最小化到托盘" +
@@ -236,7 +250,7 @@ namespace AIDotNet.Document.Client
 
         private static void HandleException(Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            Log.Logger.Error(ex, "程序异常：{ex}", ex.Message);
         }
     }
 }

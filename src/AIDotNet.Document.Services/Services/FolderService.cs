@@ -1,6 +1,7 @@
 ﻿using System.Threading.Channels;
 using AIDotNet.Document.Services.Domain;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace AIDotNet.Document.Services.Services;
 
@@ -8,10 +9,12 @@ public sealed class FolderService : IFolderService
 {
     private readonly IFreeSql _freeSql;
     private Channel<Folder> FolderChannel { get; } = Channel.CreateUnbounded<Folder>();
+    private ILogger<FolderService> _logger;
 
-    public FolderService(IFreeSql freeSql, IServiceProvider serviceProvider)
+    public FolderService(IFreeSql freeSql, IServiceProvider serviceProvider, ILogger<FolderService> logger)
     {
         _freeSql = freeSql;
+        _logger = logger;
         Task.Run(async () =>
         {
             var values = await freeSql.Select<Folder>()
@@ -59,11 +62,11 @@ public sealed class FolderService : IFolderService
                         }
                     };
 
-                    Console.WriteLine($"开始导入文件：{folder.Id}");
+                    _logger.LogInformation($"开始导入文件：{folder.Id}");
 
                     await kernelMemory.ImportTextAsync(content, folder.Id, tag, index: "document");
 
-                    Console.WriteLine($"导入文件：{folder.Id} 完成");
+                    _logger.LogInformation($"导入文件：{folder.Id} 完成");
 
                     await freeSql.Update<Folder>()
                         .Set(f => f.Status, VectorStatus.Processed)
@@ -93,12 +96,12 @@ public sealed class FolderService : IFolderService
                             }
                         };
 
-                        Console.WriteLine($"开始导入文件：{folder.Id}");
+                        _logger.LogInformation($"开始导入文件：{folder.Id}");
 
                         await kernelMemory.ImportDocumentAsync(filePath, Guid.NewGuid().ToString("N"), tag,
                             index: "document");
 
-                        Console.WriteLine($"导入文件：{folder.Id} 完成");
+                        _logger.LogInformation($"导入文件：{folder.Id} 完成");
 
                         await freeSql.Update<Folder>()
                             .Set(f => f.Status, VectorStatus.Processed)
@@ -107,7 +110,7 @@ public sealed class FolderService : IFolderService
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine($"导入文件：{folder.Id} 失败 {e.Message}");
+                        _logger.LogError($"导入文件：{folder.Id} 失败 {e.Message}");
                         await freeSql.Update<Folder>()
                             .Set(f => f.Status, VectorStatus.Failed)
                             .Where(f => f.Id == folder.Id)
@@ -121,7 +124,7 @@ public sealed class FolderService : IFolderService
             }
             catch (Exception e)
             {
-                Console.WriteLine($"导入文件：{folder.Id} 失败 {e.Message}");
+                _logger.LogError($"导入文件：{folder.Id} 失败 {e.Message}");
                 await freeSql.Update<Folder>()
                     .Set(f => f.Status, VectorStatus.Failed)
                     .Where(f => f.Id == folder.Id)
@@ -134,7 +137,7 @@ public sealed class FolderService : IFolderService
     {
         var result = await _freeSql.Select<Folder>().Where(f => f.Id == id).FirstAsync();
 
-        if(result == null)
+        if (result == null)
         {
             return null;
         }

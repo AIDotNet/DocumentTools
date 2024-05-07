@@ -1,6 +1,6 @@
 ﻿namespace AIDotNet.Document.Contract.Models;
 
-public sealed class ChatMessage
+public sealed class ChatMessageDto
 {
     public string? Content { get; set; }
 
@@ -9,7 +9,7 @@ public sealed class ChatMessage
     public Dictionary<string, string> Extra { get; set; }
 
     public string? Id { get; set; }
-
+    
     public Dictionary<string, string> Meta { get; set; }
 
     public string? Role { get; set; }

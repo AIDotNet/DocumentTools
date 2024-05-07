@@ -25,7 +25,7 @@ public partial class FloatingBallChat
 
     private bool _isLoading;
 
-    private List<ChatMessage> ChatMessages { get; set; } = new();
+    private List<ChatMessageDto> ChatMessages { get; set; } = new();
 
     private void FloatingBall()
     {
@@ -39,7 +39,7 @@ public partial class FloatingBallChat
             return;
         }
 
-        ChatMessages.Add(new ChatMessage()
+        ChatMessages.Add(new ChatMessageDto()
         {
             Content = _message,
             Role = ChatMessageRole.User,
@@ -53,7 +53,7 @@ public partial class FloatingBallChat
 
         _ = InvokeAsync(StateHasChanged);
 
-        var chat = new ChatMessage()
+        var chat = new ChatMessageDto()
         {
             CreateAt = DateTime.Now,
             Extra = new Dictionary<string, string>(),
@@ -94,14 +94,14 @@ public partial class FloatingBallChat
         await InvokeAsync(StateHasChanged);
     }
 
-    private void RemoveMessage(ChatMessage message)
+    private void RemoveMessage(ChatMessageDto messageDto)
     {
-        ChatMessages.Remove(message);
+        ChatMessages.Remove(messageDto);
     }
 
-    private async Task CopyMessage(ChatMessage message)
+    private async Task CopyMessage(ChatMessageDto messageDto)
     {
-        await JsRuntime.InvokeVoidAsync("util.copyToClipboard", message.Content);
+        await JsRuntime.InvokeVoidAsync("util.copyToClipboard", messageDto.Content);
 
         await PopupService.EnqueueSnackbarAsync("复制成功", AlertTypes.Success);
     }

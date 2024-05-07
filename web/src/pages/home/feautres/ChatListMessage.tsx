@@ -3,13 +3,9 @@ import {
     ActionsBar,
     ActionsBarProps,
     ChatList,
-    ChatListProps,
     ChatMessage,
-    StoryBook,
-    useControls,
-    useCreateStore,
 } from '@lobehub/ui';
-import { JSX } from 'react/jsx-runtime';
+import './ChatLIstMessage.css';
 
 
 interface ChatListMessageProps {
@@ -52,6 +48,7 @@ export default function ChatListMessage({ messages, onDelete, onEdit, onRefresh 
             style={{
                 padding: 8,
             }}
+            
             renderMessages={{
                 default: ({ id, editableContent }) => <div id={id}>{editableContent}</div>,
             }}

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using AIDotNet.Document.Contract;
+using AIDotNet.Document.Services.TypeHandlers;
 using Azure.AI.OpenAI;
 using Microsoft.SemanticKernel;
 
@@ -9,6 +10,9 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddDocumentService(this IServiceCollection services)
         {
+            FreeSql.Internal.Utils.TypeHandlers.TryAdd(typeof(Dictionary<string, string>),
+                new JsonTypeHandler<Dictionary<string, string>>());
+
             services.AddScoped<IMenuItemService, MenuItemService>();
             services.AddSingleton<IFreeSql>((_) => new FreeSqlBuilder()
                 .UseConnectionString(DataType.Sqlite, "Data Source=document.db;attachs=file_storage")
@@ -44,7 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient((services) =>
             {
                 var settingService = services.GetRequiredService<ISettingService>();
-                
+
                 var options = settingService.GetSetting<OpenAIOptions>(Constant.Settings.OpenAIOptions);
 
                 options ??= new();
@@ -76,11 +80,11 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var settingService = provider.GetRequiredService<ISettingService>();
             var folderService = provider.GetRequiredService<IFolderService>();
-            
-            
+
+
             settingService.Update();
-            
-            
+
+
             return provider;
         }
     }

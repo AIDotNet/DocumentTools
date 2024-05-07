@@ -1,12 +1,70 @@
 
 
 import { Flexbox } from 'react-layout-kit';
-import { Divider } from "antd"
+import { Divider, Button } from "antd"
 import ChatListMessage from './feautres/ChatListMessage';
 import { ActionIcon, ChatInputActionBar, MobileChatInputArea, MobileChatSendButton } from '@lobehub/ui';
 import { Eraser, Languages } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import {
+    ChatMessage,
+} from '@lobehub/ui';
+import { AddChatMessage, GetChatMessages } from '../../services/chatService';
+import React from 'react';
 
 export default function Home() {
+    const [messages, setMessages] = useState([] as ChatMessage[])
+    const inputRef = React.createRef<any>()
+    const [value, setValue] = useState('' as string)
+    const [input, setInput] = useState({
+        page: 1,
+        pageSize: 10
+    })
+
+    function LoadMessages() {
+        const message = GetChatMessages(input.page, input.pageSize);
+        if (message?.Items) {
+            setMessages(message.Items.map((item) => {
+                // 将item.CreateAt转换1686538950084 这种时间戳格式
+                const createAt = parseInt(item.CreateAt);
+                const updateAt = item.UpdateAt ? parseInt(item.UpdateAt) : null;
+                return {
+                    content: item.Content,
+                    id: item.Id,
+                    role: item.Role,
+                    createAt: createAt,
+                    updateAt: updateAt,
+                    meta: item.Meta,
+                    extra: item.Extra,
+                } as ChatMessage
+            }))
+        }
+    }
+
+    useEffect(() => {
+        LoadMessages()
+    }, [])
+
+    function SendMessage() {
+        AddChatMessage({
+            Content: value,
+            Role: 'user',
+            CreateAt: new Date().getTime().toString(),
+            UpdateAt: null,
+            Meta: {
+                avatar: '😁',
+                title: '我',
+            },
+            Extra: {
+
+            },
+            Id: '',
+        })
+
+        setValue('')
+        LoadMessages()
+    }
+
     return (
         <Flexbox style={{
             height: '100vh',
@@ -33,53 +91,55 @@ export default function Home() {
                 flex: 1,
                 padding: 8
             }}>
-                <ChatListMessage messages={[
-                    {
-                        content: 'dayjs 如何使用 fromNow',
-                        createAt: 1_686_437_950_084,
-                        extra: {},
-                        id: '1',
-                        meta: {
-                            avatar: '😄',
-                            title: '我',
-                        },
-                        role: 'user',
-                        updateAt: 1_686_437_950_084,
-                    },
-                    {
-                        content:
-                            '要使用 dayjs 的 fromNow 函数，需要先安装 dayjs 库并在代码中引入它。然后，可以使用以下语法来获取当前时间与给定时间之间的相对时间：\n\n```javascript\ndayjs().fromNow(); // 获取当前时间的相对时间\ndayjs(\'2021-05-01\').fromNow(); // 获取给定时间的相对时间\n```\n\n第一个示例将返回类似于 "几秒前"、"一分钟前"、"2 天前" 的相对时间字符串，表示当前时间与调用 fromNow 方法时的时间差。第二个示例将返回给定时间与当前时间的相对时间字符串。',
-                        createAt: 1_686_538_950_084,
-                        extra: {},
-                        id: '2',
-                        meta: {
-                            avatar: '🤖',
-                            backgroundColor: '#E8DA5A',
-                            title: '智能助手',
-                        },
-                        role: 'assistant',
-                        updateAt: 1_686_538_950_084,
-                    },]} onDelete={function (id: string): void {
-                        throw new Error('Function not implemented.');
-                    }} onEdit={function (id: string, content: string): void {
-                        throw new Error('Function not implemented.');
-                    }} onRefresh={function (id: string): void {
-                        throw new Error('Function not implemented.');
-                    }} />
+                <ChatListMessage messages={messages} onDelete={function (id: string): void {
+                    throw new Error('Function not implemented.');
+                }} onEdit={function (id: string, content: string): void {
+                    throw new Error('Function not implemented.');
+                }} onRefresh={function (id: string): void {
+                    throw new Error('Function not implemented.');
+                }} />
             </Flexbox>
-            <MobileChatInputArea
-                textAreaRightAddons={<MobileChatSendButton />}
-                topAddons={
-                    <ChatInputActionBar
-                        leftAddons={
-                            <>
-                                <ActionIcon icon={Languages} />
-                                <ActionIcon icon={Eraser} />
-                            </>
+            <div style={{
+                display: 'flex',
+                width: '100%',
+            }}>
+                <div style={{
+                    flex: 1
+                }}>
+                    <MobileChatInputArea
+                        value={value}
+                        onInput={(value) => {
+                            setValue(value)
+                        }}
+                        onSend={() => SendMessage()}
+                        ref={inputRef}
+                        topAddons={
+                            <ChatInputActionBar
+                                leftAddons={
+                                    <>
+                                        <ActionIcon icon={Languages} />
+                                        <ActionIcon icon={Eraser} />
+                                    </>
+                                }
+                            />
                         }
                     />
-                }
-            />
+                </div>
+                <div style={{
+                    display: 'flex',
+                    // 靠下
+                    alignItems: 'flex-end',
+                    marginBottom: 10,
+                    backgroundColor: '#FAFAFA',
+                }}>
+                    <MobileChatSendButton
+
+                        onSend={() => SendMessage()}
+                    />
+                </div>
+
+            </div>
+
         </Flexbox>
     )
 }

@@ -5,7 +5,7 @@ public class CompletionInput
     /// <summary>
     /// 对话
     /// </summary>
-    public List<ChatMessage> History { get; set; }
+    public List<ChatMessageDto> History { get; set; }
 
     /// <summary>
     /// 向量相似度

@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
-using ChatMessage = AIDotNet.Document.Contract.Models.ChatMessage;
 using ChatMessageRole = AIDotNet.Document.Contract.Models.ChatMessageRole;
 
 namespace AIDotNet.Document.Services.Services;
@@ -57,7 +56,7 @@ public class KernelService(IServiceProvider serviceProvider, ILogger<KernelServi
                     .Replace("{{question}}", content.Content);
 
                 // 往input.History最上面添加
-                input.History.Insert(0, new ChatMessage()
+                input.History.Insert(0, new ChatMessageDto()
                 {
                     Content = prompt,
                     CreateAt = DateTime.Now,

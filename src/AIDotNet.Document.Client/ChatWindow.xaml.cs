@@ -52,6 +52,14 @@ public partial class ChatWindow : Window
 
             BlazorWeb.WebView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
                 "var fileStorageService = window.chrome.webview.hostObjects.fileStorageService;");
+
+            // 注册一个js调用的方法
+            var chatService = app.GetService<IChatService>();
+
+            BlazorWeb.WebView.CoreWebView2.AddHostObjectToScript("chatService", chatService);
+            
+            BlazorWeb.WebView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
+                "var chatService = window.chrome.webview.hostObjects.chatService;");
         };
 
 
@@ -61,7 +69,7 @@ public partial class ChatWindow : Window
             var screenWidth = SystemParameters.PrimaryScreenWidth;
             var screenHeight = SystemParameters.PrimaryScreenHeight;
 
-            
+
             switch (screenWidth)
             {
                 // 根据当前屏幕尺寸设置窗口大小 当屏幕是4k的时候
@@ -78,12 +86,12 @@ public partial class ChatWindow : Window
                     Height = 400;
                     break;
             }
-            
+
             // 设置窗口位置和大小
             Left = screenWidth - Width - 10;
             Top = screenHeight - Height - 50;
 
-            
+
             // 置顶
             Topmost = true;
         };

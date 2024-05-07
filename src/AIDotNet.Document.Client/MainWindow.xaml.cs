@@ -61,10 +61,6 @@ namespace AIDotNet.Document.Client
                 BlazorWeb.WebView.CoreWebView2.AddWebResourceRequestedFilter("https://word/*",
                     Microsoft.Web.WebView2.Core.CoreWebView2WebResourceContext.All);
 
-                // 监听 */api/v1/upload
-                BlazorWeb.WebView.CoreWebView2.AddWebResourceRequestedFilter("*/api/v1/upload",
-                    Microsoft.Web.WebView2.Core.CoreWebView2WebResourceContext.All);
-
                 var fileStorageService = app.GetService<IFileStorageService>();
 
                 BlazorWeb.WebView.CoreWebView2.WebResourceRequested += async (s, e) =>
@@ -96,9 +92,6 @@ namespace AIDotNet.Document.Client
                             new System.IO.MemoryStream(bytes), 200, "OK",
                             "Content-Type: application/msword\n" +
                             cors);
-                    }
-                    else if (e.Request.Uri.Contains("/api/v1/upload"))
-                    {
                     }
                 };
 

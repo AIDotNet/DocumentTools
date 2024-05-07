@@ -15,6 +15,10 @@ public partial class Setting
     private List<EmbeddingDto> _embeddings;
 
     private string _version = string.Empty;
+    
+    private readonly string _author = "AIDotNet";
+    
+    private readonly string _email = "239573049@qq.com";
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {

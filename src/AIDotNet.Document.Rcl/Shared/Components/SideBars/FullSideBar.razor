@@ -56,11 +56,12 @@
         <MRow NoGutters=true Class="px-2 pb-6">
             <MButton Color="indigo darken-4"
                      Text=true Small=true Dark=true
-                     OnClick="WindowService.OpenSetting">
+                     OnClick="()=>WindowService.OpenSetting(Constant.Settings.SettingsType)">
                 <MIcon Left=true Small=true>mdi-wrench</MIcon>
                 打开设置
             </MButton>
             <MButton Color="pink darken-3"
+                     OnClick="()=>WindowService.OpenSetting(Constant.Settings.AboutType)"
                      Text=true Small=true Dark=true>
                 <MIcon Small=true>mdi-information-variant</MIcon>
                 关于我们

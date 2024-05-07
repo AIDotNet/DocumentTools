@@ -33,9 +33,15 @@ public class MainWindowService(Window window) : IMainWindowService
 
     private Setting? _setting;
 
-    public void OpenSetting()
+    public void OpenSetting(string type)
     {
-        _setting = new Setting();
+        if(_setting != null)
+        {
+            _setting.Activate();
+            return;
+        }
+        
+        _setting = new Setting(type);
         _setting.Show();
 
         _setting.Closed += (sender, args) => { _setting = null; };

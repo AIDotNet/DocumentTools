@@ -13,7 +13,7 @@ public interface IMainWindowService
     /// <summary>
     /// 打开设置
     /// </summary>
-    void OpenSetting();
+    void OpenSetting(string type);
     
     void Show();
     

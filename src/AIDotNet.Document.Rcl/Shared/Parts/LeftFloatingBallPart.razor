@@ -15,7 +15,7 @@
                 <MButton @attributes=context.Attrs
                          Color="indigo darken-4"
                          Fab=true Small=true Dark=true Width=36 Height=36
-                         OnClick="WindowService.OpenSetting">
+                         OnClick="()=>WindowService.OpenSetting(Constant.Settings.SettingsType)">
                     <MIcon Small=true>mdi-wrench</MIcon>
                 </MButton>
             </ActivatorContent>

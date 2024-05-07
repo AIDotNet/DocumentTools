@@ -8,8 +8,8 @@
             <MCol Cols="12" Class="text-center">
                 <MMenu OffsetX=true>
                     <ActivatorContent>
-                        <MAvatar @attributes=context.Attrs Tile=Mini Size="@(Mini?36:64)" Class="@(Mini?"mt-4 mb-2":"mt-10 mb-2")">
-                            <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" />
+                        <MAvatar @attributes=context.Attrs Tile=Mini Size="@(Mini ? 36 : 64)" Class="@(Mini ? "mt-4 mb-2" : "mt-10 mb-2")">
+                            <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png"/>
                         </MAvatar>
                     </ActivatorContent>
                     <ChildContent>
@@ -26,7 +26,7 @@
             <MCol Cols="12" Class="text-center">
                 @if (Mini)
                 {
-                    <MDivider Class="my-2" />
+                    <MDivider Class="my-2"/>
                 }
                 else
                 {
@@ -44,23 +44,24 @@
                  Mini=Mini
                  Dense="true" Nav="true" Routable="true"
                  ActiveClass="blue--text text--darken-1"
-                 Color="@null" />
+                 Color="@null"/>
     </ChildContent>
 
     <AppendContent>
 
-        <MDivider Class="mb-3" />
+        <MDivider Class="mb-3"/>
 
         @if (Mini is false)
         {
             <MRow NoGutters=true Class="px-2 pb-6">
                 <MButton Color="indigo darken-4"
                          Text=true Small=true Dark=true
-                         OnClick="WindowService.OpenSetting">
+                         OnClick="() => WindowService.OpenSetting(Constant.Settings.SettingsType)">
                     <MIcon Left=true Small=true>mdi-wrench</MIcon>
                     打开设置
                 </MButton>
                 <MButton Color="pink darken-3"
+                         OnClick="() => WindowService.OpenSetting(Constant.Settings.AboutType)"
                          Text=true Small=true Dark=true>
                     <MIcon Small=true>mdi-information-variant</MIcon>
                     关于我们
@@ -79,8 +80,8 @@
                             {
                                 var model = ModeSwitchModels[i];
 
-                                <MListItem Class="menuItem" OnClick="_=>SetType(model.type)">
-                                    <MIcon Small=true Left=true Class="my-auto" Color="@model.color" Icon="model.icon" />
+                                <MListItem Class="menuItem" OnClick="_ => SetType(model.type)">
+                                    <MIcon Small=true Left=true Class="my-auto" Color="@model.color" Icon="model.icon"/>
                                     <MListItemContent>
                                         <MListItemTitle Class="menuItemLabel">@model.label</MListItemTitle>
                                     </MListItemContent>
@@ -111,8 +112,8 @@
                             {
                                 var model = ModeSwitchModels[i];
 
-                                <MListItem Class="menuItem" OnClick="_=>SetType(model.type)">
-                                    <MIcon Small=true Left=true Class="my-auto" Color="@model.color" Icon="model.icon" />
+                                <MListItem Class="menuItem" OnClick="_ => SetType(model.type)">
+                                    <MIcon Small=true Left=true Class="my-auto" Color="@model.color" Icon="model.icon"/>
                                     <MListItemContent>
                                         <MListItemTitle Class="menuItemLabel">@model.label</MListItemTitle>
                                     </MListItemContent>
@@ -125,7 +126,7 @@
                 <MTooltip Right=true Context="tipContext">
                     <ActivatorContent>
                         <MListItem @attributes=tipContext.Attrs
-                                   OnClick="WindowService.OpenSetting"
+                                   OnClick="() => WindowService.OpenSetting(Constant.Settings.SettingsType)"
                                    Dense=true Context="itemContext"
                                    Class="pa-0" Style="min-height:32px;">
                             <ItemContent>
@@ -142,6 +143,7 @@
                     <ActivatorContent>
                         <MListItem @attributes=tipContext.Attrs
                                    Dense=true Context="itemContext"
+                                   OnClick="() => WindowService.OpenSetting(Constant.Settings.AboutType)"
                                    Class="pa-0" Style="min-height:32px;">
                             <ItemContent>
                                 <MIcon Small=true Class="mx-auto">mdi-information-variant</MIcon>

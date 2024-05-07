@@ -67,7 +67,7 @@
             <MTooltip Right=true Context="tipContext">
                 <ActivatorContent>
                     <MListItem @attributes=tipContext.Attrs
-                               OnClick="WindowService.OpenSetting"
+                               OnClick="()=>WindowService.OpenSetting(Constant.Settings.SettingsType)"
                                Dense=true Context="itemContext"
                                Class="pa-0" Style="min-height:32px;">
                         <ItemContent>

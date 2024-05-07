@@ -8,7 +8,7 @@ namespace AIDotNet.Document.Client;
 
 public partial class Setting : Window
 {
-    public Setting()
+    public Setting(string type)
     {
         InitializeComponent();
 
@@ -16,6 +16,10 @@ public partial class Setting : Window
         {
             Selector = "#app",
             ComponentType = typeof(Rcl.Components.Setting),
+            Parameters = new Dictionary<string, object?>()
+            {
+                { "type", type }
+            }
         });
 
         var app = ApplicationContext.BuildApplication();

@@ -1,27 +1,18 @@
 ﻿<MApp>
-    <MTabs Vertical=true>
-        <MTab>OpenAI设置</MTab>
+    <MTabs @bind-Value="Type" Vertical=true>
+        <MTab Value="Constant.Settings.SettingsType">OpenAI设置</MTab>
 
-        <MTab>关于</MTab>
+        <MTab Value="Constant.Settings.AboutType">关于</MTab>
 
-        <MTabItem>
-            <MCard Flat=true Style="margin:5px;">
+        <MTabItem Value="Constant.Settings.SettingsType">
+            <MCard Flat Style="margin:5px;">
                 <MTextField @bind-Value=_options.Endpoint
                             Label="OpenAI代理地址"
-                            Dense=true Outlined=true />
+                            Dense Outlined/>
 
                 <MTextField @bind-Value=_options.ApiKey
                             Label="ApiKey"
-                            Dense=true Outlined=true />
-
-
-                @*                 <MSelect @bind-Value="@_options.ChatModel"
-                Items="_models"
-                ItemText="u => u.Name"
-                ItemValue="u => u.Value"
-                Label="请选择您的聊天模型"
-                Dense=true Outlined=true>
-                </MSelect> *@
+                            Dense Outlined/>
 
                 <MAutocomplete @bind-Value="@_options.ChatModel"
                                Items="_models"
@@ -29,7 +20,7 @@
                                ItemValue="u => u.Value"
                                OnSearchInputUpdate="SearchInputUpdate"
                                Label="请选择您的聊天模型"
-                               Dense=true Outlined=true>
+                               Dense Outlined>
                 </MAutocomplete>
 
 
@@ -38,16 +29,16 @@
                          ItemText="u => u.Name"
                          ItemValue="u => u.Value"
                          Label="请选择您的嵌入模型"
-                         Dense=true Outlined=true>
+                         Dense Outlined>
                 </MSelect>
 
-                <MButton OnClick="Save" Block=true>
+                <MButton OnClick="Save" Block>
                     保存
                 </MButton>
             </MCard>
         </MTabItem>
 
-        <MTabItem>
+        <MTabItem Value="Constant.Settings.AboutType">
             <MCard Flat=true Style="margin:5px;text-align: center;">
 
                 <div style="font-size: 40px; font-weight: bold; background: linear-gradient(to right, #30CFD0 0%, #330867 100%); -webkit-background-clip: text; color: transparent;">
@@ -55,7 +46,7 @@
                 </div>
 
                 <div>
-                    版本：@_version <br />
+                    版本：@_version <br/>
                 </div>
 
             </MCard>

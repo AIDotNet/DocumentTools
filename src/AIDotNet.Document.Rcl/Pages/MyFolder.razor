@@ -113,14 +113,16 @@
         <div style="width: 100%;height: calc(100vh - 50px);overflow-y: auto;">
             @if (FolderItemDto?.Id != null)
             {
-                <div style="height: 25px;margin-bottom: 8px;">
-                    <div class="folder-icon">
-                        <MIcon OnClick="Back" Style="cursor: pointer;">mdi-menu-left</MIcon>
-                    </div>
-                    <div class="folder-info" style="padding-top: 2px;text-align: center;padding-left: 20px;">
+                <MRow NoGutters=true>
+                    <MCol Cols="2">
+                        <MButton Icon=true Small=true OnClick="Back">
+                            <MIcon Small=false Style="cursor: pointer;">mdi-menu-left</MIcon>
+                        </MButton>
+                    </MCol>
+                    <MCol Cols="8" Class="text-center" Align="AlignTypes.Center">
                         @FolderItemDto?.Name
-                    </div>
-                </div>
+                    </MCol>
+                </MRow>
             }
 
             @foreach (var item in Folders)
@@ -241,7 +243,13 @@
                                             </MListItemContent>
                                         </MListItem>
                                     }
-                                    
+
+                                    <MListItem Class="menuItem" OnClick="Refresh">
+                                        <MIcon Small=true Left=true Class="my-auto" Color="info">mdi-refresh</MIcon>
+                                        <MListItemContent>
+                                            <MListItemTitle Class="menuItemLabel">刷新</MListItemTitle>
+                                        </MListItemContent>
+                                    </MListItem>
                                 </MListItemGroup>
                             </ChildContent>
                         </MMenu>

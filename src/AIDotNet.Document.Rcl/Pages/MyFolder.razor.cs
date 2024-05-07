@@ -283,8 +283,8 @@ public partial class MyFolder
             FolderType.Pdf => ".pdf",
             _ => throw new ArgumentOutOfRangeException()
         };
-        
-        await FileService.SaveFileAsync(item.Name,suffix, async path =>
+
+        await FileService.SaveFileAsync(item.Name, suffix, async path =>
         {
             var info = new FileInfo(path);
 
@@ -335,4 +335,11 @@ public partial class MyFolder
     /// <returns></returns>
     private string GetClass(string folderId)
         => folderId == FolderId ? "folder-item folder-item-selected" : "folder-item";
+
+    private async Task Refresh()
+    {
+        Folders = await FolderService.GetFolderByParentIdAsync(FolderId);
+
+        await InvokeAsync(StateHasChanged);
+    }
 }

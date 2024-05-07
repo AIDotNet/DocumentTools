@@ -134,6 +134,11 @@ public sealed class FolderService : IFolderService
     {
         var result = await _freeSql.Select<Folder>().Where(f => f.Id == id).FirstAsync();
 
+        if(result == null)
+        {
+            return null;
+        }
+
         return new FolderItemDto()
         {
             Id = result.Id,

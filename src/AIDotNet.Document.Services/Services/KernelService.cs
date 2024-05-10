@@ -59,10 +59,10 @@ public class KernelService(IServiceProvider serviceProvider, ILogger<KernelServi
                 input.History.Insert(0, new ChatMessageDto()
                 {
                     Content = prompt,
-                    CreateAt = DateTime.Now,
-                    Extra = new Dictionary<string, string>(),
-                    Id = Guid.NewGuid().ToString(),
-                    Meta = new Dictionary<string, string>(),
+                    // CreateAt = DateTime.Now,
+                    // Extra = new Dictionary<string, string>(),
+                    // Id = Guid.NewGuid().ToString(),
+                    // Meta = new Dictionary<string, string>(),
                     Role = ChatMessageRole.System
                 });
             }

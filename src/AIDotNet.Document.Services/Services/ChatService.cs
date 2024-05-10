@@ -1,55 +1,35 @@
-﻿using System.Runtime.InteropServices;
-using AIDotNet.Document.Services.Domain;
+﻿using AIDotNet.Document.Services.Domain;
+using MapsterMapper;
 
 namespace AIDotNet.Document.Services.Services;
 
-[ClassInterface(ClassInterfaceType.AutoDual)]
-[ComVisible(true)]
-public class ChatService(IFreeSql freeSql) : IChatService
+public sealed class ChatService(IFreeSql freeSql, IMapper mapper) : IChatService
 {
-    public PageResult<ChatMessageDto> GetChatMessages(int page, int pageSize)
+    public async Task<PageResult<ChatMessageDto>> GetChatMessagesAsync(int page, int pageSize)
     {
-        var query = freeSql.Select<ChatMessage>()
+        var query = await freeSql.Select<ChatMessage>()
             .OrderByDescending(x => x.CreateAt)
             .Page(page, pageSize)
-            .ToList();
+            .ToListAsync();
 
-        var total = freeSql.Select<ChatMessage>().Count();
+        var total = await freeSql.Select<ChatMessage>().CountAsync();
 
-        return new PageResult<ChatMessageDto>(total, query.Select(x => new ChatMessageDto()
-        {
-            Content = x.Content,
-            CreateAt = x.CreateAt,
-            Extra = x.Extra,
-            Id = x.Id,
-            Meta = x.Meta,
-            Role = x.Role,
-            UpdateAt = x.UpdateAt,
-        }).ToList());
+        return new PageResult<ChatMessageDto>(total, mapper.Map<List<ChatMessageDto>>(query));
     }
 
-    public async void RemoveChatMessage(string id)
+    public async Task RemoveChatMessageAsync(string id)
     {
         await freeSql.Delete<ChatMessage>().Where(x => x.Id == id).ExecuteAffrowsAsync();
     }
 
-    public void AddChatMessage(ChatMessageDto messageDto)
+    public Task AddChatMessageAsync(ChatMessageDto message)
     {
-        messageDto.Id = Guid.NewGuid().ToString("N");
+        // message.Id = Guid.NewGuid().ToString("N");
 
-        freeSql.Insert(new ChatMessage()
-        {
-            Id = Guid.NewGuid().ToString("N"),
-            Content = messageDto.Content,
-            CreateAt = messageDto.CreateAt,
-            Extra = messageDto.Extra,
-            Meta = messageDto.Meta,
-            Role = messageDto.Role,
-            UpdateAt = messageDto.UpdateAt,
-        }).ExecuteAffrows();
+        return freeSql.Insert(message).ExecuteAffrowsAsync();
     }
 
-    public async void UpdateChatMessage(string id, string content)
+    public async Task UpdateChatMessageAsync(string id, string content)
     {
         await freeSql.Update<ChatMessage>()
             .Where(x => x.Id == id)
@@ -57,8 +37,8 @@ public class ChatService(IFreeSql freeSql) : IChatService
             .ExecuteAffrowsAsync();
     }
 
-    public void RemoveChatMessages()
+    public Task RemoveChatMessagesAsync()
     {
-        freeSql.Delete<ChatMessage>().ExecuteAffrows();
+        return freeSql.Delete<ChatMessage>().ExecuteAffrowsAsync();
     }
 }

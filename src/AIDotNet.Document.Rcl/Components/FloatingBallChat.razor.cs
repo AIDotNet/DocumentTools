@@ -43,10 +43,10 @@ public partial class FloatingBallChat
         {
             Content = _message,
             Role = ChatMessageRole.User,
-            CreateAt = DateTime.Now,
-            Extra = new Dictionary<string, string>(),
-            Id = Guid.NewGuid().ToString(),
-            Meta = new Dictionary<string, string>(),
+            // CreateAt = DateTime.Now,
+            // Extra = new Dictionary<string, string>(),
+            // Id = Guid.NewGuid().ToString(),
+            // Meta = new Dictionary<string, string>(),
         });
 
         _message = string.Empty;
@@ -55,11 +55,11 @@ public partial class FloatingBallChat
 
         var chat = new ChatMessageDto()
         {
-            CreateAt = DateTime.Now,
-            Extra = new Dictionary<string, string>(),
-            Id = Guid.NewGuid().ToString(),
-            Role = ChatMessageRole.Assistant,
-            Meta = new Dictionary<string, string>(),
+            // CreateAt = DateTime.Now,
+            // Extra = new Dictionary<string, string>(),
+            // Id = Guid.NewGuid().ToString(),
+            // Role = ChatMessageRole.Assistant,
+            // Meta = new Dictionary<string, string>(),
         };
 
         // ChatMessages获取最后4条消息,但是要防止越界

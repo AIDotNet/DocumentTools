@@ -2,6 +2,7 @@
 using AIDotNet.Document.Contract;
 using AIDotNet.Document.Services.TypeHandlers;
 using Azure.AI.OpenAI;
+using Mapster;
 using Microsoft.SemanticKernel;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -21,6 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton<IFileStorageService, FileStorageService>();
 
+            services.AddMapster();
             services.AddSingleton<IFolderService, FolderService>();
             services.AddSingleton<ISettingService, SettingService>();
             services.AddSingleton<IDataStatisticsService, DataStatisticsService>();

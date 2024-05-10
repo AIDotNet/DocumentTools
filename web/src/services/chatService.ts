@@ -1,4 +1,9 @@
-declare var chatService: any;
+import { callService } from "./framework";
+
+/**
+ * C#的AIDotNet.Document.Services.Services的ChatService服务
+ */
+const serviceName = 'AIDotNet.Document.Contract.Services.IChatService,AIDotNet.Document.Contract';
 
 /**
  * 获取聊天消息
@@ -6,8 +11,8 @@ declare var chatService: any;
  * @param pageSize 
  * @returns 
  */
-export function GetChatMessages(page: number, pageSize: number): PageResult<ChatMessage> {
-    return chatService.GetChatMessages(page, pageSize);
+export async function GetChatMessages(page: number, pageSize: number): Promise<PageResult<ChatMessage>> {
+    return await callService(serviceName, 'GetChatMessagesAsync', page, pageSize );
 }
 
 /**
@@ -15,8 +20,8 @@ export function GetChatMessages(page: number, pageSize: number): PageResult<Chat
  * @param id 
  * @returns 
  */
-export function RemoveChatMessage(id: string) {
-    return chatService.RemoveChatMessage(id);
+export async function RemoveChatMessage(id: string) {
+    await callService(serviceName, 'RemoveChatMessageAsync', id);
 }
 
 /**
@@ -24,8 +29,8 @@ export function RemoveChatMessage(id: string) {
  * @param data 
  * @returns 
  */
-export function AddChatMessage(data: ChatMessage) {
-    return chatService.AddChatMessage(data);
+export async function AddChatMessage(data: ChatMessage) {
+    await callService(serviceName, 'AddChatMessageAsync', data);
 }
 
 /**
@@ -34,16 +39,16 @@ export function AddChatMessage(data: ChatMessage) {
  * @param content 编辑内容
  * @returns 
  */
-export function UpdateChatMessage(id: string, content: string) {
-    return chatService.UpdateChatMessage(id, content);
+export async function UpdateChatMessage(id: string, content: string) {
+    await callService(serviceName, 'UpdateChatMessageAsync', id, content);
 }
 
 /**
  * 清空所有聊天消息
  * @returns 
  */
-export function RemoveChatMessages() {
-    return chatService.RemoveChatMessages();
+export async function RemoveChatMessages() {
+    await callService(serviceName, 'RemoveChatMessagesAsync');
 }
 
 export interface ChatMessage {

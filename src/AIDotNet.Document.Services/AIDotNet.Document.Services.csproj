@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="FreeSql.Provider.Sqlite" Version="3.2.821" />
+    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.37.240420.2" />
     <PackageReference Include="Microsoft.KernelMemory.MemoryDb.Postgres" Version="0.37.240420.2" />

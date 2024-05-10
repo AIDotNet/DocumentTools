@@ -11,6 +11,7 @@ import {
 } from '@lobehub/ui';
 import { AddChatMessage, GetChatMessages } from '../../services/chatService';
 import React from 'react';
+import { Completion } from '../../services/KernelService';
 
 export default function Home() {
     const [messages, setMessages] = useState([] as ChatMessage[])
@@ -21,8 +22,8 @@ export default function Home() {
         pageSize: 10
     })
 
-    function LoadMessages() {
-        const message = GetChatMessages(input.page, input.pageSize);
+    async function LoadMessages() {
+        const message = await GetChatMessages(input.page, input.pageSize);
         if (message?.Items) {
             setMessages(message.Items.map((item) => {
                 // 将item.CreateAt转换1686538950084 这种时间戳格式
@@ -40,29 +41,26 @@ export default function Home() {
             }))
         }
     }
-
     useEffect(() => {
         LoadMessages()
     }, [])
 
-    function SendMessage() {
-        AddChatMessage({
-            Content: value,
-            Role: 'user',
-            CreateAt: new Date().getTime().toString(),
-            UpdateAt: null,
-            Meta: {
-                avatar: '😁',
-                title: '我',
-            },
-            Extra: {
+    async function SendMessage() {
+        const stream = await  Completion({
+            History:[
+                {
+                    Content:value,
+                    Role:"user",
+                }
+            ],
+            Relevancy:0.5
+        });
 
-            },
-            Id: '',
-        })
+        for await (const message of stream) {
+            console.log("收到",message);
+        }
 
-        setValue('')
-        LoadMessages()
+        console.log("结束");
     }
 
     return (

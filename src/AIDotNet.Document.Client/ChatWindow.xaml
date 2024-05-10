@@ -13,7 +13,6 @@
         Height="500"
         Width="300">
     <Grid>
-        
         <wv2:WebView2 Name="webView"
                       Source="http://localhost:5173/"
         />

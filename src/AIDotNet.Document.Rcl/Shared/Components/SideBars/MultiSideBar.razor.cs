@@ -51,7 +51,7 @@ namespace AIDotNet.Document.Rcl.Shared.Components.SideBars
             await Task.Delay(200);
         }
 
-        async Task SetSideBarType()
+        async Task SaveSideBarType()
         {
             SideBarType_LS = _sideBarType;
             await Task.Delay(200);
@@ -78,7 +78,7 @@ namespace AIDotNet.Document.Rcl.Shared.Components.SideBars
 
                 _modeSwitchModels = _allModeSwitchModels.Where(x => x.type != _sideBarType).ToArray();
 
-                await SetSideBarType();
+                await SaveSideBarType();
             }
         }
 

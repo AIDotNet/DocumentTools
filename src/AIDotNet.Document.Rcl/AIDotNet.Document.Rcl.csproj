@@ -14,7 +14,7 @@
   <ItemGroup>
     <PackageReference Include="Blazor.ContextMenu" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.4" />
-    <PackageReference Include="Masa.Blazor" Version="1.4.*" />
+    <PackageReference Include="Masa.Blazor" Version="1.5.1" />
   </ItemGroup>
 
   <ItemGroup>
